@@ -27,10 +27,16 @@ import JobRequirementsScreen from './components/screens/JobRequirementsScreen';
 import CompanyQRCodeScreen from './components/screens/CompanyQRCodeScreen';
 import CandidateListScreen from './components/screens/CandidateListScreen';
 
+// Admin Panel
+import AdminPanel from './components/AdminPanel';
+
 function App() {
   // Screen state
   const [currentScreen, setCurrentScreen] = useState('landing');
   const [userType, setUserType] = useState(null);
+  
+  // Admin mode
+  const [isAdminMode, setIsAdminMode] = useState(false);
   
   // Job seeker profile state
   const [profile, setProfile] = useState({});
