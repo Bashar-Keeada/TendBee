@@ -580,6 +580,408 @@ async def get_employer_stats(company_id: str):
     }
 
 
+# ===================== ADMIN API ROUTES =====================
+
+# ----- Admin Stats -----
+@api_router.get("/admin/stats")
+async def get_admin_stats():
+    """Get overall platform statistics for admin dashboard"""
+    total_jobseekers = await db.jobseekers.count_documents({})
+    total_companies = await db.companies.count_documents({})
+    total_jobs = await db.jobs.count_documents({})
+    active_jobs = await db.jobs.count_documents({"is_active": True})
+    total_interests = await db.interests.count_documents({})
+    total_invites = await db.calendar_invites.count_documents({})
+    
+    # Get recent activity (last 7 days)
+    from datetime import timedelta
+    week_ago = (datetime.now(timezone.utc) - timedelta(days=7)).isoformat()
+    
+    new_jobseekers = await db.jobseekers.count_documents({"created_at": {"$gte": week_ago}})
+    new_jobs = await db.jobs.count_documents({"created_at": {"$gte": week_ago}})
+    new_interests = await db.interests.count_documents({"created_at": {"$gte": week_ago}})
+    
+    # Employment status breakdown
+    employed = await db.jobseekers.count_documents({"is_employed": True})
+    unemployed = await db.jobseekers.count_documents({"is_employed": False})
+    af_registered = await db.jobseekers.count_documents({"is_registered_af": True})
+    
+    # Interest status breakdown
+    pending_interests = await db.interests.count_documents({"status": "pending"})
+    reviewed_interests = await db.interests.count_documents({"status": "reviewed"})
+    interview_interests = await db.interests.count_documents({"status": "interview"})
+    hired_interests = await db.interests.count_documents({"status": "hired"})
+    
+    return {
+        "overview": {
+            "total_jobseekers": total_jobseekers,
+            "total_companies": total_companies,
+            "total_jobs": total_jobs,
+            "active_jobs": active_jobs,
+            "total_interests": total_interests,
+            "total_invites": total_invites,
+        },
+        "recent_activity": {
+            "new_jobseekers": new_jobseekers,
+            "new_jobs": new_jobs,
+            "new_interests": new_interests,
+        },
+        "jobseeker_breakdown": {
+            "employed": employed,
+            "unemployed": unemployed,
+            "af_registered": af_registered,
+        },
+        "interest_breakdown": {
+            "pending": pending_interests,
+            "reviewed": reviewed_interests,
+            "interview": interview_interests,
+            "hired": hired_interests,
+        }
+    }
+
+
+# ----- Admin Jobseeker Management -----
+@api_router.get("/admin/jobseekers")
+async def admin_list_jobseekers(
+    search: Optional[str] = None,
+    is_employed: Optional[bool] = None,
+    is_registered_af: Optional[bool] = None,
+    city: Optional[str] = None,
+    sort_by: str = "created_at",
+    sort_order: str = "desc",
+    skip: int = 0,
+    limit: int = Query(default=20, le=100)
+):
+    """Admin: List all jobseekers with filtering and pagination"""
+    query = {}
+    
+    if search:
+        query["$or"] = [
+            {"first_name": {"$regex": search, "$options": "i"}},
+            {"last_name": {"$regex": search, "$options": "i"}},
+            {"phone": {"$regex": search, "$options": "i"}},
+        ]
+    if is_employed is not None:
+        query["is_employed"] = is_employed
+    if is_registered_af is not None:
+        query["is_registered_af"] = is_registered_af
+    if city:
+        query["cities"] = city
+    
+    sort_direction = -1 if sort_order == "desc" else 1
+    
+    total = await db.jobseekers.count_documents(query)
+    docs = await db.jobseekers.find(query, {"_id": 0}) \
+        .sort(sort_by, sort_direction) \
+        .skip(skip) \
+        .limit(limit) \
+        .to_list(limit)
+    
+    return {
+        "total": total,
+        "skip": skip,
+        "limit": limit,
+        "data": [await serialize_doc(doc) for doc in docs]
+    }
+
+
+@api_router.delete("/admin/jobseekers/{jobseeker_id}")
+async def admin_delete_jobseeker(jobseeker_id: str):
+    """Admin: Delete a jobseeker and related data"""
+    # Delete related interests
+    await db.interests.delete_many({"jobseeker_id": jobseeker_id})
+    # Delete related calendar invites
+    await db.calendar_invites.delete_many({"jobseeker_id": jobseeker_id})
+    # Delete jobseeker
+    result = await db.jobseekers.delete_one({"id": jobseeker_id})
+    
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Jobbsökare hittades inte")
+    
+    return {"message": "Jobbsökare och relaterad data har raderats"}
+
+
+# ----- Admin Company Management -----
+@api_router.get("/admin/companies")
+async def admin_list_companies(
+    search: Optional[str] = None,
+    industry: Optional[str] = None,
+    city: Optional[str] = None,
+    sort_by: str = "created_at",
+    sort_order: str = "desc",
+    skip: int = 0,
+    limit: int = Query(default=20, le=100)
+):
+    """Admin: List all companies with filtering and pagination"""
+    query = {}
+    
+    if search:
+        query["$or"] = [
+            {"company_name": {"$regex": search, "$options": "i"}},
+            {"org_number": {"$regex": search, "$options": "i"}},
+            {"contact_person": {"$regex": search, "$options": "i"}},
+        ]
+    if industry:
+        query["industry"] = industry
+    if city:
+        query["city"] = {"$regex": city, "$options": "i"}
+    
+    sort_direction = -1 if sort_order == "desc" else 1
+    
+    total = await db.companies.count_documents(query)
+    docs = await db.companies.find(query, {"_id": 0}) \
+        .sort(sort_by, sort_direction) \
+        .skip(skip) \
+        .limit(limit) \
+        .to_list(limit)
+    
+    # Add job count for each company
+    companies = []
+    for doc in docs:
+        company = await serialize_doc(doc)
+        job_count = await db.jobs.count_documents({"company_id": company["id"]})
+        company["job_count"] = job_count
+        companies.append(company)
+    
+    return {
+        "total": total,
+        "skip": skip,
+        "limit": limit,
+        "data": companies
+    }
+
+
+@api_router.delete("/admin/companies/{company_id}")
+async def admin_delete_company(company_id: str):
+    """Admin: Delete a company and related data"""
+    # Get all jobs for this company
+    jobs = await db.jobs.find({"company_id": company_id}, {"id": 1}).to_list(100)
+    job_ids = [j['id'] for j in jobs]
+    
+    # Delete related interests
+    await db.interests.delete_many({"job_id": {"$in": job_ids}})
+    # Delete related calendar invites
+    await db.calendar_invites.delete_many({"company_id": company_id})
+    # Delete jobs
+    await db.jobs.delete_many({"company_id": company_id})
+    # Delete company
+    result = await db.companies.delete_one({"id": company_id})
+    
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Företag hittades inte")
+    
+    return {"message": "Företag och relaterad data har raderats"}
+
+
+# ----- Admin Job Management -----
+@api_router.get("/admin/jobs")
+async def admin_list_jobs(
+    search: Optional[str] = None,
+    company_id: Optional[str] = None,
+    is_active: Optional[bool] = None,
+    employment_type: Optional[str] = None,
+    sort_by: str = "created_at",
+    sort_order: str = "desc",
+    skip: int = 0,
+    limit: int = Query(default=20, le=100)
+):
+    """Admin: List all jobs with filtering and pagination"""
+    query = {}
+    
+    if search:
+        query["$or"] = [
+            {"title": {"$regex": search, "$options": "i"}},
+            {"location": {"$regex": search, "$options": "i"}},
+            {"description": {"$regex": search, "$options": "i"}},
+        ]
+    if company_id:
+        query["company_id"] = company_id
+    if is_active is not None:
+        query["is_active"] = is_active
+    if employment_type:
+        query["employment_type"] = employment_type
+    
+    sort_direction = -1 if sort_order == "desc" else 1
+    
+    total = await db.jobs.count_documents(query)
+    docs = await db.jobs.find(query, {"_id": 0}) \
+        .sort(sort_by, sort_direction) \
+        .skip(skip) \
+        .limit(limit) \
+        .to_list(limit)
+    
+    # Add company name and interest count for each job
+    jobs = []
+    for doc in docs:
+        job = await serialize_doc(doc)
+        company = await db.companies.find_one({"id": job.get("company_id")}, {"_id": 0})
+        job["company_name"] = company.get("company_name") if company else "Okänt"
+        job["interest_count"] = await db.interests.count_documents({"job_id": job["id"]})
+        jobs.append(job)
+    
+    return {
+        "total": total,
+        "skip": skip,
+        "limit": limit,
+        "data": jobs
+    }
+
+
+@api_router.put("/admin/jobs/{job_id}/toggle-active")
+async def admin_toggle_job_active(job_id: str):
+    """Admin: Toggle job active status"""
+    job = await db.jobs.find_one({"id": job_id})
+    if not job:
+        raise HTTPException(status_code=404, detail="Jobb hittades inte")
+    
+    new_status = not job.get("is_active", True)
+    await db.jobs.update_one({"id": job_id}, {"$set": {"is_active": new_status}})
+    
+    return {"message": f"Jobb {'aktiverat' if new_status else 'inaktiverat'}", "is_active": new_status}
+
+
+@api_router.delete("/admin/jobs/{job_id}")
+async def admin_delete_job(job_id: str):
+    """Admin: Delete a job and related data"""
+    # Delete related interests
+    await db.interests.delete_many({"job_id": job_id})
+    # Delete related calendar invites
+    await db.calendar_invites.delete_many({"job_id": job_id})
+    # Delete job
+    result = await db.jobs.delete_one({"id": job_id})
+    
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Jobb hittades inte")
+    
+    return {"message": "Jobb och relaterad data har raderats"}
+
+
+# ----- Admin Interest/Application Management -----
+@api_router.get("/admin/interests")
+async def admin_list_interests(
+    status: Optional[str] = None,
+    job_id: Optional[str] = None,
+    jobseeker_id: Optional[str] = None,
+    sort_by: str = "created_at",
+    sort_order: str = "desc",
+    skip: int = 0,
+    limit: int = Query(default=20, le=100)
+):
+    """Admin: List all interests/applications with filtering"""
+    query = {}
+    
+    if status:
+        query["status"] = status
+    if job_id:
+        query["job_id"] = job_id
+    if jobseeker_id:
+        query["jobseeker_id"] = jobseeker_id
+    
+    sort_direction = -1 if sort_order == "desc" else 1
+    
+    total = await db.interests.count_documents(query)
+    docs = await db.interests.find(query, {"_id": 0}) \
+        .sort(sort_by, sort_direction) \
+        .skip(skip) \
+        .limit(limit) \
+        .to_list(limit)
+    
+    # Enrich with jobseeker and job info
+    interests = []
+    for doc in docs:
+        interest = await serialize_doc(doc)
+        
+        # Get jobseeker info
+        jobseeker = await db.jobseekers.find_one({"id": interest.get("jobseeker_id")}, {"_id": 0})
+        if jobseeker:
+            interest["jobseeker_name"] = f"{jobseeker.get('first_name', '')} {jobseeker.get('last_name', '')}"
+        
+        # Get job info
+        job = await db.jobs.find_one({"id": interest.get("job_id")}, {"_id": 0})
+        if job:
+            interest["job_title"] = job.get("title", "")
+            company = await db.companies.find_one({"id": job.get("company_id")}, {"_id": 0})
+            interest["company_name"] = company.get("company_name") if company else ""
+        
+        interests.append(interest)
+    
+    return {
+        "total": total,
+        "skip": skip,
+        "limit": limit,
+        "data": interests
+    }
+
+
+@api_router.put("/admin/interests/{interest_id}/status")
+async def admin_update_interest_status(interest_id: str, status: str = Query(..., regex="^(pending|reviewed|interview|rejected|hired)$")):
+    """Admin: Update interest/application status"""
+    result = await db.interests.update_one(
+        {"id": interest_id},
+        {"$set": {"status": status}}
+    )
+    
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Intresse hittades inte")
+    
+    return {"message": f"Status uppdaterad till {status}"}
+
+
+# ----- Admin Activity Log -----
+@api_router.get("/admin/activity")
+async def admin_get_activity(limit: int = Query(default=50, le=100)):
+    """Admin: Get recent platform activity"""
+    activities = []
+    
+    # Get recent jobseekers
+    recent_jobseekers = await db.jobseekers.find({}, {"_id": 0}) \
+        .sort("created_at", -1).limit(10).to_list(10)
+    for js in recent_jobseekers:
+        activities.append({
+            "type": "new_jobseeker",
+            "message": f"Ny jobbsökare: {js.get('first_name', '')} {js.get('last_name', '')}",
+            "timestamp": js.get("created_at"),
+            "id": js.get("id")
+        })
+    
+    # Get recent companies
+    recent_companies = await db.companies.find({}, {"_id": 0}) \
+        .sort("created_at", -1).limit(10).to_list(10)
+    for c in recent_companies:
+        activities.append({
+            "type": "new_company",
+            "message": f"Nytt företag: {c.get('company_name', '')}",
+            "timestamp": c.get("created_at"),
+            "id": c.get("id")
+        })
+    
+    # Get recent jobs
+    recent_jobs = await db.jobs.find({}, {"_id": 0}) \
+        .sort("created_at", -1).limit(10).to_list(10)
+    for j in recent_jobs:
+        activities.append({
+            "type": "new_job",
+            "message": f"Nytt jobb: {j.get('title', '')}",
+            "timestamp": j.get("created_at"),
+            "id": j.get("id")
+        })
+    
+    # Get recent interests
+    recent_interests = await db.interests.find({}, {"_id": 0}) \
+        .sort("created_at", -1).limit(10).to_list(10)
+    for i in recent_interests:
+        activities.append({
+            "type": "new_interest",
+            "message": "Nytt jobbintresse",
+            "timestamp": i.get("created_at"),
+            "id": i.get("id")
+        })
+    
+    # Sort by timestamp and return
+    activities.sort(key=lambda x: x.get("timestamp", ""), reverse=True)
+    return activities[:limit]
+
+
 # Include the router in the main app
 app.include_router(api_router)
 
