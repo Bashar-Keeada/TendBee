@@ -162,10 +162,42 @@ function App() {
     }
   };
   
+  // Check for admin mode keyboard shortcut
+  React.useEffect(() => {
+    const handleKeyDown = (e) => {
+      // Ctrl/Cmd + Shift + A to toggle admin mode
+      if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === 'A') {
+        e.preventDefault();
+        setIsAdminMode(prev => !prev);
+      }
+    };
+    
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
+  
+  // Render Admin Panel if in admin mode
+  if (isAdminMode) {
+    return <AdminPanel onExit={() => setIsAdminMode(false)} />;
+  }
+  
   return (
-    <MobileFrame>
-      {renderScreen()}
-    </MobileFrame>
+    <div className="relative">
+      {/* Admin Mode Toggle Button (visible in corner) */}
+      <button
+        onClick={() => setIsAdminMode(true)}
+        className="fixed bottom-4 right-4 z-50 bg-foreground text-background p-2 rounded-full shadow-lg hover:bg-foreground/90 transition-colors"
+        title="Öppna Admin Panel (Ctrl+Shift+A)"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+        </svg>
+      </button>
+      
+      <MobileFrame>
+        {renderScreen()}
+      </MobileFrame>
+    </div>
   );
 }
 
