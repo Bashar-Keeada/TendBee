@@ -101,10 +101,10 @@ export default function TendbeeLanding() {
             </div>
             
             <div className="hidden lg:flex items-center gap-4">
-              <a href="#login" className={`font-medium transition-colors ${scrolled ? 'text-foreground/70 hover:text-foreground' : 'text-white/70 hover:text-white'}`}>Login</a>
-              <button className={scrolled ? 'btn-enterprise' : 'btn-white'}>
+              <a href="https://app.tendbee.se" target="_blank" rel="noopener noreferrer" className={`font-medium transition-colors ${scrolled ? 'text-foreground/70 hover:text-foreground' : 'text-white/70 hover:text-white'}`}>Login</a>
+              <a href="https://app.tendbee.se/demo" target="_blank" rel="noopener noreferrer" className={scrolled ? 'btn-enterprise' : 'btn-white'}>
                 Request Demo
-              </button>
+              </a>
             </div>
             
             {/* Mobile menu button */}
