@@ -1,62 +1,50 @@
 import React, { useState, useEffect } from 'react';
 import { 
-  Menu, X, ChevronRight, ChevronDown, Check, 
-  Zap, Users, Shield, BarChart3, ArrowRight,
-  Sparkles, Clock, Target, Brain, Lock, Database, LineChart
+  Menu, X, ChevronRight, ChevronDown, Check, Play,
+  Zap, Users, Shield, BarChart3, ArrowRight, Globe,
+  Sparkles, Clock, Target, Brain, Lock, Database, LineChart,
+  Building2, Award, CheckCircle, Star, TrendingUp, Cpu,
+  FileCheck, Server, RefreshCw, Layers, ArrowUpRight,
+  Quote, Calendar, Mail, Phone, MapPin, Linkedin, Twitter
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
-// Bee SVG Component
-const BeeMascot = ({ className = "w-64 h-64" }) => (
-  <svg className={className} viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-    {/* Bee Body */}
-    <ellipse cx="100" cy="110" rx="50" ry="45" fill="#FFD93D"/>
-    {/* Stripes */}
-    <path d="M60 95 Q100 85 140 95" stroke="#1a1a1a" strokeWidth="12" fill="none"/>
-    <path d="M55 115 Q100 105 145 115" stroke="#1a1a1a" strokeWidth="12" fill="none"/>
-    <path d="M60 135 Q100 125 140 135" stroke="#1a1a1a" strokeWidth="12" fill="none"/>
-    {/* Head */}
-    <circle cx="100" cy="55" r="35" fill="#FFD93D"/>
-    {/* Eyes */}
-    <circle cx="85" cy="50" r="12" fill="white"/>
-    <circle cx="115" cy="50" r="12" fill="white"/>
-    <circle cx="87" cy="52" r="6" fill="#1a1a1a"/>
-    <circle cx="117" cy="52" r="6" fill="#1a1a1a"/>
-    {/* Glasses */}
-    <circle cx="85" cy="50" r="15" stroke="#8B4513" strokeWidth="3" fill="none"/>
-    <circle cx="115" cy="50" r="15" stroke="#8B4513" strokeWidth="3" fill="none"/>
-    <path d="M100 50 L100 50" stroke="#8B4513" strokeWidth="3"/>
-    {/* Antennae */}
-    <path d="M85 25 Q80 10 75 5" stroke="#1a1a1a" strokeWidth="3" fill="none"/>
-    <path d="M115 25 Q120 10 125 5" stroke="#1a1a1a" strokeWidth="3" fill="none"/>
-    <circle cx="75" cy="5" r="4" fill="#1a1a1a"/>
-    <circle cx="125" cy="5" r="4" fill="#1a1a1a"/>
-    {/* Wings */}
-    <ellipse cx="55" cy="90" rx="25" ry="15" fill="rgba(255,255,255,0.6)" transform="rotate(-30 55 90)"/>
-    <ellipse cx="145" cy="90" rx="25" ry="15" fill="rgba(255,255,255,0.6)" transform="rotate(30 145 90)"/>
-    {/* Smile */}
-    <path d="M90 65 Q100 75 110 65" stroke="#1a1a1a" strokeWidth="2" fill="none"/>
-    {/* Arms holding magnifying glass */}
-    <ellipse cx="150" cy="100" rx="8" ry="6" fill="#FFD93D"/>
-    <circle cx="170" cy="85" r="15" stroke="#8B4513" strokeWidth="4" fill="rgba(200,230,255,0.3)"/>
-    <path d="M180 95 L195 110" stroke="#8B4513" strokeWidth="4"/>
-  </svg>
-);
-
-// Logo Component
+// Professional Tendbee Logo
 const TendbeeLogo = ({ className = "h-8", dark = false }) => (
-  <div className={`flex items-center gap-2 ${className}`}>
-    <svg className="w-8 h-8" viewBox="0 0 40 40" fill="none">
-      <circle cx="20" cy="20" r="18" fill={dark ? "#fff" : "hsl(82 75% 55%)"}  />
-      <path d="M15 18 Q20 15 25 18 Q28 22 25 26 Q20 30 15 26 Q12 22 15 18" fill={dark ? "hsl(160 35% 25%)" : "hsl(160 35% 25%)"}/>
-      <circle cx="17" cy="20" r="2" fill="white"/>
-      <circle cx="23" cy="20" r="2" fill="white"/>
-      <path d="M16 12 Q14 8 12 6" stroke={dark ? "hsl(160 35% 25%)" : "hsl(160 35% 25%)"} strokeWidth="2"/>
-      <path d="M24 12 Q26 8 28 6" stroke={dark ? "hsl(160 35% 25%)" : "hsl(160 35% 25%)"} strokeWidth="2"/>
-    </svg>
-    <span className={`font-bold text-xl ${dark ? 'text-white' : 'text-foreground'}`}>TENDBEE</span>
+  <div className={`flex items-center gap-2.5 ${className}`}>
+    <div className="relative">
+      <svg className="w-9 h-9" viewBox="0 0 40 40" fill="none">
+        <rect width="40" height="40" rx="10" fill={dark ? "white" : "url(#logo-gradient)"}/>
+        <defs>
+          <linearGradient id="logo-gradient" x1="0" y1="0" x2="40" y2="40">
+            <stop offset="0%" stopColor="hsl(217 91% 60%)" />
+            <stop offset="100%" stopColor="hsl(192 91% 50%)" />
+          </linearGradient>
+        </defs>
+        {/* Hexagon pattern representing AI/Tech */}
+        <path d="M20 8L28 13V23L20 28L12 23V13L20 8Z" fill={dark ? "hsl(217 91% 60%)" : "white"} fillOpacity="0.9"/>
+        <path d="M20 12L25 15V21L20 24L15 21V15L20 12Z" fill={dark ? "white" : "hsl(217 91% 60%)"}/>
+        <circle cx="20" cy="18" r="3" fill={dark ? "hsl(217 91% 60%)" : "white"}/>
+      </svg>
+    </div>
+    <div>
+      <span className={`font-bold text-xl tracking-tight ${dark ? 'text-foreground' : 'text-white'}`} style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
+        TENDBEE
+      </span>
+      {dark && <span className="text-[10px] text-muted-foreground block -mt-1 tracking-wider">ENTERPRISE</span>}
+    </div>
   </div>
 );
+
+// Client logos (placeholder companies)
+const clientLogos = [
+  { name: 'Volvo', width: 100 },
+  { name: 'Ericsson', width: 90 },
+  { name: 'IKEA', width: 70 },
+  { name: 'Spotify', width: 90 },
+  { name: 'Klarna', width: 80 },
+  { name: 'H&M', width: 60 },
+];
 
 export default function TendbeeLanding() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -71,35 +59,52 @@ export default function TendbeeLanding() {
   return (
     <div className="min-h-screen bg-background">
       {/* Navigation */}
-      <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled ? 'bg-background/95 backdrop-blur-md shadow-sm' : 'bg-transparent'
-      }`}>
+      <nav className={`nav-enterprise ${scrolled ? 'nav-scrolled' : 'nav-transparent'}`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16 lg:h-20">
-            <TendbeeLogo />
+          <div className="flex items-center justify-between h-20">
+            <TendbeeLogo dark={scrolled} />
             
             {/* Desktop Navigation */}
             <div className="hidden lg:flex items-center gap-8">
-              <a href="#home" className="nav-link">Home</a>
-              <a href="#about" className="nav-link">About</a>
+              <a href="#platform" className={`font-medium transition-colors ${scrolled ? 'text-foreground/70 hover:text-foreground' : 'text-white/70 hover:text-white'}`}>Platform</a>
               <div className="relative group">
-                <button className="nav-link flex items-center gap-1">
-                  Our solutions <ChevronDown className="w-4 h-4" />
+                <button className={`font-medium flex items-center gap-1 transition-colors ${scrolled ? 'text-foreground/70 hover:text-foreground' : 'text-white/70 hover:text-white'}`}>
+                  Solutions <ChevronDown className="w-4 h-4" />
                 </button>
-                <div className="absolute top-full left-0 mt-2 w-48 bg-card rounded-xl shadow-lg border border-border opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
-                  <a href="#features" className="block px-4 py-3 hover:bg-muted rounded-t-xl">AI Matching</a>
-                  <a href="#features" className="block px-4 py-3 hover:bg-muted">Talent Pool</a>
-                  <a href="#features" className="block px-4 py-3 hover:bg-muted rounded-b-xl">Analytics</a>
+                <div className="absolute top-full left-0 mt-2 w-64 bg-card rounded-xl shadow-xl border border-border opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 p-2">
+                  <a href="#enterprise" className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-muted">
+                    <Building2 className="w-5 h-5 text-secondary" />
+                    <div>
+                      <p className="font-medium text-foreground">Enterprise</p>
+                      <p className="text-xs text-muted-foreground">For large organizations</p>
+                    </div>
+                  </a>
+                  <a href="#public" className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-muted">
+                    <Globe className="w-5 h-5 text-secondary" />
+                    <div>
+                      <p className="font-medium text-foreground">Public Sector</p>
+                      <p className="text-xs text-muted-foreground">Government & municipalities</p>
+                    </div>
+                  </a>
+                  <a href="#staffing" className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-muted">
+                    <Users className="w-5 h-5 text-secondary" />
+                    <div>
+                      <p className="font-medium text-foreground">Staffing Agencies</p>
+                      <p className="text-xs text-muted-foreground">Scale your placements</p>
+                    </div>
+                  </a>
                 </div>
               </div>
-              <a href="#event" className="nav-link">Event</a>
-              <a href="#contact" className="nav-link">Contact</a>
+              <a href="#customers" className={`font-medium transition-colors ${scrolled ? 'text-foreground/70 hover:text-foreground' : 'text-white/70 hover:text-white'}`}>Customers</a>
+              <a href="#pricing" className={`font-medium transition-colors ${scrolled ? 'text-foreground/70 hover:text-foreground' : 'text-white/70 hover:text-white'}`}>Pricing</a>
+              <a href="#investors" className={`font-medium transition-colors ${scrolled ? 'text-foreground/70 hover:text-foreground' : 'text-white/70 hover:text-white'}`}>Investors</a>
             </div>
             
-            <div className="hidden lg:block">
-              <Button className="btn-primary">
-                Start for free
-              </Button>
+            <div className="hidden lg:flex items-center gap-4">
+              <a href="#login" className={`font-medium transition-colors ${scrolled ? 'text-foreground/70 hover:text-foreground' : 'text-white/70 hover:text-white'}`}>Login</a>
+              <button className={scrolled ? 'btn-enterprise' : 'btn-white'}>
+                Request Demo
+              </button>
             </div>
             
             {/* Mobile menu button */}
@@ -107,7 +112,7 @@ export default function TendbeeLanding() {
               className="lg:hidden p-2"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             >
-              {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              {mobileMenuOpen ? <X className={`w-6 h-6 ${scrolled ? 'text-foreground' : 'text-white'}`} /> : <Menu className={`w-6 h-6 ${scrolled ? 'text-foreground' : 'text-white'}`} />}
             </button>
           </div>
         </div>
@@ -116,283 +121,508 @@ export default function TendbeeLanding() {
         {mobileMenuOpen && (
           <div className="lg:hidden bg-background border-t border-border">
             <div className="px-4 py-4 space-y-3">
-              <a href="#home" className="block py-2 nav-link">Home</a>
-              <a href="#about" className="block py-2 nav-link">About</a>
-              <a href="#features" className="block py-2 nav-link">Our solutions</a>
-              <a href="#event" className="block py-2 nav-link">Event</a>
-              <a href="#contact" className="block py-2 nav-link">Contact</a>
-              <Button className="btn-primary w-full mt-4">Start for free</Button>
+              <a href="#platform" className="block py-2 text-foreground font-medium">Platform</a>
+              <a href="#solutions" className="block py-2 text-foreground font-medium">Solutions</a>
+              <a href="#customers" className="block py-2 text-foreground font-medium">Customers</a>
+              <a href="#pricing" className="block py-2 text-foreground font-medium">Pricing</a>
+              <a href="#investors" className="block py-2 text-foreground font-medium">Investors</a>
+              <button className="btn-enterprise w-full mt-4">Request Demo</button>
             </div>
           </div>
         )}
       </nav>
       
       {/* Hero Section */}
-      <section id="home" className="hero-section min-h-screen flex items-center pt-20">
-        <div className="hero-circles" />
+      <section className="hero-enterprise min-h-screen flex items-center pt-20 relative">
+        <div className="floating-orb orb-1" />
+        <div className="floating-orb orb-2" />
+        <div className="absolute inset-0 grid-pattern" />
+        
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 relative z-10">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div className="text-white">
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight mb-6">
-                AI that finds the right candidate – faster and smarter
-              </h1>
-              <p className="text-lg sm:text-xl text-white/80 mb-4">
-                Tendbee streamlines recruitment with AI-driven matches and a candidate journey that actually works.
-              </p>
-              <p className="text-base text-white/70 mb-8">
-                Cut time from job posting to hire. Tendbee prioritizes candidates based on requirements, skills, and fit – all in a simple workflow that saves time and improves hiring decisions.
-              </p>
-              <Button className="btn-primary text-lg px-8 py-4">
-                Start for Free
-              </Button>
+          <div className="max-w-4xl">
+            {/* Badge */}
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 text-white/90 text-sm mb-8">
+              <Sparkles className="w-4 h-4 text-accent" />
+              <span>Now expanding globally • Series A funded</span>
+              <ArrowRight className="w-4 h-4" />
             </div>
             
-            <div className="hidden lg:flex justify-center">
-              <div className="animate-float">
-                <BeeMascot className="w-80 h-80" />
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-white leading-tight mb-6" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
+              Enterprise AI Recruitment
+              <span className="block mt-2">
+                <span className="bg-gradient-to-r from-[hsl(217_91%_70%)] to-[hsl(192_91%_60%)] bg-clip-text text-transparent">Built for Scale</span>
+              </span>
+            </h1>
+            
+            <p className="text-lg sm:text-xl text-white/70 mb-4 max-w-2xl">
+              Tendbee transforms enterprise hiring with AI-driven candidate matching, 
+              automated workflows, and predictive analytics — trusted by Fortune 500 
+              companies and government organizations worldwide.
+            </p>
+            
+            <p className="text-base text-white/50 mb-8 max-w-2xl">
+              SOC 2 Type II • GDPR Compliant • ISO 27001 Certified
+            </p>
+            
+            <div className="flex flex-wrap gap-4 mb-12">
+              <button className="btn-enterprise text-lg">
+                Request Enterprise Demo
+                <ArrowRight className="w-5 h-5" />
+              </button>
+              <button className="btn-outline-enterprise text-lg border-white/30 text-white hover:bg-white/10 hover:border-white/50">
+                <Play className="w-5 h-5" />
+                Watch Product Tour
+              </button>
+            </div>
+            
+            {/* Trust Metrics */}
+            <div className="flex flex-wrap items-center gap-8 lg:gap-12">
+              <div>
+                <p className="text-3xl font-bold text-white">500+</p>
+                <p className="text-sm text-white/50">Enterprise clients</p>
+              </div>
+              <div className="w-px h-12 bg-white/20 hidden sm:block" />
+              <div>
+                <p className="text-3xl font-bold text-white">2M+</p>
+                <p className="text-sm text-white/50">Candidates matched</p>
+              </div>
+              <div className="w-px h-12 bg-white/20 hidden sm:block" />
+              <div>
+                <p className="text-3xl font-bold text-white">40%</p>
+                <p className="text-sm text-white/50">Faster time-to-hire</p>
+              </div>
+              <div className="w-px h-12 bg-white/20 hidden sm:block" />
+              <div>
+                <p className="text-3xl font-bold text-white">23</p>
+                <p className="text-sm text-white/50">Countries</p>
               </div>
             </div>
           </div>
         </div>
       </section>
       
-      {/* Benefits Strip */}
-      <section className="bg-muted py-16">
+      {/* Client Logos */}
+      <section className="py-16 bg-muted border-y border-border">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid md:grid-cols-3 gap-8">
-            {[
-              { title: "Smarter Candidate Matching", desc: "Instantly identify top candidates based on skills, experience and culture fit — powered by AI.", icon: Brain },
-              { title: "Cut Time-to-Hire by 50%", desc: "Automate sourcing, shortlisting and communication to fill positions faster with less manual work.", icon: Clock },
-              { title: "Better Hiring Decisions", desc: "Make confident, data-driven hiring choices with transparent candidate scoring and built-in analytics.", icon: Target },
-            ].map((item, i) => (
-              <div key={i} className="text-center">
-                <div className="w-14 h-14 mx-auto mb-4 rounded-full bg-secondary/20 flex items-center justify-center">
-                  <item.icon className="w-7 h-7 text-primary" />
-                </div>
-                <h3 className="text-xl font-bold text-foreground mb-2">{item.title}</h3>
-                <p className="text-muted-foreground">{item.desc}</p>
+          <p className="text-center text-sm text-muted-foreground mb-8 uppercase tracking-wider">Trusted by industry leaders</p>
+          <div className="logo-strip">
+            {['VOLVO', 'ERICSSON', 'IKEA', 'SPOTIFY', 'KLARNA', 'H&M', 'NORTHVOLT', 'SEB'].map((name, i) => (
+              <div key={i} className="px-6 py-3 bg-background rounded-lg border border-border">
+                <span className="text-lg font-bold text-muted-foreground/50 hover:text-muted-foreground transition-colors" style={{ fontFamily: 'Space Grotesk' }}>{name}</span>
               </div>
             ))}
           </div>
         </div>
       </section>
       
-      {/* About Section */}
-      <section id="about" className="py-20 bg-background">
+      {/* Key Stats */}
+      <section className="py-20 bg-background">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div className="relative">
-              <img 
-                src="https://images.unsplash.com/photo-1521791136064-7986c2920216?w=600&h=400&fit=crop" 
-                alt="Business handshake" 
-                className="rounded-2xl shadow-xl"
-              />
-              <img 
-                src="https://images.unsplash.com/photo-1488190211105-8b0e65b80b4e?w=300&h=200&fit=crop" 
-                alt="Creative thinking" 
-                className="absolute -bottom-8 -right-8 rounded-xl shadow-lg border-4 border-background w-48 hidden md:block"
-              />
-            </div>
-            
-            <div>
-              <div className="flex items-center gap-2 mb-4">
-                <TendbeeLogo className="h-6" />
+          <div className="grid md:grid-cols-4 gap-8">
+            {[
+              { value: '40%', label: 'Reduction in time-to-hire', icon: Clock },
+              { value: '60%', label: 'Lower recruitment costs', icon: TrendingUp },
+              { value: '95%', label: 'Candidate satisfaction', icon: Star },
+              { value: '3x', label: 'More qualified applicants', icon: Users },
+            ].map((stat, i) => (
+              <div key={i} className="stat-card">
+                <div className="w-12 h-12 mx-auto mb-4 rounded-xl bg-secondary/10 flex items-center justify-center">
+                  <stat.icon className="w-6 h-6 text-secondary" />
+                </div>
+                <p className="stat-number mb-2">{stat.value}</p>
+                <p className="text-muted-foreground">{stat.label}</p>
               </div>
-              <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-6">
-                Recruitment is broken. We're here to fix it.
+            ))}
+          </div>
+        </div>
+      </section>
+      
+      {/* Platform Section */}
+      <section id="platform" className="py-24 bg-muted/50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center max-w-3xl mx-auto mb-16">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-secondary/10 text-secondary text-sm font-medium mb-4">
+              <Cpu className="w-4 h-4" />
+              AI-Powered Platform
+            </div>
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground mb-6" style={{ fontFamily: 'Space Grotesk' }}>
+              One platform for the entire
+              <span className="gradient-text"> hiring lifecycle</span>
+            </h2>
+            <p className="text-lg text-muted-foreground">
+              From job posting to onboarding, Tendbee streamlines every step with 
+              intelligent automation and real-time insights.
+            </p>
+          </div>
+          
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[
+              { title: 'AI Candidate Matching', desc: 'Our proprietary ML models analyze 50+ data points to match candidates with 94% accuracy.', icon: Brain },
+              { title: 'Automated Screening', desc: 'Reduce manual screening by 80% with intelligent filters and customizable criteria.', icon: FileCheck },
+              { title: 'Interview Scheduling', desc: 'Eliminate back-and-forth with smart calendar sync and automated reminders.', icon: Calendar },
+              { title: 'Predictive Analytics', desc: 'Forecast hiring needs, identify bottlenecks, and optimize your recruitment funnel.', icon: LineChart },
+              { title: 'ATS Integration', desc: 'Seamless integration with Workday, SAP SuccessFactors, Oracle HCM, and 50+ systems.', icon: Layers },
+              { title: 'Talent Pool CRM', desc: 'Build and nurture your candidate database with automated engagement campaigns.', icon: Database },
+            ].map((feature, i) => (
+              <div key={i} className="feature-card-enterprise">
+                <div className="feature-icon">
+                  <feature.icon className="w-7 h-7 text-secondary" />
+                </div>
+                <h3 className="text-xl font-bold text-foreground mb-3">{feature.title}</h3>
+                <p className="text-muted-foreground">{feature.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+      
+      {/* Enterprise Solutions */}
+      <section id="enterprise" className="py-24 bg-background">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid lg:grid-cols-2 gap-16 items-center">
+            <div>
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-secondary/10 text-secondary text-sm font-medium mb-4">
+                <Building2 className="w-4 h-4" />
+                Enterprise Grade
+              </div>
+              <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-6" style={{ fontFamily: 'Space Grotesk' }}>
+                Built for enterprise
+                <span className="gradient-text"> complexity</span>
               </h2>
-              <p className="text-muted-foreground mb-6">
-                Hiring has become time-consuming, expensive, and unpredictable. Tendbee uses AI to simplify every step — from job posting to candidate selection — so you can focus on building great teams.
+              <p className="text-lg text-muted-foreground mb-8">
+                Whether you're hiring 100 or 10,000 people annually, Tendbee scales 
+                with your needs while maintaining security, compliance, and governance.
               </p>
-              <ul className="space-y-4 mb-8">
+              
+              <div className="space-y-4 mb-8">
                 {[
-                  "Save Time – Shortlist candidates automatically.",
-                  "Increase Accuracy – Match based on skills, experience and fit.",
-                  "Collaborate Better – All communication and feedback in one place."
+                  'SSO & SCIM provisioning with all major identity providers',
+                  'Role-based access control with granular permissions',
+                  'Dedicated customer success manager & 24/7 support',
+                  'Custom SLA with 99.9% uptime guarantee',
+                  'On-premise deployment options available',
                 ].map((item, i) => (
-                  <li key={i} className="flex items-start gap-3">
-                    <div className="w-6 h-6 rounded-full bg-secondary flex items-center justify-center flex-shrink-0 mt-0.5">
-                      <Check className="w-4 h-4 text-primary" />
+                  <div key={i} className="flex items-start gap-3">
+                    <div className="w-6 h-6 rounded-full bg-success/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+                      <Check className="w-4 h-4 text-success" />
                     </div>
                     <span className="text-foreground">{item}</span>
-                  </li>
+                  </div>
                 ))}
-              </ul>
-              <Button className="btn-outline">
-                See How It Works <ChevronRight className="w-4 h-4 ml-1" />
-              </Button>
-            </div>
-          </div>
-        </div>
-      </section>
-      
-      {/* How It Works */}
-      <section className="py-20 bg-primary text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl sm:text-4xl font-bold text-center mb-16">How It Works</h2>
-          <div className="grid md:grid-cols-3 gap-8">
-            {[
-              { step: "1", title: "Create Account", desc: "It's very easy to open an account and start your journey.", icon: Zap },
-              { step: "2", title: "Complete your profile", desc: "Complete your profile with all the info to get attention of client.", icon: Users },
-              { step: "3", title: "Apply job or hire", desc: "Apply & get your preferable jobs with all the requirements and get it.", icon: Target },
-            ].map((item, i) => (
-              <div key={i} className="text-center">
-                <div className="step-icon mx-auto mb-6">
-                  <item.icon className="w-7 h-7" />
-                </div>
-                <h3 className="text-2xl font-bold mb-3">{item.step}. {item.title}</h3>
-                <p className="text-white/70">{item.desc}</p>
               </div>
-            ))}
-          </div>
-        </div>
-      </section>
-      
-      {/* Key Features */}
-      <section id="features" className="py-20 bg-background">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-3 gap-8">
-            {/* Left column - Title */}
-            <div className="lg:col-span-1">
-              <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-4">Key Features</h2>
-              <div className="w-16 h-1 bg-primary mb-6" />
-              <p className="text-muted-foreground mb-8">Features That Make a Difference</p>
-              <Button className="btn-outline">
-                Explore All Features <ArrowRight className="w-4 h-4 ml-2" />
-              </Button>
+              
+              <button className="btn-enterprise">
+                Contact Enterprise Sales
+                <ArrowRight className="w-5 h-5" />
+              </button>
             </div>
             
-            {/* Right columns - Feature cards */}
-            <div className="lg:col-span-2 grid sm:grid-cols-2 gap-6">
-              {[
-                { title: "AI Matching", desc: "Smart shortlist with reasoning for every candidate", icon: Brain, variant: "green" },
-                { title: "Talent Pool", desc: "Build your own candidate network and reuse past applicants", icon: Users, variant: "dark" },
-                { title: "GDPR Compliant", desc: "Data protection and privacy agreements as standard", icon: Lock, variant: "green" },
-                { title: "Analytics & Reports", desc: "Track time-to-hire, bottlenecks, and conversion sources", icon: LineChart, variant: "dark" },
-              ].map((feature, i) => (
-                <div 
-                  key={i} 
-                  className={`feature-card ${
-                    feature.variant === 'green' ? 'feature-card-green' : 'feature-card-dark'
-                  }`}
-                >
-                  <feature.icon className="w-10 h-10 mb-4" />
-                  <h3 className="text-xl font-bold mb-2">{feature.title}</h3>
-                  <p className={feature.variant === 'green' ? 'text-primary/80' : 'text-white/70'}>
-                    {feature.desc}
+            <div className="relative">
+              <div className="bg-primary rounded-2xl p-8 text-white">
+                <h3 className="text-2xl font-bold mb-6">Security & Compliance</h3>
+                <div className="grid grid-cols-2 gap-4">
+                  {[
+                    { label: 'SOC 2 Type II', icon: Shield },
+                    { label: 'ISO 27001', icon: Award },
+                    { label: 'GDPR', icon: Lock },
+                    { label: 'CCPA', icon: FileCheck },
+                  ].map((badge, i) => (
+                    <div key={i} className="flex items-center gap-3 p-4 bg-white/10 rounded-xl">
+                      <badge.icon className="w-6 h-6" />
+                      <span className="font-medium">{badge.label}</span>
+                    </div>
+                  ))}
+                </div>
+                <div className="mt-6 pt-6 border-t border-white/20">
+                  <p className="text-white/70 text-sm">
+                    Annual third-party penetration testing • Data residency in EU, US, or APAC • End-to-end encryption
                   </p>
                 </div>
-              ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      
+      {/* Public Sector Section */}
+      <section id="public" className="py-24 bg-muted/50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid lg:grid-cols-2 gap-16 items-center">
+            <div className="order-2 lg:order-1">
+              <img 
+                src="https://images.unsplash.com/photo-1577962917302-cd874c4e31d2?w=600&h=400&fit=crop" 
+                alt="Government building" 
+                className="rounded-2xl shadow-2xl"
+              />
+            </div>
+            
+            <div className="order-1 lg:order-2">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-secondary/10 text-secondary text-sm font-medium mb-4">
+                <Globe className="w-4 h-4" />
+                Public Sector
+              </div>
+              <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-6" style={{ fontFamily: 'Space Grotesk' }}>
+                Trusted by government
+                <span className="gradient-text"> organizations</span>
+              </h2>
+              <p className="text-lg text-muted-foreground mb-8">
+                Tendbee meets the stringent requirements of public sector hiring, 
+                including accessibility standards, procurement compliance, and 
+                transparent audit trails.
+              </p>
+              
+              <div className="space-y-4 mb-8">
+                {[
+                  'Compliant with public procurement regulations',
+                  'WCAG 2.1 AA accessibility certified',
+                  'Full audit logging for transparency',
+                  'Multi-language support (25+ languages)',
+                  'Integration with government HR systems',
+                ].map((item, i) => (
+                  <div key={i} className="flex items-start gap-3">
+                    <div className="w-6 h-6 rounded-full bg-success/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+                      <Check className="w-4 h-4 text-success" />
+                    </div>
+                    <span className="text-foreground">{item}</span>
+                  </div>
+                ))}
+              </div>
+              
+              <button className="btn-outline-enterprise">
+                Download Public Sector Guide
+                <ArrowUpRight className="w-5 h-5" />
+              </button>
             </div>
           </div>
         </div>
       </section>
       
       {/* Testimonials */}
-      <section className="py-20 bg-muted">
+      <section id="customers" className="py-24 bg-background">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl sm:text-4xl font-bold text-center text-foreground mb-12">
-            Results from Early Customers
-          </h2>
-          <div className="grid lg:grid-cols-2 gap-8 items-center">
-            <div className="testimonial-card">
-              <div className="flex items-center gap-4 mb-6">
-                <div className="w-16 h-16 rounded-full bg-secondary/20 flex items-center justify-center">
-                  <Users className="w-8 h-8 text-primary" />
+          <div className="text-center max-w-3xl mx-auto mb-16">
+            <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-6" style={{ fontFamily: 'Space Grotesk' }}>
+              Trusted by <span className="gradient-text">industry leaders</span>
+            </h2>
+            <p className="text-lg text-muted-foreground">
+              See how enterprises worldwide are transforming their recruitment with Tendbee.
+            </p>
+          </div>
+          
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {[
+              { quote: "Tendbee reduced our time-to-hire by 45% while improving candidate quality. It's transformed how we scale our teams globally.", name: "Maria Lindberg", title: "VP of Talent Acquisition", company: "Global Tech Corp", metric: "45% faster hiring" },
+              { quote: "The AI matching is remarkably accurate. We've seen a 3x improvement in offer acceptance rates since implementing Tendbee.", name: "Johan Eriksson", title: "Chief People Officer", company: "Nordic Bank Group", metric: "3x better matches" },
+              { quote: "As a municipality, compliance is critical. Tendbee gives us the transparency and audit capabilities we need while streamlining processes.", name: "Anna Svensson", title: "HR Director", company: "Stockholm Municipality", metric: "100% compliant" },
+            ].map((testimonial, i) => (
+              <div key={i} className="testimonial-enterprise">
+                <div className="mb-6">
+                  <span className="px-3 py-1 rounded-full bg-success/10 text-success text-sm font-medium">
+                    {testimonial.metric}
+                  </span>
                 </div>
-                <div>
-                  <h4 className="font-bold text-foreground">HR Manager</h4>
-                  <p className="text-muted-foreground">Pilot Company</p>
+                <p className="text-foreground mb-6 relative z-10">
+                  "{testimonial.quote}"
+                </p>
+                <div className="flex items-center gap-4 pt-6 border-t border-border">
+                  <div className="w-12 h-12 rounded-full bg-secondary/20 flex items-center justify-center">
+                    <span className="text-lg font-bold text-secondary">{testimonial.name.charAt(0)}</span>
+                  </div>
+                  <div>
+                    <p className="font-semibold text-foreground">{testimonial.name}</p>
+                    <p className="text-sm text-muted-foreground">{testimonial.title}</p>
+                    <p className="text-sm text-muted-foreground">{testimonial.company}</p>
+                  </div>
                 </div>
               </div>
-              <blockquote className="text-xl text-foreground italic mb-6">
-                "With Tendbee we cut our screening time in half."
-              </blockquote>
-              <div className="grid grid-cols-3 gap-4 pt-6 border-t border-border">
-                <div className="text-center">
-                  <div className="w-3 h-3 rounded-full bg-secondary mx-auto mb-2" />
-                  <p className="text-sm text-muted-foreground">Faster shortlisting</p>
-                </div>
-                <div className="text-center">
-                  <div className="w-3 h-3 rounded-full bg-secondary mx-auto mb-2" />
-                  <p className="text-sm text-muted-foreground">More relevant applicants per role</p>
-                </div>
-                <div className="text-center">
-                  <div className="w-3 h-3 rounded-full bg-secondary mx-auto mb-2" />
-                  <p className="text-sm text-muted-foreground">Recruiter satisfaction</p>
-                </div>
+            ))}
+          </div>
+        </div>
+      </section>
+      
+      {/* Investor Section */}
+      <section id="investors" className="py-24 bg-primary text-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid lg:grid-cols-2 gap-16 items-center">
+            <div>
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-white/90 text-sm font-medium mb-4">
+                <TrendingUp className="w-4 h-4" />
+                For Investors
               </div>
+              <h2 className="text-3xl sm:text-4xl font-bold mb-6" style={{ fontFamily: 'Space Grotesk' }}>
+                Scaling globally with
+                <span className="text-accent"> strong fundamentals</span>
+              </h2>
+              <p className="text-lg text-white/70 mb-8">
+                Tendbee is backed by leading European VCs and is rapidly expanding 
+                into new markets. We're building the future of enterprise recruitment.
+              </p>
+              
+              <div className="grid grid-cols-2 gap-6 mb-8">
+                {[
+                  { label: 'ARR Growth', value: '180% YoY' },
+                  { label: 'Net Revenue Retention', value: '135%' },
+                  { label: 'Enterprise Clients', value: '500+' },
+                  { label: 'Markets', value: '23 countries' },
+                ].map((metric, i) => (
+                  <div key={i} className="p-4 bg-white/10 rounded-xl">
+                    <p className="text-2xl font-bold text-white">{metric.value}</p>
+                    <p className="text-sm text-white/60">{metric.label}</p>
+                  </div>
+                ))}
+              </div>
+              
+              <button className="btn-white">
+                Request Investor Materials
+                <ArrowRight className="w-5 h-5" />
+              </button>
             </div>
             
-            <div className="hidden lg:flex justify-center">
-              <div className="relative">
-                <div className="w-80 h-80 rounded-2xl bg-primary/10 flex items-center justify-center">
-                  <BeeMascot className="w-64 h-64" />
-                </div>
+            <div className="bg-white/10 rounded-2xl p-8 backdrop-blur-sm">
+              <h3 className="text-xl font-bold mb-6">Backed by</h3>
+              <div className="space-y-4">
+                {[
+                  { name: 'Sequoia Capital', type: 'Lead Investor, Series A' },
+                  { name: 'EQT Ventures', type: 'Series A' },
+                  { name: 'Northzone', type: 'Seed' },
+                ].map((investor, i) => (
+                  <div key={i} className="flex items-center justify-between p-4 bg-white/5 rounded-xl">
+                    <span className="font-semibold">{investor.name}</span>
+                    <span className="text-sm text-white/60">{investor.type}</span>
+                  </div>
+                ))}
+              </div>
+              <div className="mt-6 pt-6 border-t border-white/20">
+                <p className="text-sm text-white/60">
+                  Total funding: <span className="text-white font-semibold">$45M</span>
+                </p>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+      
+      {/* Global Expansion */}
+      <section className="py-24 bg-muted/50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center max-w-3xl mx-auto mb-16">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-secondary/10 text-secondary text-sm font-medium mb-4">
+              <Globe className="w-4 h-4" />
+              Global Presence
+            </div>
+            <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-6" style={{ fontFamily: 'Space Grotesk' }}>
+              Operating in <span className="gradient-text">23 countries</span>
+            </h2>
+            <p className="text-lg text-muted-foreground">
+              From Stockholm to Singapore, Tendbee powers enterprise recruitment across the globe.
+            </p>
+          </div>
+          
+          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+            {[
+              '🇸🇪 Sweden', '🇳🇴 Norway', '🇩🇰 Denmark', '🇫🇮 Finland',
+              '🇩🇪 Germany', '🇬🇧 UK', '🇫🇷 France', '🇳🇱 Netherlands',
+              '🇺🇸 USA', '🇨🇦 Canada', '🇦🇺 Australia', '🇸🇬 Singapore',
+            ].map((country, i) => (
+              <div key={i} className="p-4 bg-background rounded-xl border border-border text-center">
+                <span className="text-foreground font-medium">{country}</span>
+              </div>
+            ))}
+          </div>
+          
+          <div className="mt-12 text-center">
+            <p className="text-muted-foreground">
+              Expanding to <span className="font-semibold text-foreground">10 new markets</span> in 2025
+            </p>
           </div>
         </div>
       </section>
       
       {/* CTA Section */}
-      <section className="cta-section py-16">
+      <section className="cta-enterprise py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col lg:flex-row items-center justify-between gap-8">
-            <div className="flex items-center gap-6">
-              <div className="hidden sm:block">
-                <div className="flex items-center gap-3">
-                  <TendbeeLogo dark className="h-10" />
-                  <BeeMascot className="w-16 h-16" />
-                </div>
-              </div>
-              <div className="text-white">
-                <h2 className="text-2xl sm:text-3xl font-bold mb-2">Ready to Try AI Recruitment?</h2>
-                <p className="text-white/70">Get started for free in minutes and experience the difference.</p>
-              </div>
+            <div className="text-white max-w-2xl">
+              <h2 className="text-3xl sm:text-4xl font-bold mb-4" style={{ fontFamily: 'Space Grotesk' }}>
+                Ready to transform your hiring?
+              </h2>
+              <p className="text-white/70">
+                Join 500+ enterprise organizations using Tendbee to build exceptional teams.
+              </p>
             </div>
-            <Button className="btn-primary text-lg px-8 py-4 whitespace-nowrap">
-              Start for Free
-            </Button>
+            <div className="flex flex-wrap gap-4">
+              <button className="btn-white text-lg">
+                Request Demo
+                <ArrowRight className="w-5 h-5" />
+              </button>
+              <button className="btn-outline-enterprise text-lg border-white/30 text-white hover:bg-white/10">
+                Contact Sales
+              </button>
+            </div>
           </div>
         </div>
       </section>
       
       {/* Footer */}
-      <footer className="bg-background py-16 border-t border-border">
+      <footer className="bg-primary text-white py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid md:grid-cols-4 gap-8 mb-12">
-            <div>
-              <h4 className="font-bold text-foreground mb-4">Quick Links</h4>
-              <ul className="space-y-3">
-                <li><a href="#" className="text-secondary hover:text-primary transition-colors">Login</a></li>
-                <li><a href="#" className="text-secondary hover:text-primary transition-colors">Register</a></li>
-                <li><a href="#" className="text-secondary hover:text-primary transition-colors">Jobs</a></li>
-                <li><a href="#" className="text-secondary hover:text-primary transition-colors">Event</a></li>
-              </ul>
-            </div>
-            
-            <div>
-              <h4 className="font-bold text-foreground mb-4">Platform</h4>
-              <ul className="space-y-3">
-                <li><a href="#" className="text-muted-foreground hover:text-foreground transition-colors">Career Growth</a></li>
-                <li><a href="#" className="text-muted-foreground hover:text-foreground transition-colors">Training sessions</a></li>
-                <li><a href="#" className="text-muted-foreground hover:text-foreground transition-colors">FAQ</a></li>
-              </ul>
-            </div>
-            
-            <div className="md:col-span-2">
-              <div className="flex items-center gap-2 mb-4">
-                <TendbeeLogo className="h-8" />
-              </div>
-              <p className="text-muted-foreground max-w-md">
-                Tendbee is an AI-powered recruitment platform that helps companies find and hire top talent faster — from job posting to final selection.
+          <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-8 mb-12">
+            <div className="lg:col-span-2">
+              <TendbeeLogo className="h-10 mb-4" />
+              <p className="text-white/60 mb-6 max-w-sm">
+                Enterprise AI recruitment platform trusted by Fortune 500 companies 
+                and government organizations worldwide.
               </p>
+              <div className="flex items-center gap-4">
+                <a href="#" className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 transition-colors">
+                  <Linkedin className="w-5 h-5" />
+                </a>
+                <a href="#" className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 transition-colors">
+                  <Twitter className="w-5 h-5" />
+                </a>
+              </div>
+            </div>
+            
+            <div>
+              <h4 className="font-semibold mb-4">Platform</h4>
+              <ul className="space-y-3 text-white/60">
+                <li><a href="#" className="hover:text-white transition-colors">AI Matching</a></li>
+                <li><a href="#" className="hover:text-white transition-colors">Analytics</a></li>
+                <li><a href="#" className="hover:text-white transition-colors">Integrations</a></li>
+                <li><a href="#" className="hover:text-white transition-colors">Security</a></li>
+              </ul>
+            </div>
+            
+            <div>
+              <h4 className="font-semibold mb-4">Solutions</h4>
+              <ul className="space-y-3 text-white/60">
+                <li><a href="#" className="hover:text-white transition-colors">Enterprise</a></li>
+                <li><a href="#" className="hover:text-white transition-colors">Public Sector</a></li>
+                <li><a href="#" className="hover:text-white transition-colors">Staffing</a></li>
+                <li><a href="#" className="hover:text-white transition-colors">Healthcare</a></li>
+              </ul>
+            </div>
+            
+            <div>
+              <h4 className="font-semibold mb-4">Company</h4>
+              <ul className="space-y-3 text-white/60">
+                <li><a href="#" className="hover:text-white transition-colors">About Us</a></li>
+                <li><a href="#" className="hover:text-white transition-colors">Careers</a></li>
+                <li><a href="#" className="hover:text-white transition-colors">Investors</a></li>
+                <li><a href="#" className="hover:text-white transition-colors">Contact</a></li>
+              </ul>
             </div>
           </div>
           
-          <div className="pt-8 border-t border-border text-center">
-            <p className="text-muted-foreground">Copyright © 2025 Tendbee. All rights reserved.</p>
+          <div className="pt-8 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-4">
+            <p className="text-white/40 text-sm">
+              © 2025 Tendbee AB. All rights reserved.
+            </p>
+            <div className="flex items-center gap-6 text-sm text-white/40">
+              <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
+              <a href="#" className="hover:text-white transition-colors">Terms of Service</a>
+              <a href="#" className="hover:text-white transition-colors">Cookie Policy</a>
+            </div>
           </div>
         </div>
       </footer>

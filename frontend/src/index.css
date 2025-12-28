@@ -2,73 +2,75 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap');
 
 body {
     margin: 0;
-    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
 
 @layer base {
     :root {
-        /* Tendbee Color System - Green & Yellow Bee Theme */
+        /* Tendbee Enterprise Color System - Professional Navy & Electric Blue */
         --background: 0 0% 100%;
-        --foreground: 210 20% 15%;
+        --foreground: 222 47% 11%;
         
         --card: 0 0% 100%;
-        --card-foreground: 210 20% 15%;
+        --card-foreground: 222 47% 11%;
         
         --popover: 0 0% 100%;
-        --popover-foreground: 210 20% 15%;
+        --popover-foreground: 222 47% 11%;
         
-        /* Primary - Deep Forest Green */
-        --primary: 160 35% 25%;
+        /* Primary - Deep Navy */
+        --primary: 222 47% 11%;
         --primary-foreground: 0 0% 100%;
         
-        /* Secondary - Vibrant Lime Green */
-        --secondary: 82 75% 55%;
-        --secondary-foreground: 160 35% 15%;
+        /* Secondary - Electric Blue */
+        --secondary: 217 91% 60%;
+        --secondary-foreground: 0 0% 100%;
         
-        /* Accent - Bee Yellow */
-        --accent: 45 100% 55%;
-        --accent-foreground: 160 35% 15%;
+        /* Accent - Vibrant Cyan */
+        --accent: 192 91% 50%;
+        --accent-foreground: 222 47% 11%;
         
-        /* Muted - Soft Green Tint */
-        --muted: 80 30% 95%;
-        --muted-foreground: 160 15% 40%;
+        /* Tertiary - Success Green */
+        --success: 160 84% 39%;
+        --success-foreground: 0 0% 100%;
+        
+        /* Muted - Professional Gray */
+        --muted: 220 14% 96%;
+        --muted-foreground: 220 9% 46%;
         
         --destructive: 0 84% 60%;
         --destructive-foreground: 0 0% 100%;
         
-        --border: 160 20% 90%;
-        --input: 160 20% 90%;
-        --ring: 82 75% 55%;
+        --border: 220 13% 91%;
+        --input: 220 13% 91%;
+        --ring: 217 91% 60%;
         
-        /* Custom Colors */
-        --success: 160 60% 45%;
-        --hero-bg: 160 35% 25%;
-        --hero-pattern: 160 30% 30%;
-        --feature-green: 82 75% 55%;
-        --feature-dark: 160 35% 25%;
+        /* Gradient Colors */
+        --gradient-start: 222 47% 11%;
+        --gradient-mid: 222 47% 18%;
+        --gradient-end: 230 50% 25%;
         
         --radius: 0.75rem;
     }
     
     .dark {
-        --background: 160 30% 8%;
+        --background: 222 47% 5%;
         --foreground: 0 0% 98%;
-        --card: 160 30% 12%;
+        --card: 222 47% 8%;
         --card-foreground: 0 0% 98%;
-        --primary: 82 75% 55%;
-        --primary-foreground: 160 35% 10%;
-        --secondary: 160 35% 30%;
-        --secondary-foreground: 0 0% 100%;
-        --muted: 160 30% 15%;
-        --muted-foreground: 160 15% 60%;
-        --border: 160 20% 20%;
-        --input: 160 20% 20%;
+        --primary: 217 91% 60%;
+        --primary-foreground: 0 0% 100%;
+        --secondary: 192 91% 50%;
+        --secondary-foreground: 222 47% 11%;
+        --muted: 222 47% 12%;
+        --muted-foreground: 220 14% 60%;
+        --border: 222 30% 18%;
+        --input: 222 30% 18%;
     }
 }
 
@@ -82,135 +84,197 @@ body {
 }
 
 @layer components {
-    /* Hero Section with Pattern */
-    .hero-section {
-        background: linear-gradient(135deg, hsl(160 35% 25%) 0%, hsl(160 30% 30%) 50%, hsl(160 35% 22%) 100%);
+    /* Enterprise Hero */
+    .hero-enterprise {
+        background: linear-gradient(135deg, 
+            hsl(222 47% 11%) 0%, 
+            hsl(222 47% 15%) 40%,
+            hsl(230 50% 20%) 100%);
         position: relative;
         overflow: hidden;
     }
     
-    .hero-section::before {
+    .hero-enterprise::before {
         content: '';
         position: absolute;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        left: 50%;
-        background: radial-gradient(circle at 70% 50%, hsl(160 30% 35% / 0.4) 0%, transparent 50%);
+        top: -50%;
+        right: -20%;
+        width: 80%;
+        height: 200%;
+        background: radial-gradient(ellipse at center, 
+            hsl(217 91% 60% / 0.08) 0%, 
+            transparent 60%);
         pointer-events: none;
     }
     
-    /* Concentric circles pattern */
-    .hero-circles {
-        position: absolute;
-        right: 10%;
-        top: 50%;
-        transform: translateY(-50%);
-        width: 500px;
-        height: 500px;
+    /* Grid Pattern Overlay */
+    .grid-pattern {
+        background-image: 
+            linear-gradient(hsl(217 91% 60% / 0.03) 1px, transparent 1px),
+            linear-gradient(90deg, hsl(217 91% 60% / 0.03) 1px, transparent 1px);
+        background-size: 60px 60px;
     }
     
-    .hero-circles::before,
-    .hero-circles::after {
-        content: '';
+    /* Floating Orbs */
+    .floating-orb {
         position: absolute;
         border-radius: 50%;
-        border: 1px solid hsl(160 30% 40% / 0.3);
+        filter: blur(60px);
+        opacity: 0.4;
     }
     
-    .hero-circles::before {
-        width: 100%;
-        height: 100%;
-        top: 0;
-        left: 0;
+    .orb-1 {
+        width: 400px;
+        height: 400px;
+        background: hsl(217 91% 60%);
+        top: 10%;
+        right: 10%;
     }
     
-    .hero-circles::after {
-        width: 70%;
-        height: 70%;
-        top: 15%;
-        left: 15%;
+    .orb-2 {
+        width: 300px;
+        height: 300px;
+        background: hsl(192 91% 50%);
+        bottom: 20%;
+        left: 10%;
     }
     
-    /* Feature Cards */
-    .feature-card {
-        @apply rounded-2xl p-8 transition-transform duration-300 hover:-translate-y-1;
-    }
-    
-    .feature-card-green {
-        background: hsl(82 75% 55%);
-        color: hsl(160 35% 15%);
-    }
-    
-    .feature-card-dark {
-        background: hsl(160 35% 25%);
+    /* Enterprise Button Styles */
+    .btn-enterprise {
+        @apply inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl font-semibold text-base transition-all duration-300;
+        background: linear-gradient(135deg, hsl(217 91% 60%) 0%, hsl(217 91% 50%) 100%);
         color: white;
+        box-shadow: 0 4px 20px -4px hsl(217 91% 60% / 0.4);
     }
     
-    /* CTA Section */
-    .cta-section {
-        background: linear-gradient(135deg, hsl(160 35% 25%) 0%, hsl(160 30% 30%) 100%);
-    }
-    
-    /* Testimonial Card */
-    .testimonial-card {
-        @apply bg-card rounded-2xl shadow-lg p-6 border border-border;
-    }
-    
-    /* Button Styles */
-    .btn-primary {
-        @apply inline-flex items-center justify-center px-6 py-3 rounded-full font-semibold transition-all duration-200;
-        background: hsl(82 75% 55%);
-        color: hsl(160 35% 15%);
-    }
-    
-    .btn-primary:hover {
-        background: hsl(82 75% 50%);
+    .btn-enterprise:hover {
         transform: translateY(-2px);
-        box-shadow: 0 10px 20px -10px hsl(82 75% 55% / 0.5);
+        box-shadow: 0 8px 30px -4px hsl(217 91% 60% / 0.5);
     }
     
-    .btn-outline {
-        @apply inline-flex items-center justify-center px-6 py-3 rounded-full font-semibold transition-all duration-200 border-2;
-        border-color: hsl(160 35% 30%);
-        color: hsl(160 35% 25%);
+    .btn-outline-enterprise {
+        @apply inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl font-semibold text-base transition-all duration-300 border-2;
+        border-color: hsl(217 91% 60% / 0.3);
+        color: hsl(217 91% 60%);
         background: transparent;
     }
     
-    .btn-outline:hover {
-        background: hsl(160 35% 25%);
-        color: white;
+    .btn-outline-enterprise:hover {
+        background: hsl(217 91% 60% / 0.1);
+        border-color: hsl(217 91% 60%);
     }
     
-    /* Step Icons */
-    .step-icon {
-        @apply w-14 h-14 rounded-full flex items-center justify-center;
-        background: hsl(82 75% 55%);
-        color: hsl(160 35% 15%);
+    .btn-white {
+        @apply inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl font-semibold text-base transition-all duration-300;
+        background: white;
+        color: hsl(222 47% 11%);
     }
     
-    /* Nav Link */
-    .nav-link {
-        @apply text-foreground/80 hover:text-foreground transition-colors font-medium;
+    .btn-white:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 30px -4px rgb(0 0 0 / 0.2);
+    }
+    
+    /* Client Logo Strip */
+    .logo-strip {
+        @apply flex items-center justify-center gap-8 lg:gap-12 flex-wrap;
+    }
+    
+    .client-logo {
+        @apply h-8 lg:h-10 opacity-40 grayscale hover:opacity-70 hover:grayscale-0 transition-all duration-300;
+    }
+    
+    /* Stats Cards */
+    .stat-card {
+        @apply text-center p-6;
+    }
+    
+    .stat-number {
+        @apply text-4xl lg:text-5xl font-bold bg-gradient-to-r from-[hsl(217_91%_60%)] to-[hsl(192_91%_50%)] bg-clip-text text-transparent;
+    }
+    
+    /* Feature Cards */
+    .feature-card-enterprise {
+        @apply bg-card rounded-2xl p-8 border border-border transition-all duration-300 hover:shadow-xl hover:border-secondary/30;
+    }
+    
+    .feature-icon {
+        @apply w-14 h-14 rounded-xl flex items-center justify-center mb-6;
+        background: linear-gradient(135deg, hsl(217 91% 60% / 0.1) 0%, hsl(192 91% 50% / 0.1) 100%);
+    }
+    
+    /* Testimonial */
+    .testimonial-enterprise {
+        @apply bg-card rounded-2xl p-8 border border-border relative;
+    }
+    
+    .testimonial-enterprise::before {
+        content: '"';
+        position: absolute;
+        top: 20px;
+        left: 24px;
+        font-size: 80px;
+        line-height: 1;
+        color: hsl(217 91% 60% / 0.1);
+        font-family: 'Georgia', serif;
+    }
+    
+    /* Security Badge */
+    .security-badge {
+        @apply flex items-center gap-2 px-4 py-2 rounded-full bg-muted text-sm font-medium text-muted-foreground;
+    }
+    
+    /* CTA Section */
+    .cta-enterprise {
+        background: linear-gradient(135deg, 
+            hsl(222 47% 11%) 0%, 
+            hsl(230 50% 18%) 100%);
+    }
+    
+    /* Navigation */
+    .nav-enterprise {
+        @apply fixed top-0 left-0 right-0 z-50 transition-all duration-300;
+    }
+    
+    .nav-scrolled {
+        @apply bg-background/95 backdrop-blur-md shadow-sm border-b border-border;
+    }
+    
+    .nav-transparent {
+        @apply bg-transparent;
     }
     
     /* Animations */
     @keyframes float {
         0%, 100% { transform: translateY(0px); }
-        50% { transform: translateY(-10px); }
+        50% { transform: translateY(-15px); }
     }
     
-    @keyframes pulse-soft {
-        0%, 100% { opacity: 1; }
-        50% { opacity: 0.8; }
+    @keyframes pulse-glow {
+        0%, 100% { box-shadow: 0 0 20px hsl(217 91% 60% / 0.3); }
+        50% { box-shadow: 0 0 40px hsl(217 91% 60% / 0.5); }
+    }
+    
+    @keyframes slide-up {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
     }
     
     .animate-float {
-        animation: float 3s ease-in-out infinite;
+        animation: float 4s ease-in-out infinite;
     }
     
-    .animate-pulse-soft {
-        animation: pulse-soft 2s ease-in-out infinite;
+    .animate-pulse-glow {
+        animation: pulse-glow 3s ease-in-out infinite;
+    }
+    
+    .animate-slide-up {
+        animation: slide-up 0.6s ease-out forwards;
+    }
+    
+    /* Gradient Text */
+    .gradient-text {
+        @apply bg-gradient-to-r from-[hsl(217_91%_60%)] to-[hsl(192_91%_50%)] bg-clip-text text-transparent;
     }
 }
 
@@ -221,5 +285,23 @@ html {
 
 /* Selection color */
 ::selection {
-    background: hsl(82 75% 55% / 0.3);
+    background: hsl(217 91% 60% / 0.3);
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: hsl(220 14% 96%);
+}
+
+::-webkit-scrollbar-thumb {
+    background: hsl(217 91% 60% / 0.3);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: hsl(217 91% 60% / 0.5);
 }
