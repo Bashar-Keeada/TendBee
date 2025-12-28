@@ -2,105 +2,73 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
 
 body {
     margin: 0;
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
 
 @layer base {
     :root {
-        /* Scandinavian Minimal Design System */
+        /* Tendbee Color System - Green & Yellow Bee Theme */
         --background: 0 0% 100%;
-        --foreground: 220 14% 10%;
+        --foreground: 210 20% 15%;
         
         --card: 0 0% 100%;
-        --card-foreground: 220 14% 10%;
+        --card-foreground: 210 20% 15%;
         
         --popover: 0 0% 100%;
-        --popover-foreground: 220 14% 10%;
+        --popover-foreground: 210 20% 15%;
         
-        /* Primary - Blue for Job Seekers */
-        --primary: 217 91% 60%;
+        /* Primary - Deep Forest Green */
+        --primary: 160 35% 25%;
         --primary-foreground: 0 0% 100%;
         
-        /* Secondary - Green for Employers */
-        --secondary: 160 84% 39%;
-        --secondary-foreground: 0 0% 100%;
+        /* Secondary - Vibrant Lime Green */
+        --secondary: 82 75% 55%;
+        --secondary-foreground: 160 35% 15%;
         
-        /* Accent - Orange for Highlights/Match Scores */
-        --accent: 38 92% 50%;
-        --accent-foreground: 0 0% 100%;
+        /* Accent - Bee Yellow */
+        --accent: 45 100% 55%;
+        --accent-foreground: 160 35% 15%;
         
-        /* Muted - Scandinavian Soft Gray */
-        --muted: 220 14% 96%;
-        --muted-foreground: 220 9% 46%;
+        /* Muted - Soft Green Tint */
+        --muted: 80 30% 95%;
+        --muted-foreground: 160 15% 40%;
         
         --destructive: 0 84% 60%;
         --destructive-foreground: 0 0% 100%;
         
-        --border: 220 13% 91%;
-        --input: 220 13% 91%;
-        --ring: 217 91% 60%;
+        --border: 160 20% 90%;
+        --input: 160 20% 90%;
+        --ring: 82 75% 55%;
         
         /* Custom Colors */
-        --success: 160 84% 39%;
-        --success-foreground: 0 0% 100%;
-        --warning: 38 92% 50%;
-        --warning-foreground: 0 0% 100%;
-        
-        /* Gradients */
-        --gradient-primary: linear-gradient(135deg, hsl(217 91% 60%) 0%, hsl(217 91% 50%) 100%);
-        --gradient-secondary: linear-gradient(135deg, hsl(160 84% 39%) 0%, hsl(160 84% 32%) 100%);
-        --gradient-accent: linear-gradient(135deg, hsl(38 92% 50%) 0%, hsl(38 92% 45%) 100%);
-        --gradient-background: linear-gradient(180deg, hsl(220 14% 96%) 0%, hsl(220 13% 91%) 100%);
-        
-        /* Shadows - Scandinavian soft */
-        --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-        --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.07), 0 2px 4px -2px rgb(0 0 0 / 0.07);
-        --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.08), 0 4px 6px -4px rgb(0 0 0 / 0.08);
-        --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.08), 0 8px 10px -6px rgb(0 0 0 / 0.08);
-        --shadow-phone: 0 25px 50px -12px rgb(0 0 0 / 0.25);
-        
-        /* Transitions */
-        --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
-        --transition-normal: 200ms cubic-bezier(0.4, 0, 0.2, 1);
-        --transition-smooth: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+        --success: 160 60% 45%;
+        --hero-bg: 160 35% 25%;
+        --hero-pattern: 160 30% 30%;
+        --feature-green: 82 75% 55%;
+        --feature-dark: 160 35% 25%;
         
         --radius: 0.75rem;
     }
     
     .dark {
-        --background: 220 14% 10%;
+        --background: 160 30% 8%;
         --foreground: 0 0% 98%;
-        
-        --card: 220 14% 14%;
+        --card: 160 30% 12%;
         --card-foreground: 0 0% 98%;
-        
-        --popover: 220 14% 14%;
-        --popover-foreground: 0 0% 98%;
-        
-        --primary: 217 91% 60%;
-        --primary-foreground: 0 0% 100%;
-        
-        --secondary: 160 84% 45%;
+        --primary: 82 75% 55%;
+        --primary-foreground: 160 35% 10%;
+        --secondary: 160 35% 30%;
         --secondary-foreground: 0 0% 100%;
-        
-        --accent: 38 92% 55%;
-        --accent-foreground: 0 0% 100%;
-        
-        --muted: 220 14% 18%;
-        --muted-foreground: 220 9% 60%;
-        
-        --destructive: 0 62% 50%;
-        --destructive-foreground: 0 0% 100%;
-        
-        --border: 220 13% 20%;
-        --input: 220 13% 20%;
-        --ring: 217 91% 60%;
+        --muted: 160 30% 15%;
+        --muted-foreground: 160 15% 60%;
+        --border: 160 20% 20%;
+        --input: 160 20% 20%;
     }
 }
 
@@ -114,181 +82,144 @@ body {
 }
 
 @layer components {
-    /* Phone Frame Styling */
-    .phone-frame {
-        @apply relative w-full max-w-[390px] h-[844px] bg-foreground rounded-[3rem] overflow-hidden;
-        box-shadow: var(--shadow-phone);
+    /* Hero Section with Pattern */
+    .hero-section {
+        background: linear-gradient(135deg, hsl(160 35% 25%) 0%, hsl(160 30% 30%) 50%, hsl(160 35% 22%) 100%);
+        position: relative;
+        overflow: hidden;
     }
     
-    .phone-notch {
-        @apply absolute top-0 left-1/2 -translate-x-1/2 w-[120px] h-[30px] bg-foreground rounded-b-3xl z-50;
+    .hero-section::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 50%;
+        background: radial-gradient(circle at 70% 50%, hsl(160 30% 35% / 0.4) 0%, transparent 50%);
+        pointer-events: none;
     }
     
-    .phone-screen {
-        @apply absolute inset-[3px] bg-background rounded-[2.8rem] overflow-hidden;
+    /* Concentric circles pattern */
+    .hero-circles {
+        position: absolute;
+        right: 10%;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 500px;
+        height: 500px;
     }
     
-    /* Screen Container */
-    .screen-container {
-        @apply min-h-full p-6 pt-14 overflow-y-auto;
+    .hero-circles::before,
+    .hero-circles::after {
+        content: '';
+        position: absolute;
+        border-radius: 50%;
+        border: 1px solid hsl(160 30% 40% / 0.3);
     }
     
-    /* Card Variants */
-    .card-interactive {
-        @apply bg-card rounded-xl border-2 border-border p-4 cursor-pointer;
-        transition: border-color var(--transition-normal), box-shadow var(--transition-normal);
+    .hero-circles::before {
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
     }
     
-    .card-interactive:hover {
-        @apply border-muted-foreground/30;
-        box-shadow: var(--shadow-md);
+    .hero-circles::after {
+        width: 70%;
+        height: 70%;
+        top: 15%;
+        left: 15%;
     }
     
-    .card-selected {
-        @apply border-primary bg-primary/5;
+    /* Feature Cards */
+    .feature-card {
+        @apply rounded-2xl p-8 transition-transform duration-300 hover:-translate-y-1;
     }
     
-    /* Info Boxes */
-    .info-box {
-        @apply rounded-xl p-4 border-2;
+    .feature-card-green {
+        background: hsl(82 75% 55%);
+        color: hsl(160 35% 15%);
     }
     
-    .info-box-primary {
-        @apply bg-primary/5 border-primary/20 text-foreground;
+    .feature-card-dark {
+        background: hsl(160 35% 25%);
+        color: white;
     }
     
-    .info-box-secondary {
-        @apply bg-secondary/5 border-secondary/20 text-foreground;
+    /* CTA Section */
+    .cta-section {
+        background: linear-gradient(135deg, hsl(160 35% 25%) 0%, hsl(160 30% 30%) 100%);
     }
     
-    .info-box-accent {
-        @apply bg-accent/5 border-accent/20 text-foreground;
+    /* Testimonial Card */
+    .testimonial-card {
+        @apply bg-card rounded-2xl shadow-lg p-6 border border-border;
     }
     
-    /* Match Score Badges */
-    .match-badge {
-        @apply inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold;
+    /* Button Styles */
+    .btn-primary {
+        @apply inline-flex items-center justify-center px-6 py-3 rounded-full font-semibold transition-all duration-200;
+        background: hsl(82 75% 55%);
+        color: hsl(160 35% 15%);
     }
     
-    .match-high {
-        @apply bg-secondary/15 text-secondary;
+    .btn-primary:hover {
+        background: hsl(82 75% 50%);
+        transform: translateY(-2px);
+        box-shadow: 0 10px 20px -10px hsl(82 75% 55% / 0.5);
     }
     
-    .match-medium {
-        @apply bg-accent/15 text-accent;
+    .btn-outline {
+        @apply inline-flex items-center justify-center px-6 py-3 rounded-full font-semibold transition-all duration-200 border-2;
+        border-color: hsl(160 35% 30%);
+        color: hsl(160 35% 25%);
+        background: transparent;
     }
     
-    .match-low {
-        @apply bg-muted text-muted-foreground;
+    .btn-outline:hover {
+        background: hsl(160 35% 25%);
+        color: white;
     }
     
-    /* Sticky Footer */
-    .sticky-footer {
-        @apply fixed bottom-0 left-0 right-0 bg-background border-t border-border px-6 py-4 z-40;
+    /* Step Icons */
+    .step-icon {
+        @apply w-14 h-14 rounded-full flex items-center justify-center;
+        background: hsl(82 75% 55%);
+        color: hsl(160 35% 15%);
     }
     
-    /* Form Styling */
-    .form-label {
-        @apply text-sm font-medium text-foreground mb-2 block;
-    }
-    
-    .form-input {
-        @apply h-12 text-base rounded-xl border-2 border-border bg-background px-4;
-        transition: border-color var(--transition-fast);
-    }
-    
-    .form-input:focus {
-        @apply border-primary ring-0 outline-none;
-    }
-    
-    /* Progress Indicator */
-    .progress-bar {
-        @apply h-1.5 rounded-full bg-muted overflow-hidden;
-    }
-    
-    .progress-fill {
-        @apply h-full bg-primary rounded-full;
-        transition: width var(--transition-smooth);
-    }
-    
-    /* Option Cards */
-    .option-card {
-        @apply flex items-center gap-4 p-4 rounded-xl border-2 border-border bg-card cursor-pointer;
-        transition: all var(--transition-normal);
-    }
-    
-    .option-card:hover {
-        @apply border-muted-foreground/40;
-    }
-    
-    .option-card.selected {
-        @apply border-primary bg-primary/5;
-    }
-    
-    .option-card-secondary.selected {
-        @apply border-secondary bg-secondary/5;
-    }
-    
-    /* QR Code Container */
-    .qr-container {
-        @apply w-64 h-64 bg-background border-4 border-foreground rounded-2xl flex items-center justify-center mx-auto;
-        box-shadow: var(--shadow-lg);
+    /* Nav Link */
+    .nav-link {
+        @apply text-foreground/80 hover:text-foreground transition-colors font-medium;
     }
     
     /* Animations */
-    @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(8px); }
-        to { opacity: 1; transform: translateY(0); }
+    @keyframes float {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-10px); }
     }
     
     @keyframes pulse-soft {
         0%, 100% { opacity: 1; }
-        50% { opacity: 0.7; }
+        50% { opacity: 0.8; }
     }
     
-    @keyframes scale-in {
-        from { transform: scale(0.95); opacity: 0; }
-        to { transform: scale(1); opacity: 1; }
-    }
-    
-    .animate-fade-in {
-        animation: fadeIn 0.3s ease-out;
+    .animate-float {
+        animation: float 3s ease-in-out infinite;
     }
     
     .animate-pulse-soft {
         animation: pulse-soft 2s ease-in-out infinite;
     }
-    
-    .animate-scale-in {
-        animation: scale-in 0.2s ease-out;
-    }
 }
 
-@layer utilities {
-    .text-balance {
-        text-wrap: balance;
-    }
-    
-    .scrollbar-hide {
-        -ms-overflow-style: none;
-        scrollbar-width: none;
-    }
-    
-    .scrollbar-hide::-webkit-scrollbar {
-        display: none;
-    }
+/* Smooth scroll */
+html {
+    scroll-behavior: smooth;
 }
 
-/* Custom Focus States */
-button:focus-visible,
-input:focus-visible,
-select:focus-visible,
-textarea:focus-visible {
-    outline: 2px solid hsl(var(--primary));
-    outline-offset: 2px;
-}
-
-/* Selection Color */
+/* Selection color */
 ::selection {
-    background: hsl(var(--primary) / 0.2);
+    background: hsl(82 75% 55% / 0.3);
 }
