@@ -13,7 +13,7 @@ body {
 
 @layer base {
     :root {
-        /* Tendbee Enterprise Color System - Professional Navy & Electric Blue */
+        /* TendBee Color System - Golden Amber & Dark Theme */
         --background: 0 0% 100%;
         --foreground: 222 47% 11%;
         
@@ -27,28 +27,28 @@ body {
         --primary: 222 47% 11%;
         --primary-foreground: 0 0% 100%;
         
-        /* Secondary - Electric Blue */
-        --secondary: 217 91% 60%;
-        --secondary-foreground: 0 0% 100%;
+        /* Secondary - Golden Amber (Bee Color) */
+        --secondary: 38 92% 50%;
+        --secondary-foreground: 222 47% 11%;
         
-        /* Accent - Vibrant Cyan */
-        --accent: 192 91% 50%;
-        --accent-foreground: 222 47% 11%;
+        /* Accent - Darker Amber */
+        --accent: 32 95% 44%;
+        --accent-foreground: 0 0% 100%;
         
         /* Tertiary - Success Green */
         --success: 160 84% 39%;
         --success-foreground: 0 0% 100%;
         
         /* Muted - Professional Gray */
-        --muted: 220 14% 96%;
+        --muted: 40 20% 96%;
         --muted-foreground: 220 9% 46%;
         
         --destructive: 0 84% 60%;
         --destructive-foreground: 0 0% 100%;
         
-        --border: 220 13% 91%;
-        --input: 220 13% 91%;
-        --ring: 217 91% 60%;
+        --border: 40 13% 91%;
+        --input: 40 13% 91%;
+        --ring: 38 92% 50%;
         
         /* Gradient Colors */
         --gradient-start: 222 47% 11%;
@@ -63,10 +63,10 @@ body {
         --foreground: 0 0% 98%;
         --card: 222 47% 8%;
         --card-foreground: 0 0% 98%;
-        --primary: 217 91% 60%;
-        --primary-foreground: 0 0% 100%;
-        --secondary: 192 91% 50%;
-        --secondary-foreground: 222 47% 11%;
+        --primary: 38 92% 50%;
+        --primary-foreground: 222 47% 11%;
+        --secondary: 32 95% 44%;
+        --secondary-foreground: 0 0% 100%;
         --muted: 222 47% 12%;
         --muted-foreground: 220 14% 60%;
         --border: 222 30% 18%;
@@ -102,7 +102,7 @@ body {
         width: 80%;
         height: 200%;
         background: radial-gradient(ellipse at center, 
-            hsl(217 91% 60% / 0.08) 0%, 
+            hsl(38 92% 50% / 0.08) 0%, 
             transparent 60%);
         pointer-events: none;
     }
@@ -110,8 +110,8 @@ body {
     /* Grid Pattern Overlay */
     .grid-pattern {
         background-image: 
-            linear-gradient(hsl(217 91% 60% / 0.03) 1px, transparent 1px),
-            linear-gradient(90deg, hsl(217 91% 60% / 0.03) 1px, transparent 1px);
+            linear-gradient(hsl(38 92% 50% / 0.03) 1px, transparent 1px),
+            linear-gradient(90deg, hsl(38 92% 50% / 0.03) 1px, transparent 1px);
         background-size: 60px 60px;
     }
     
@@ -126,7 +126,7 @@ body {
     .orb-1 {
         width: 400px;
         height: 400px;
-        background: hsl(217 91% 60%);
+        background: hsl(38 92% 50%);
         top: 10%;
         right: 10%;
     }
@@ -134,7 +134,7 @@ body {
     .orb-2 {
         width: 300px;
         height: 300px;
-        background: hsl(192 91% 50%);
+        background: hsl(32 95% 44%);
         bottom: 20%;
         left: 10%;
     }
@@ -142,26 +142,26 @@ body {
     /* Enterprise Button Styles */
     .btn-enterprise {
         @apply inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl font-semibold text-base transition-all duration-300;
-        background: linear-gradient(135deg, hsl(217 91% 60%) 0%, hsl(217 91% 50%) 100%);
-        color: white;
-        box-shadow: 0 4px 20px -4px hsl(217 91% 60% / 0.4);
+        background: linear-gradient(135deg, hsl(38 92% 50%) 0%, hsl(32 95% 44%) 100%);
+        color: hsl(222 47% 11%);
+        box-shadow: 0 4px 20px -4px hsl(38 92% 50% / 0.4);
     }
     
     .btn-enterprise:hover {
         transform: translateY(-2px);
-        box-shadow: 0 8px 30px -4px hsl(217 91% 60% / 0.5);
+        box-shadow: 0 8px 30px -4px hsl(38 92% 50% / 0.5);
     }
     
     .btn-outline-enterprise {
         @apply inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl font-semibold text-base transition-all duration-300 border-2;
-        border-color: hsl(217 91% 60% / 0.3);
-        color: hsl(217 91% 60%);
+        border-color: hsl(38 92% 50% / 0.3);
+        color: hsl(38 92% 50%);
         background: transparent;
     }
     
     .btn-outline-enterprise:hover {
-        background: hsl(217 91% 60% / 0.1);
-        border-color: hsl(217 91% 60%);
+        background: hsl(38 92% 50% / 0.1);
+        border-color: hsl(38 92% 50%);
     }
     
     .btn-white {
@@ -190,7 +190,7 @@ body {
     }
     
     .stat-number {
-        @apply text-4xl lg:text-5xl font-bold bg-gradient-to-r from-[hsl(217_91%_60%)] to-[hsl(192_91%_50%)] bg-clip-text text-transparent;
+        @apply text-4xl lg:text-5xl font-bold bg-gradient-to-r from-[hsl(38_92%_50%)] to-[hsl(32_95%_44%)] bg-clip-text text-transparent;
     }
     
     /* Feature Cards */
@@ -200,7 +200,7 @@ body {
     
     .feature-icon {
         @apply w-14 h-14 rounded-xl flex items-center justify-center mb-6;
-        background: linear-gradient(135deg, hsl(217 91% 60% / 0.1) 0%, hsl(192 91% 50% / 0.1) 100%);
+        background: linear-gradient(135deg, hsl(38 92% 50% / 0.1) 0%, hsl(32 95% 44% / 0.1) 100%);
     }
     
     /* Testimonial */
@@ -215,7 +215,7 @@ body {
         left: 24px;
         font-size: 80px;
         line-height: 1;
-        color: hsl(217 91% 60% / 0.1);
+        color: hsl(38 92% 50% / 0.1);
         font-family: 'Georgia', serif;
     }
     
@@ -251,8 +251,8 @@ body {
     }
     
     @keyframes pulse-glow {
-        0%, 100% { box-shadow: 0 0 20px hsl(217 91% 60% / 0.3); }
-        50% { box-shadow: 0 0 40px hsl(217 91% 60% / 0.5); }
+        0%, 100% { box-shadow: 0 0 20px hsl(38 92% 50% / 0.3); }
+        50% { box-shadow: 0 0 40px hsl(38 92% 50% / 0.5); }
     }
     
     @keyframes slide-up {
@@ -274,7 +274,7 @@ body {
     
     /* Gradient Text */
     .gradient-text {
-        @apply bg-gradient-to-r from-[hsl(217_91%_60%)] to-[hsl(192_91%_50%)] bg-clip-text text-transparent;
+        @apply bg-gradient-to-r from-[hsl(38_92%_50%)] to-[hsl(32_95%_44%)] bg-clip-text text-transparent;
     }
 }
 
@@ -285,7 +285,7 @@ html {
 
 /* Selection color */
 ::selection {
-    background: hsl(217 91% 60% / 0.3);
+    background: hsl(38 92% 50% / 0.3);
 }
 
 /* Custom scrollbar */
@@ -298,10 +298,10 @@ html {
 }
 
 ::-webkit-scrollbar-thumb {
-    background: hsl(217 91% 60% / 0.3);
+    background: hsl(38 92% 50% / 0.3);
     border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background: hsl(217 91% 60% / 0.5);
+    background: hsl(38 92% 50% / 0.5);
 }
