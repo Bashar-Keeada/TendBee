@@ -9,77 +9,59 @@ import {
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
-// Modern Tendbee Logo - Abstract Geometric Design
+// TendBee Logo - Bee mascot style like Trustbee
 const TendbeeLogo = ({ className = "h-8", dark = false, showTagline = true }) => (
   <div className={`flex items-center gap-3 ${className}`}>
     <div className="relative">
-      <svg className="w-11 h-11" viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <svg className="w-12 h-12" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
         <defs>
-          <linearGradient id="tendbee-gradient-1" x1="0" y1="0" x2="52" y2="52">
-            <stop offset="0%" stopColor="#3B82F6" />
-            <stop offset="50%" stopColor="#2563EB" />
-            <stop offset="100%" stopColor="#06B6D4" />
+          <linearGradient id="bee-body-gradient" x1="0" y1="0" x2="40" y2="40">
+            <stop offset="0%" stopColor="#FCD34D" />
+            <stop offset="100%" stopColor="#F59E0B" />
           </linearGradient>
-          <linearGradient id="tendbee-gradient-2" x1="52" y1="0" x2="0" y2="52">
-            <stop offset="0%" stopColor="#06B6D4" />
-            <stop offset="100%" stopColor="#3B82F6" />
-          </linearGradient>
-          <radialGradient id="tendbee-glow" cx="26" cy="26" r="20">
-            <stop offset="0%" stopColor="rgba(59, 130, 246, 0.3)" />
-            <stop offset="100%" stopColor="rgba(59, 130, 246, 0)" />
-          </radialGradient>
         </defs>
         
-        {/* Outer hexagon frame */}
-        <path 
-          d="M26 4L46 15V37L26 48L6 37V15L26 4Z" 
-          fill={dark ? "#1E293B" : "url(#tendbee-gradient-1)"} 
-          stroke="rgba(255,255,255,0.1)"
-          strokeWidth="1"
-        />
+        {/* Bee Body */}
+        <ellipse cx="28" cy="34" rx="14" ry="12" fill="url(#bee-body-gradient)" />
         
-        {/* Inner geometric pattern - representing AI network */}
-        <path 
-          d="M26 12L38 19V33L26 40L14 33V19L26 12Z" 
-          fill="none" 
-          stroke="white" 
-          strokeWidth="1.5" 
-          strokeOpacity="0.3"
-        />
+        {/* Body Stripes */}
+        <path d="M16 30Q28 28 40 30" stroke="#1E293B" strokeWidth="3.5" strokeLinecap="round" />
+        <path d="M15 36Q28 34 41 36" stroke="#1E293B" strokeWidth="3.5" strokeLinecap="round" />
+        <path d="M17 42Q28 40 39 42" stroke="#1E293B" strokeWidth="3.5" strokeLinecap="round" />
         
-        {/* Central T symbol stylized as interconnected nodes */}
-        <path 
-          d="M17 18H35M26 18V36" 
-          stroke="white" 
-          strokeWidth="4" 
-          strokeLinecap="round"
-        />
+        {/* Bee Head */}
+        <circle cx="28" cy="18" r="10" fill="url(#bee-body-gradient)" />
         
-        {/* Connection nodes at key points */}
-        <circle cx="17" cy="18" r="3" fill="white" />
-        <circle cx="35" cy="18" r="3" fill="white" />
-        <circle cx="26" cy="36" r="3" fill="white" />
+        {/* Eyes - white background */}
+        <circle cx="24" cy="17" r="4" fill="white" />
+        <circle cx="32" cy="17" r="4" fill="white" />
         
-        {/* Central AI core */}
-        <circle cx="26" cy="18" r="2.5" fill="#06B6D4" />
+        {/* Pupils */}
+        <circle cx="25" cy="17" r="2" fill="#1E293B" />
+        <circle cx="33" cy="17" r="2" fill="#1E293B" />
         
-        {/* Neural network connections */}
-        <path d="M26 18L20 25M26 18L32 25" stroke="white" strokeWidth="1.5" strokeOpacity="0.4" />
-        <circle cx="20" cy="25" r="1.5" fill="white" fillOpacity="0.6" />
-        <circle cx="32" cy="25" r="1.5" fill="white" fillOpacity="0.6" />
+        {/* Glasses frames */}
+        <circle cx="24" cy="17" r="5.5" stroke="#8B5A2B" strokeWidth="1.5" fill="none" />
+        <circle cx="32" cy="17" r="5.5" stroke="#8B5A2B" strokeWidth="1.5" fill="none" />
+        <path d="M28 17L28 17" stroke="#8B5A2B" strokeWidth="1.5" />
         
-        {/* Data flow indicators */}
-        <path d="M14 19L10 16M38 19L42 16" stroke="white" strokeWidth="1" strokeOpacity="0.3" />
-        <circle cx="10" cy="16" r="1" fill="white" fillOpacity="0.4" />
-        <circle cx="42" cy="16" r="1" fill="white" fillOpacity="0.4" />
+        {/* Antennae */}
+        <path d="M23 9Q20 4 18 2" stroke="#1E293B" strokeWidth="2" strokeLinecap="round" fill="none" />
+        <path d="M33 9Q36 4 38 2" stroke="#1E293B" strokeWidth="2" strokeLinecap="round" fill="none" />
+        <circle cx="18" cy="2" r="2.5" fill="#1E293B" />
+        <circle cx="38" cy="2" r="2.5" fill="#1E293B" />
         
-        {/* Subtle glow effect */}
-        <circle cx="26" cy="26" r="20" fill="url(#tendbee-glow)" />
+        {/* Wings */}
+        <ellipse cx="15" cy="28" rx="7" ry="5" fill="white" fillOpacity="0.7" transform="rotate(-25 15 28)" />
+        <ellipse cx="41" cy="28" rx="7" ry="5" fill="white" fillOpacity="0.7" transform="rotate(25 41 28)" />
+        
+        {/* Smile */}
+        <path d="M24 22Q28 26 32 22" stroke="#1E293B" strokeWidth="1.5" fill="none" strokeLinecap="round" />
       </svg>
     </div>
     <div>
       <span className={`font-bold text-2xl tracking-tight ${dark ? 'text-foreground' : 'text-white'}`} style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
-        tendbee
+        Tend<span style={{ color: dark ? '#3B82F6' : '#FCD34D' }}>Bee</span>
       </span>
       {dark && showTagline && <span className="text-[10px] text-muted-foreground block -mt-0.5 tracking-widest uppercase">Enterprise AI Recruitment</span>}
     </div>
