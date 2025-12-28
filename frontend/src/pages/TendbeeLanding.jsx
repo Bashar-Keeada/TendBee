@@ -9,54 +9,55 @@ import {
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
-// TendBee Logo - Bee mascot style like Trustbee
+// TendBee Logo - Minimalist line-art bee style
 const TendbeeLogo = ({ className = "h-8", dark = false, showTagline = true }) => (
   <div className={`flex items-center gap-3 ${className}`}>
     <div className="relative">
-      <svg className="w-12 h-12" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <linearGradient id="bee-body-gradient" x1="0" y1="0" x2="40" y2="40">
-            <stop offset="0%" stopColor="#FCD34D" />
-            <stop offset="100%" stopColor="#F59E0B" />
-          </linearGradient>
-        </defs>
+      <svg className="w-12 h-12" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+        {/* Minimalist line-art bee - flowing curves */}
         
-        {/* Bee Body */}
-        <ellipse cx="28" cy="34" rx="14" ry="12" fill="url(#bee-body-gradient)" />
+        {/* Left wing loop */}
+        <path 
+          d="M30 35 Q10 25 18 12 Q24 5 30 15" 
+          stroke={dark ? "#1E293B" : "white"} 
+          strokeWidth="2.5" 
+          strokeLinecap="round"
+          fill="none"
+        />
         
-        {/* Body Stripes */}
-        <path d="M16 30Q28 28 40 30" stroke="#1E293B" strokeWidth="3.5" strokeLinecap="round" />
-        <path d="M15 36Q28 34 41 36" stroke="#1E293B" strokeWidth="3.5" strokeLinecap="round" />
-        <path d="M17 42Q28 40 39 42" stroke="#1E293B" strokeWidth="3.5" strokeLinecap="round" />
+        {/* Right wing loop */}
+        <path 
+          d="M30 35 Q50 25 42 12 Q36 5 30 15" 
+          stroke={dark ? "#1E293B" : "white"} 
+          strokeWidth="2.5" 
+          strokeLinecap="round"
+          fill="none"
+        />
         
-        {/* Bee Head */}
-        <circle cx="28" cy="18" r="10" fill="url(#bee-body-gradient)" />
+        {/* Body drop shape */}
+        <path 
+          d="M30 35 Q25 45 30 55 Q35 45 30 35" 
+          stroke={dark ? "#1E293B" : "white"} 
+          strokeWidth="2.5" 
+          strokeLinecap="round"
+          fill="none"
+        />
         
-        {/* Eyes - white background */}
-        <circle cx="24" cy="17" r="4" fill="white" />
-        <circle cx="32" cy="17" r="4" fill="white" />
-        
-        {/* Pupils */}
-        <circle cx="25" cy="17" r="2" fill="#1E293B" />
-        <circle cx="33" cy="17" r="2" fill="#1E293B" />
-        
-        {/* Glasses frames */}
-        <circle cx="24" cy="17" r="5.5" stroke="#8B5A2B" strokeWidth="1.5" fill="none" />
-        <circle cx="32" cy="17" r="5.5" stroke="#8B5A2B" strokeWidth="1.5" fill="none" />
-        <path d="M28 17L28 17" stroke="#8B5A2B" strokeWidth="1.5" />
-        
-        {/* Antennae */}
-        <path d="M23 9Q20 4 18 2" stroke="#1E293B" strokeWidth="2" strokeLinecap="round" fill="none" />
-        <path d="M33 9Q36 4 38 2" stroke="#1E293B" strokeWidth="2" strokeLinecap="round" fill="none" />
-        <circle cx="18" cy="2" r="2.5" fill="#1E293B" />
-        <circle cx="38" cy="2" r="2.5" fill="#1E293B" />
-        
-        {/* Wings */}
-        <ellipse cx="15" cy="28" rx="7" ry="5" fill="white" fillOpacity="0.7" transform="rotate(-25 15 28)" />
-        <ellipse cx="41" cy="28" rx="7" ry="5" fill="white" fillOpacity="0.7" transform="rotate(25 41 28)" />
-        
-        {/* Smile */}
-        <path d="M24 22Q28 26 32 22" stroke="#1E293B" strokeWidth="1.5" fill="none" strokeLinecap="round" />
+        {/* Antennae - X shape */}
+        <path 
+          d="M26 8 L30 14 L34 8" 
+          stroke={dark ? "#1E293B" : "white"} 
+          strokeWidth="2" 
+          strokeLinecap="round"
+          fill="none"
+        />
+        <path 
+          d="M27 5 L30 10 L33 5" 
+          stroke={dark ? "#1E293B" : "white"} 
+          strokeWidth="1.5" 
+          strokeLinecap="round"
+          fill="none"
+        />
       </svg>
     </div>
     <div>
