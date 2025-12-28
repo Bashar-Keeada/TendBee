@@ -9,29 +9,61 @@ import {
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
-// Professional Tendbee Logo
-const TendbeeLogo = ({ className = "h-8", dark = false }) => (
-  <div className={`flex items-center gap-2.5 ${className}`}>
+// Professional Tendbee Logo with Bee Icon
+const TendbeeLogo = ({ className = "h-8", dark = false, showTagline = true }) => (
+  <div className={`flex items-center gap-3 ${className}`}>
     <div className="relative">
-      <svg className="w-9 h-9" viewBox="0 0 40 40" fill="none">
-        <rect width="40" height="40" rx="10" fill={dark ? "white" : "url(#logo-gradient)"}/>
+      <svg className="w-10 h-10" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+        {/* Background circle with gradient */}
         <defs>
-          <linearGradient id="logo-gradient" x1="0" y1="0" x2="40" y2="40">
-            <stop offset="0%" stopColor="hsl(217 91% 60%)" />
-            <stop offset="100%" stopColor="hsl(192 91% 50%)" />
+          <linearGradient id="logo-bg-gradient" x1="0" y1="0" x2="48" y2="48">
+            <stop offset="0%" stopColor="#3B82F6" />
+            <stop offset="100%" stopColor="#06B6D4" />
+          </linearGradient>
+          <linearGradient id="logo-bee-gradient" x1="0" y1="0" x2="24" y2="24">
+            <stop offset="0%" stopColor="#FCD34D" />
+            <stop offset="100%" stopColor="#F59E0B" />
           </linearGradient>
         </defs>
-        {/* Hexagon pattern representing AI/Tech */}
-        <path d="M20 8L28 13V23L20 28L12 23V13L20 8Z" fill={dark ? "hsl(217 91% 60%)" : "white"} fillOpacity="0.9"/>
-        <path d="M20 12L25 15V21L20 24L15 21V15L20 12Z" fill={dark ? "white" : "hsl(217 91% 60%)"}/>
-        <circle cx="20" cy="18" r="3" fill={dark ? "hsl(217 91% 60%)" : "white"}/>
+        
+        {/* Main circle background */}
+        <circle cx="24" cy="24" r="22" fill={dark ? "#1E293B" : "url(#logo-bg-gradient)"} />
+        
+        {/* Bee body */}
+        <ellipse cx="24" cy="26" rx="10" ry="8" fill="url(#logo-bee-gradient)" />
+        
+        {/* Bee stripes */}
+        <path d="M16 24C18 23 22 22.5 24 22.5C26 22.5 30 23 32 24" stroke="#1E293B" strokeWidth="2.5" strokeLinecap="round" />
+        <path d="M15 28C17 27 21 26.5 24 26.5C27 26.5 31 27 33 28" stroke="#1E293B" strokeWidth="2.5" strokeLinecap="round" />
+        
+        {/* Bee head */}
+        <circle cx="24" cy="17" r="6" fill="url(#logo-bee-gradient)" />
+        
+        {/* Eyes */}
+        <circle cx="22" cy="16" r="1.5" fill="#1E293B" />
+        <circle cx="26" cy="16" r="1.5" fill="#1E293B" />
+        
+        {/* Antennae */}
+        <path d="M21 12Q19 9 18 8" stroke="#1E293B" strokeWidth="1.5" strokeLinecap="round" fill="none" />
+        <path d="M27 12Q29 9 30 8" stroke="#1E293B" strokeWidth="1.5" strokeLinecap="round" fill="none" />
+        <circle cx="18" cy="8" r="1.5" fill="#1E293B" />
+        <circle cx="30" cy="8" r="1.5" fill="#1E293B" />
+        
+        {/* Wings */}
+        <ellipse cx="17" cy="22" rx="5" ry="3" fill="white" fillOpacity="0.6" transform="rotate(-20 17 22)" />
+        <ellipse cx="31" cy="22" rx="5" ry="3" fill="white" fillOpacity="0.6" transform="rotate(20 31 22)" />
+        
+        {/* Tech element - small nodes */}
+        <circle cx="10" cy="24" r="2" fill="white" fillOpacity="0.4" />
+        <circle cx="38" cy="24" r="2" fill="white" fillOpacity="0.4" />
+        <circle cx="24" cy="38" r="2" fill="white" fillOpacity="0.4" />
       </svg>
     </div>
     <div>
-      <span className={`font-bold text-xl tracking-tight ${dark ? 'text-foreground' : 'text-white'}`} style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
-        TENDBEE
+      <span className={`font-bold text-2xl tracking-tight ${dark ? 'text-foreground' : 'text-white'}`} style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
+        tendbee
       </span>
-      {dark && <span className="text-[10px] text-muted-foreground block -mt-1 tracking-wider">ENTERPRISE</span>}
+      {dark && showTagline && <span className="text-[10px] text-muted-foreground block -mt-0.5 tracking-widest uppercase">Enterprise AI Recruitment</span>}
     </div>
   </div>
 );
