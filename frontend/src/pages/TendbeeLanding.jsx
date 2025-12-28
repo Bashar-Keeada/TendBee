@@ -9,7 +9,7 @@ import {
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
-// TendBee Logo - Minimalist line-art bee style
+// TendBee Logo - Minimalist line-art bee style with yellow bee color
 const TendbeeLogo = ({ className = "h-8", dark = false, showTagline = true }) => (
   <div className={`flex items-center gap-3 ${className}`}>
     <div className="relative">
@@ -19,7 +19,7 @@ const TendbeeLogo = ({ className = "h-8", dark = false, showTagline = true }) =>
         {/* Left wing loop */}
         <path 
           d="M30 35 Q10 25 18 12 Q24 5 30 15" 
-          stroke={dark ? "#1E293B" : "white"} 
+          stroke={dark ? "#1E293B" : "#FCD34D"} 
           strokeWidth="2.5" 
           strokeLinecap="round"
           fill="none"
@@ -28,7 +28,7 @@ const TendbeeLogo = ({ className = "h-8", dark = false, showTagline = true }) =>
         {/* Right wing loop */}
         <path 
           d="M30 35 Q50 25 42 12 Q36 5 30 15" 
-          stroke={dark ? "#1E293B" : "white"} 
+          stroke={dark ? "#1E293B" : "#FCD34D"} 
           strokeWidth="2.5" 
           strokeLinecap="round"
           fill="none"
@@ -37,7 +37,7 @@ const TendbeeLogo = ({ className = "h-8", dark = false, showTagline = true }) =>
         {/* Body drop shape */}
         <path 
           d="M30 35 Q25 45 30 55 Q35 45 30 35" 
-          stroke={dark ? "#1E293B" : "white"} 
+          stroke={dark ? "#1E293B" : "#FCD34D"} 
           strokeWidth="2.5" 
           strokeLinecap="round"
           fill="none"
@@ -46,14 +46,14 @@ const TendbeeLogo = ({ className = "h-8", dark = false, showTagline = true }) =>
         {/* Antennae - X shape */}
         <path 
           d="M26 8 L30 14 L34 8" 
-          stroke={dark ? "#1E293B" : "white"} 
+          stroke={dark ? "#1E293B" : "#FCD34D"} 
           strokeWidth="2" 
           strokeLinecap="round"
           fill="none"
         />
         <path 
           d="M27 5 L30 10 L33 5" 
-          stroke={dark ? "#1E293B" : "white"} 
+          stroke={dark ? "#1E293B" : "#FCD34D"} 
           strokeWidth="1.5" 
           strokeLinecap="round"
           fill="none"
@@ -62,7 +62,7 @@ const TendbeeLogo = ({ className = "h-8", dark = false, showTagline = true }) =>
     </div>
     <div>
       <span className={`font-bold text-2xl tracking-tight ${dark ? 'text-foreground' : 'text-white'}`} style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
-        Tend<span style={{ color: dark ? '#3B82F6' : '#FCD34D' }}>Bee</span>
+        Tend<span style={{ color: '#FCD34D' }}>Bee</span>
       </span>
       {dark && showTagline && <span className="text-[10px] text-muted-foreground block -mt-0.5 tracking-widest uppercase">Enterprise AI Recruitment</span>}
     </div>
