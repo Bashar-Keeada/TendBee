@@ -209,7 +209,7 @@ export default function TendbeeLanding() {
             </p>
             
             <div className="flex flex-wrap gap-4 mb-12">
-              <button className="btn-enterprise text-lg">
+              <button onClick={handleDemo} className="btn-enterprise text-lg">
                 Request Enterprise Demo
                 <ArrowRight className="w-5 h-5" />
               </button>
