@@ -81,6 +81,7 @@ const clientLogos = [
 ];
 
 export default function TendbeeLanding() {
+  const navigate = useNavigate();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   
@@ -89,6 +90,14 @@ export default function TendbeeLanding() {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+  
+  const handleLogin = () => {
+    navigate('/app');
+  };
+  
+  const handleDemo = () => {
+    navigate('/app');
+  };
 
   return (
     <div className="min-h-screen bg-background">
