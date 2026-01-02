@@ -1,11 +1,25 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import TendbeeLanding from './pages/TendbeeLanding';
 import LoginPage from './pages/LoginPage';
+import AdminLoginPage, { isAdminAuthenticated, logoutAdmin } from './pages/AdminLoginPage';
 import JobMatchingApp from './components/JobMatchingApp';
 import { AdminPanel } from './components/AdminPanel';
 
+// Protected Admin Route Component
+function ProtectedAdminRoute({ children }) {
+  if (!isAdminAuthenticated()) {
+    return <Navigate to="/admin-login" replace />;
+  }
+  return children;
+}
+
 function App() {
+  const handleAdminExit = () => {
+    logoutAdmin();
+    window.location.href = '/';
+  };
+
   return (
     <Router>
       <Routes>
@@ -15,16 +29,19 @@ function App() {
         {/* Login Page */}
         <Route path="/login" element={<LoginPage />} />
         
+        {/* Admin Login Page */}
+        <Route path="/admin-login" element={<AdminLoginPage />} />
+        
         {/* Job Matching Application */}
         <Route path="/app/*" element={<JobMatchingApp />} />
         
-        {/* Admin Panel */}
+        {/* Protected Admin Panel */}
         <Route 
           path="/admin/*" 
           element={
-            <AdminPanel 
-              onExit={() => window.location.href = '/'} 
-            />
+            <ProtectedAdminRoute>
+              <AdminPanel onExit={handleAdminExit} />
+            </ProtectedAdminRoute>
           } 
         />
       </Routes>
