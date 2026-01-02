@@ -391,6 +391,12 @@ export default function LoginPage() {
                   </p>
                 </div>
 
+                {error && (
+                  <div className="mb-4 p-3 rounded-lg bg-red-500/10 border border-red-500/20 text-red-400 text-sm">
+                    {error}
+                  </div>
+                )}
+
                 <form onSubmit={handleEmailLogin} className="space-y-4">
                   <div>
                     <label className="block text-white/70 text-sm mb-2">Email</label>
