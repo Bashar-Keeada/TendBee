@@ -93,7 +93,7 @@ export const BasicInfoScreen = ({ onNavigate, onUpdateProfile }) => {
         <div>
           <Label htmlFor="phone" className="text-white/70 text-sm mb-2 block">Telefonnummer</Label>
           <div className="flex gap-2">
-            <div className="flex items-center justify-center px-4 h-12 bg-muted rounded-xl border-2 border-border text-sm font-medium text-muted-foreground">
+            <div className="flex items-center justify-center px-4 h-12 bg-white/5 rounded-xl border border-white/10 text-sm font-medium text-white/60">
               +46
             </div>
             <Input
@@ -102,25 +102,23 @@ export const BasicInfoScreen = ({ onNavigate, onUpdateProfile }) => {
               placeholder="70 123 45 67"
               value={formData.phone}
               onChange={(e) => handleChange('phone', e.target.value)}
-              className="form-input flex-1"
+              className="bg-white/5 border-white/10 text-white placeholder-white/40 flex-1"
             />
           </div>
         </div>
       </div>
       
-      {/* Sticky Footer */}
-      <div className="sticky-footer">
-        <div className="max-w-[390px] mx-auto">
-          <Button 
-            size="lg"
-            className="w-full h-14"
-            disabled={!isValid}
-            onClick={handleContinue}
-          >
-            Fortsätt
-            <ArrowRight className="w-5 h-5" />
-          </Button>
-        </div>
+      {/* Footer Button */}
+      <div className="mt-8 pb-4">
+        <Button 
+          size="lg"
+          className="w-full h-14 bg-gradient-to-r from-secondary to-accent text-white font-semibold hover:opacity-90"
+          disabled={!isValid}
+          onClick={handleContinue}
+        >
+          Fortsätt
+          <ArrowRight className="w-5 h-5" />
+        </Button>
       </div>
     </ScreenContainer>
   );
