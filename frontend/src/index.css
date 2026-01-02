@@ -117,70 +117,234 @@ body {
         @apply w-full max-w-md px-6 py-8;
     }
     
-    /* Dark theme text colors for app */
-    .screen-container h1,
-    .screen-container h2,
-    .screen-container h3,
-    .mobile-container h1,
-    .mobile-container h2,
-    .mobile-container h3 {
-        @apply text-white;
+    /* ===== DARK THEME FOR APP SCREENS ===== */
+    
+    /* Text Colors */
+    .app-wrapper h1,
+    .app-wrapper h2,
+    .app-wrapper h3,
+    .app-wrapper .text-foreground {
+        color: white !important;
     }
     
-    .screen-container p,
-    .screen-container label,
-    .mobile-container p,
-    .mobile-container label {
-        @apply text-white/70;
+    .app-wrapper p,
+    .app-wrapper label,
+    .app-wrapper .text-muted-foreground,
+    .app-wrapper .form-label {
+        color: rgba(255, 255, 255, 0.7) !important;
     }
     
-    .screen-container .text-muted-foreground,
-    .mobile-container .text-muted-foreground {
-        @apply text-white/60;
+    .app-wrapper span {
+        color: rgba(255, 255, 255, 0.8);
     }
     
-    .screen-container .text-foreground,
-    .mobile-container .text-foreground {
-        @apply text-white;
+    /* Inputs & Selects */
+    .app-wrapper input,
+    .app-wrapper select,
+    .app-wrapper textarea,
+    .app-wrapper .form-input {
+        background: rgba(255, 255, 255, 0.05) !important;
+        border-color: rgba(255, 255, 255, 0.1) !important;
+        color: white !important;
     }
     
-    /* Dark theme inputs */
-    .screen-container input,
-    .screen-container select,
-    .screen-container textarea,
-    .mobile-container input,
-    .mobile-container select,
-    .mobile-container textarea {
-        @apply bg-white/5 border-white/10 text-white placeholder-white/40;
+    .app-wrapper input::placeholder,
+    .app-wrapper textarea::placeholder {
+        color: rgba(255, 255, 255, 0.4) !important;
     }
     
-    .screen-container input:focus,
-    .screen-container select:focus,
-    .screen-container textarea:focus,
-    .mobile-container input:focus,
-    .mobile-container select:focus,
-    .mobile-container textarea:focus {
-        @apply border-secondary ring-secondary/20;
+    .app-wrapper input:focus,
+    .app-wrapper select:focus,
+    .app-wrapper textarea:focus {
+        border-color: hsl(38 92% 50%) !important;
+        box-shadow: 0 0 0 3px hsl(38 92% 50% / 0.2) !important;
     }
     
-    /* Dark theme cards */
-    .screen-container .card,
-    .screen-container .card-interactive,
-    .mobile-container .card,
-    .mobile-container .card-interactive {
-        @apply bg-white/5 border-white/10;
+    /* Option Cards */
+    .app-wrapper .option-card {
+        background: rgba(255, 255, 255, 0.05) !important;
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+        color: white !important;
     }
     
-    /* Dark theme buttons */
-    .screen-container .btn-primary,
-    .mobile-container .btn-primary {
-        background: linear-gradient(135deg, hsl(38 92% 50%) 0%, hsl(32 95% 44%) 100%);
-        @apply text-white font-semibold;
+    .app-wrapper .option-card:hover {
+        background: rgba(255, 255, 255, 0.1) !important;
+        border-color: rgba(255, 255, 255, 0.2) !important;
     }
     
-    .screen-container .btn-secondary,
-    .mobile-container .btn-secondary {
-        @apply bg-white/10 text-white border-white/20 hover:bg-white/20;
+    .app-wrapper .option-card.selected {
+        background: rgba(245, 158, 11, 0.1) !important;
+        border-color: hsl(38 92% 50%) !important;
+    }
+    
+    /* Info Boxes */
+    .app-wrapper .info-box,
+    .app-wrapper .info-box-primary,
+    .app-wrapper .info-box-secondary {
+        background: rgba(255, 255, 255, 0.05) !important;
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    }
+    
+    /* Cards */
+    .app-wrapper .card,
+    .app-wrapper .card-interactive {
+        background: rgba(255, 255, 255, 0.05) !important;
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    }
+    
+    /* Primary Button - Gold gradient */
+    .app-wrapper button[class*="bg-primary"],
+    .app-wrapper .btn-primary,
+    .app-wrapper button:not([class*="variant"]):not([class*="ghost"]):not([class*="outline"]):not([class*="secondary"]) {
+        background: linear-gradient(135deg, hsl(38 92% 50%) 0%, hsl(32 95% 44%) 100%) !important;
+        color: white !important;
+        border: none !important;
+    }
+    
+    .app-wrapper button[class*="bg-primary"]:hover,
+    .app-wrapper .btn-primary:hover {
+        opacity: 0.9;
+    }
+    
+    .app-wrapper button[class*="bg-primary"]:disabled,
+    .app-wrapper .btn-primary:disabled {
+        opacity: 0.5;
+    }
+    
+    /* Secondary/Outline Buttons */
+    .app-wrapper button[class*="variant-outline"],
+    .app-wrapper button[class*="variant-secondary"],
+    .app-wrapper .btn-secondary {
+        background: rgba(255, 255, 255, 0.05) !important;
+        border: 1px solid rgba(255, 255, 255, 0.2) !important;
+        color: white !important;
+    }
+    
+    .app-wrapper button[class*="variant-outline"]:hover,
+    .app-wrapper button[class*="variant-secondary"]:hover {
+        background: rgba(255, 255, 255, 0.1) !important;
+    }
+    
+    /* Ghost Buttons */
+    .app-wrapper button[class*="variant-ghost"],
+    .app-wrapper .btn-ghost {
+        background: transparent !important;
+        color: rgba(255, 255, 255, 0.6) !important;
+    }
+    
+    .app-wrapper button[class*="variant-ghost"]:hover {
+        background: rgba(255, 255, 255, 0.05) !important;
+        color: white !important;
+    }
+    
+    /* Back Button */
+    .app-wrapper button[class*="text-muted"] {
+        color: rgba(255, 255, 255, 0.6) !important;
+    }
+    
+    .app-wrapper button[class*="text-muted"]:hover {
+        color: white !important;
+    }
+    
+    /* Progress Bar */
+    .app-wrapper .progress-bar,
+    .app-wrapper [class*="progress"] {
+        background: rgba(255, 255, 255, 0.1) !important;
+    }
+    
+    .app-wrapper .progress-bar-fill,
+    .app-wrapper [class*="progress"] > div {
+        background: linear-gradient(90deg, hsl(38 92% 50%), hsl(32 95% 44%)) !important;
+    }
+    
+    /* Sticky Footer */
+    .app-wrapper .sticky-footer {
+        background: transparent !important;
+        border: none !important;
+    }
+    
+    /* Slider */
+    .app-wrapper [class*="slider"] {
+        background: rgba(255, 255, 255, 0.1) !important;
+    }
+    
+    .app-wrapper [class*="slider"] [class*="track"] {
+        background: rgba(255, 255, 255, 0.1) !important;
+    }
+    
+    .app-wrapper [class*="slider"] [class*="range"] {
+        background: hsl(38 92% 50%) !important;
+    }
+    
+    .app-wrapper [class*="slider"] [class*="thumb"] {
+        background: hsl(38 92% 50%) !important;
+        border-color: hsl(38 92% 50%) !important;
+    }
+    
+    /* Checkbox */
+    .app-wrapper [class*="checkbox"] {
+        border-color: rgba(255, 255, 255, 0.3) !important;
+        background: rgba(255, 255, 255, 0.05) !important;
+    }
+    
+    .app-wrapper [class*="checkbox"][data-state="checked"] {
+        background: hsl(38 92% 50%) !important;
+        border-color: hsl(38 92% 50%) !important;
+    }
+    
+    /* Badges */
+    .app-wrapper .badge,
+    .app-wrapper [class*="badge"] {
+        background: rgba(255, 255, 255, 0.1) !important;
+        color: white !important;
+    }
+    
+    /* Icons in buttons/cards */
+    .app-wrapper .text-primary,
+    .app-wrapper [class*="text-primary"] {
+        color: hsl(38 92% 50%) !important;
+    }
+    
+    .app-wrapper .text-secondary,
+    .app-wrapper [class*="text-secondary"] {
+        color: hsl(38 92% 50%) !important;
+    }
+    
+    .app-wrapper .text-accent,
+    .app-wrapper [class*="text-accent"] {
+        color: hsl(32 95% 44%) !important;
+    }
+    
+    /* Background colors override */
+    .app-wrapper .bg-muted,
+    .app-wrapper [class*="bg-muted"] {
+        background: rgba(255, 255, 255, 0.05) !important;
+    }
+    
+    .app-wrapper .bg-primary\/10,
+    .app-wrapper [class*="bg-primary"] {
+        background: rgba(245, 158, 11, 0.2) !important;
+    }
+    
+    .app-wrapper .bg-secondary\/10,
+    .app-wrapper [class*="bg-secondary"] {
+        background: rgba(245, 158, 11, 0.2) !important;
+    }
+    
+    .app-wrapper .bg-accent\/10,
+    .app-wrapper [class*="bg-accent"] {
+        background: rgba(217, 119, 6, 0.2) !important;
+    }
+    
+    /* Border colors */
+    .app-wrapper .border-border,
+    .app-wrapper [class*="border-border"] {
+        border-color: rgba(255, 255, 255, 0.1) !important;
+    }
+    
+    /* Remove bg-background override for app wrapper children */
+    .app-wrapper .bg-background {
+        background: transparent !important;
     }
 
     /* Enterprise Hero */
