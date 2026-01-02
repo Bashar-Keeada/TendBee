@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
   Mail, Lock, ArrowRight, Chrome, Shield, ChevronLeft,
-  Smartphone, User, Eye, EyeOff
+  Smartphone, User, Eye, EyeOff, Settings
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
