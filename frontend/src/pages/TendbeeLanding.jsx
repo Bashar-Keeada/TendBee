@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { 
   Menu, X, ChevronRight, ChevronDown, Check, Play,
   Zap, Users, Shield, BarChart3, ArrowRight, Globe,
