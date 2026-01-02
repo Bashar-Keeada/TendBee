@@ -231,10 +231,53 @@ class CalendarInviteCreate(BaseModel):
     company_id: str
     title: str
     date: str
-    time: str
     duration_minutes: int = 60
     location: str
     description: Optional[str] = None
+
+
+# ----- Auth Models -----
+class UserRegister(BaseModel):
+    email: EmailStr
+    password: str
+    first_name: str
+    last_name: str
+    user_type: str = "jobseeker"  # jobseeker or employer
+
+class UserLogin(BaseModel):
+    email: EmailStr
+    password: str
+
+class UserResponse(BaseModel):
+    id: str
+    email: str
+    first_name: str
+    last_name: str
+    user_type: str
+    profile_id: Optional[str] = None
+    created_at: str
+
+class AuthResponse(BaseModel):
+    success: bool
+    message: str
+    user: Optional[UserResponse] = None
+    token: Optional[str] = None
+
+
+# ===================== AUTH HELPER FUNCTIONS =====================
+
+def hash_password(password: str) -> str:
+    """Hash password using SHA-256 with salt"""
+    salt = "tendbee_salt_2025"  # In production, use proper salt per user
+    return hashlib.sha256(f"{password}{salt}".encode()).hexdigest()
+
+def verify_password(password: str, hashed: str) -> bool:
+    """Verify password against hash"""
+    return hash_password(password) == hashed
+
+def generate_token() -> str:
+    """Generate a simple session token"""
+    return secrets.token_urlsafe(32)
 
 
 # ===================== HELPER FUNCTIONS =====================
