@@ -496,6 +496,223 @@ async def logout_user(token: str = Query(...)):
     return {"success": True, "message": "Utloggad"}
 
 
+# ----- Google OAuth Routes -----
+@api_router.post("/auth/google/session")
+async def google_oauth_session(session_id: str = Query(...)):
+    """
+    Process Google OAuth session_id from Emergent Auth.
+    Creates user if doesn't exist, returns auth token.
+    """
+    import httpx
+    
+    # Get user data from Emergent Auth
+    async with httpx.AsyncClient() as client:
+        response = await client.get(
+            "https://demobackend.emergentagent.com/auth/v1/env/oauth/session-data",
+            headers={"X-Session-ID": session_id}
+        )
+        
+        if response.status_code != 200:
+            raise HTTPException(status_code=401, detail="Ogiltig Google session")
+        
+        google_data = response.json()
+    
+    email = google_data.get("email", "").lower()
+    name = google_data.get("name", "")
+    picture = google_data.get("picture", "")
+    
+    # Split name into first and last name
+    name_parts = name.split(" ", 1)
+    first_name = name_parts[0] if name_parts else ""
+    last_name = name_parts[1] if len(name_parts) > 1 else ""
+    
+    # Check if user exists
+    existing_user = await db.users.find_one({"email": email}, {"_id": 0})
+    
+    token = generate_token()
+    
+    if existing_user:
+        # Update existing user with new token
+        await db.users.update_one(
+            {"email": email},
+            {"$set": {"token": token, "picture": picture}}
+        )
+        user_id = existing_user['id']
+        profile_id = existing_user.get('profile_id')
+    else:
+        # Create new user
+        user_id = str(uuid.uuid4())
+        
+        user_doc = {
+            "id": user_id,
+            "email": email,
+            "password": None,  # No password for OAuth users
+            "first_name": first_name,
+            "last_name": last_name,
+            "user_type": "jobseeker",
+            "profile_id": None,
+            "token": token,
+            "picture": picture,
+            "auth_provider": "google",
+            "created_at": datetime.now(timezone.utc).isoformat()
+        }
+        
+        await db.users.insert_one(user_doc)
+        
+        # Create jobseeker profile
+        profile = JobSeekerProfile(
+            first_name=first_name,
+            last_name=last_name,
+            age=0,
+            phone="",
+            email=email
+        )
+        profile_doc = profile.model_dump()
+        profile_doc['created_at'] = profile_doc['created_at'].isoformat()
+        profile_doc['updated_at'] = profile_doc['updated_at'].isoformat()
+        await db.jobseekers.insert_one(profile_doc)
+        profile_id = profile.id
+        
+        # Update user with profile_id
+        await db.users.update_one(
+            {"id": user_id},
+            {"$set": {"profile_id": profile_id}}
+        )
+    
+    return AuthResponse(
+        success=True,
+        message="Google-inloggning lyckades!",
+        user=UserResponse(
+            id=user_id,
+            email=email,
+            first_name=first_name,
+            last_name=last_name,
+            user_type="jobseeker",
+            profile_id=profile_id,
+            created_at=datetime.now(timezone.utc).isoformat()
+        ),
+        token=token
+    )
+
+
+# ----- BankID Mock Routes -----
+class BankIDInitRequest(BaseModel):
+    personal_number: Optional[str] = None  # Swedish personal number (personnummer)
+
+class BankIDStatusResponse(BaseModel):
+    status: str  # pending, complete, failed
+    order_ref: str
+    user: Optional[UserResponse] = None
+    token: Optional[str] = None
+
+@api_router.post("/auth/bankid/init")
+async def bankid_init(input: BankIDInitRequest = None):
+    """
+    Initialize BankID authentication (MOCK).
+    In production, this would call the real BankID API.
+    """
+    # Generate a mock order reference
+    order_ref = f"bankid_{uuid.uuid4().hex[:16]}"
+    
+    # Store pending BankID session
+    await db.bankid_sessions.insert_one({
+        "order_ref": order_ref,
+        "status": "pending",
+        "personal_number": input.personal_number if input else None,
+        "created_at": datetime.now(timezone.utc).isoformat()
+    })
+    
+    return {
+        "order_ref": order_ref,
+        "status": "pending",
+        "message": "Öppna BankID-appen på din mobil"
+    }
+
+@api_router.post("/auth/bankid/collect")
+async def bankid_collect(order_ref: str = Query(...)):
+    """
+    Check BankID authentication status (MOCK).
+    In production, this would poll the real BankID API.
+    """
+    # Find the session
+    session = await db.bankid_sessions.find_one({"order_ref": order_ref}, {"_id": 0})
+    if not session:
+        raise HTTPException(status_code=404, detail="BankID-session hittades inte")
+    
+    # For mock: automatically complete after first poll
+    if session['status'] == 'pending':
+        # Generate mock user data
+        mock_first_name = "Anna"
+        mock_last_name = "Svensson"
+        mock_email = f"bankid_{uuid.uuid4().hex[:8]}@tendbee.se"
+        
+        token = generate_token()
+        user_id = str(uuid.uuid4())
+        
+        # Create user
+        user_doc = {
+            "id": user_id,
+            "email": mock_email,
+            "password": None,
+            "first_name": mock_first_name,
+            "last_name": mock_last_name,
+            "user_type": "jobseeker",
+            "profile_id": None,
+            "token": token,
+            "auth_provider": "bankid",
+            "personal_number": session.get('personal_number'),
+            "created_at": datetime.now(timezone.utc).isoformat()
+        }
+        
+        await db.users.insert_one(user_doc)
+        
+        # Create jobseeker profile
+        profile = JobSeekerProfile(
+            first_name=mock_first_name,
+            last_name=mock_last_name,
+            age=0,
+            phone="",
+            email=mock_email
+        )
+        profile_doc = profile.model_dump()
+        profile_doc['created_at'] = profile_doc['created_at'].isoformat()
+        profile_doc['updated_at'] = profile_doc['updated_at'].isoformat()
+        await db.jobseekers.insert_one(profile_doc)
+        profile_id = profile.id
+        
+        # Update user with profile_id
+        await db.users.update_one(
+            {"id": user_id},
+            {"$set": {"profile_id": profile_id}}
+        )
+        
+        # Update session status
+        await db.bankid_sessions.update_one(
+            {"order_ref": order_ref},
+            {"$set": {"status": "complete", "user_id": user_id}}
+        )
+        
+        return BankIDStatusResponse(
+            status="complete",
+            order_ref=order_ref,
+            user=UserResponse(
+                id=user_id,
+                email=mock_email,
+                first_name=mock_first_name,
+                last_name=mock_last_name,
+                user_type="jobseeker",
+                profile_id=profile_id,
+                created_at=user_doc['created_at']
+            ),
+            token=token
+        )
+    
+    return BankIDStatusResponse(
+        status=session['status'],
+        order_ref=order_ref
+    )
+
+
 # ----- Job Seeker Routes -----
 @api_router.post("/jobseekers", response_model=JobSeekerProfile)
 async def create_jobseeker(input: JobSeekerCreate):
