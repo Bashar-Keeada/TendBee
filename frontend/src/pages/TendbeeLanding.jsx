@@ -629,7 +629,7 @@ export default function TendbeeLanding() {
             
             <div>
               <h4 className="font-semibold mb-4">Platform</h4>
-              <ul className="space-y-3 text-white/60">
+              <ul className="flex flex-wrap gap-x-6 gap-y-2 text-white/60">
                 <li><a href="#" className="hover:text-white transition-colors">AI Matching</a></li>
                 <li><a href="#" className="hover:text-white transition-colors">Analytics</a></li>
                 <li><a href="#" className="hover:text-white transition-colors">Integrations</a></li>
@@ -639,7 +639,7 @@ export default function TendbeeLanding() {
             
             <div>
               <h4 className="font-semibold mb-4">Solutions</h4>
-              <ul className="space-y-3 text-white/60">
+              <ul className="flex flex-wrap gap-x-6 gap-y-2 text-white/60">
                 <li><a href="#" className="hover:text-white transition-colors">Enterprise</a></li>
                 <li><a href="#" className="hover:text-white transition-colors">Public Sector</a></li>
                 <li><a href="#" className="hover:text-white transition-colors">Staffing</a></li>
@@ -649,7 +649,7 @@ export default function TendbeeLanding() {
             
             <div>
               <h4 className="font-semibold mb-4">Company</h4>
-              <ul className="space-y-3 text-white/60">
+              <ul className="flex flex-wrap gap-x-6 gap-y-2 text-white/60">
                 <li><a href="#" className="hover:text-white transition-colors">About Us</a></li>
                 <li><a href="#" className="hover:text-white transition-colors">Careers</a></li>
                 <li><a href="#" className="hover:text-white transition-colors">Investors</a></li>
