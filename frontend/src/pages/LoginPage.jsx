@@ -73,13 +73,9 @@ export default function LoginPage() {
   };
 
   const handleGoogleLogin = () => {
-    setIsLoading(true);
-    // Simulate Google OAuth redirect
-    setTimeout(() => {
-      // In production, redirect to Google OAuth
-      alert('Google OAuth kommer att implementeras med din Google Client ID');
-      setIsLoading(false);
-    }, 1000);
+    // REMINDER: DO NOT HARDCODE THE URL, OR ADD ANY FALLBACKS OR REDIRECT URLS, THIS BREAKS THE AUTH
+    const redirectUrl = window.location.origin + '/auth/callback';
+    window.location.href = `https://auth.emergentagent.com/?redirect=${encodeURIComponent(redirectUrl)}`;
   };
 
   const handleEmailLogin = async (e) => {
