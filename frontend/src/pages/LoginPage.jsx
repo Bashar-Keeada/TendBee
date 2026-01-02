@@ -150,13 +150,49 @@ export default function LoginPage() {
     }
   };
 
-  const handleBankIDLogin = () => {
+  const handleBankIDLogin = async () => {
     setIsLoading(true);
-    // Simulate BankID
-    setTimeout(() => {
-      alert('BankID-integration kommer att implementeras');
+    setError('');
+    
+    try {
+      // Initialize BankID session
+      const initResponse = await fetch(`${API_URL}/api/auth/bankid/init`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({})
+      });
+      
+      const initData = await initResponse.json();
+      
+      if (!initResponse.ok) {
+        throw new Error(initData.detail || 'Kunde inte starta BankID');
+      }
+      
+      // Simulate waiting for BankID app (in real implementation, poll until complete)
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      
+      // Collect/check BankID status
+      const collectResponse = await fetch(`${API_URL}/api/auth/bankid/collect?order_ref=${initData.order_ref}`, {
+        method: 'POST'
+      });
+      
+      const collectData = await collectResponse.json();
+      
+      if (collectData.status === 'complete' && collectData.user) {
+        // Store user data and token
+        localStorage.setItem('user', JSON.stringify(collectData.user));
+        localStorage.setItem('token', collectData.token);
+        
+        // Navigate to app
+        navigate('/app');
+      } else {
+        throw new Error('BankID-verifiering misslyckades');
+      }
+    } catch (err) {
+      setError(err.message);
+    } finally {
       setIsLoading(false);
-    }, 1000);
+    }
   };
 
   return (
