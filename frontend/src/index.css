@@ -84,6 +84,105 @@ body {
 }
 
 @layer components {
+    /* App Screen Container - Centered with proper theme */
+    .screen-container {
+        @apply min-h-screen px-4 py-6;
+        background: linear-gradient(135deg, 
+            hsl(222 47% 8%) 0%, 
+            hsl(222 47% 11%) 40%,
+            hsl(230 50% 15%) 100%);
+        max-width: 480px;
+        margin: 0 auto;
+    }
+    
+    /* Mobile Container - Full screen dark theme */
+    .mobile-container {
+        @apply min-h-screen;
+        background: linear-gradient(135deg, 
+            hsl(222 47% 8%) 0%, 
+            hsl(222 47% 11%) 40%,
+            hsl(230 50% 15%) 100%);
+    }
+    
+    /* App wrapper for centering */
+    .app-wrapper {
+        @apply min-h-screen flex items-center justify-center;
+        background: linear-gradient(135deg, 
+            hsl(222 47% 8%) 0%, 
+            hsl(222 47% 11%) 40%,
+            hsl(230 50% 15%) 100%);
+    }
+    
+    .app-content {
+        @apply w-full max-w-md px-6 py-8;
+    }
+    
+    /* Dark theme text colors for app */
+    .screen-container h1,
+    .screen-container h2,
+    .screen-container h3,
+    .mobile-container h1,
+    .mobile-container h2,
+    .mobile-container h3 {
+        @apply text-white;
+    }
+    
+    .screen-container p,
+    .screen-container label,
+    .mobile-container p,
+    .mobile-container label {
+        @apply text-white/70;
+    }
+    
+    .screen-container .text-muted-foreground,
+    .mobile-container .text-muted-foreground {
+        @apply text-white/60;
+    }
+    
+    .screen-container .text-foreground,
+    .mobile-container .text-foreground {
+        @apply text-white;
+    }
+    
+    /* Dark theme inputs */
+    .screen-container input,
+    .screen-container select,
+    .screen-container textarea,
+    .mobile-container input,
+    .mobile-container select,
+    .mobile-container textarea {
+        @apply bg-white/5 border-white/10 text-white placeholder-white/40;
+    }
+    
+    .screen-container input:focus,
+    .screen-container select:focus,
+    .screen-container textarea:focus,
+    .mobile-container input:focus,
+    .mobile-container select:focus,
+    .mobile-container textarea:focus {
+        @apply border-secondary ring-secondary/20;
+    }
+    
+    /* Dark theme cards */
+    .screen-container .card,
+    .screen-container .card-interactive,
+    .mobile-container .card,
+    .mobile-container .card-interactive {
+        @apply bg-white/5 border-white/10;
+    }
+    
+    /* Dark theme buttons */
+    .screen-container .btn-primary,
+    .mobile-container .btn-primary {
+        background: linear-gradient(135deg, hsl(38 92% 50%) 0%, hsl(32 95% 44%) 100%);
+        @apply text-white font-semibold;
+    }
+    
+    .screen-container .btn-secondary,
+    .mobile-container .btn-secondary {
+        @apply bg-white/10 text-white border-white/20 hover:bg-white/20;
+    }
+
     /* Enterprise Hero */
     .hero-enterprise {
         background: linear-gradient(135deg, 
