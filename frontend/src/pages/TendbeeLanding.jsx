@@ -92,11 +92,11 @@ export default function TendbeeLanding() {
   }, []);
   
   const handleLogin = () => {
-    window.location.href = 'https://skillmatch-123.emergent.host/';
+    navigate('/login');
   };
   
   const handleDemo = () => {
-    window.location.href = 'https://skillmatch-123.emergent.host/';
+    navigate('/login');
   };
 
   return (
