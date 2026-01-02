@@ -57,7 +57,7 @@ export const EmploymentStatusScreen = ({ onNavigate, onUpdateProfile }) => {
   };
   
   return (
-    <ScreenContainer hasFooter className="bg-background">
+    <ScreenContainer hasFooter className="">
       {/* Back Button */}
       <button 
         onClick={() => onNavigate('basicInfo')}
@@ -239,7 +239,7 @@ export const EmploymentStatusScreen = ({ onNavigate, onUpdateProfile }) => {
                         <select
                           value={praktikDuration}
                           onChange={(e) => setPraktikDuration(e.target.value)}
-                          className="w-full h-12 rounded-xl border-2 border-border bg-background px-4 text-foreground focus:border-primary focus:outline-none"
+                          className="w-full h-12 rounded-xl border-2 border-border px-4 text-foreground focus:border-primary focus:outline-none"
                         >
                           <option value="">Välj varaktighet</option>
                           <option value="1">1 månad</option>

@@ -28,7 +28,7 @@ export const SalaryPreferencesScreen = ({ onNavigate, onUpdateProfile, profile }
   };
   
   return (
-    <ScreenContainer hasFooter className="bg-background">
+    <ScreenContainer hasFooter className="">
       {/* Back Button */}
       <button 
         onClick={() => onNavigate('locationPreferences')}

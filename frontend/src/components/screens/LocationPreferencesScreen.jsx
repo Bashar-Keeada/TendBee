@@ -42,7 +42,7 @@ export const LocationPreferencesScreen = ({ onNavigate, onUpdateProfile }) => {
   };
   
   return (
-    <ScreenContainer hasFooter className="bg-background">
+    <ScreenContainer hasFooter className="">
       {/* Back Button */}
       <button 
         onClick={() => onNavigate('employmentStatus')}
