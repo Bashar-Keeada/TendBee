@@ -5,7 +5,7 @@ import { ChevronLeft, Calendar, Clock, MapPin, Building2, CheckCircle2, X } from
 
 export const CalendarInviteScreen = ({ onNavigate }) => {
   return (
-    <ScreenContainer className="bg-background">
+    <ScreenContainer >
       {/* Back Button */}
       <button 
         onClick={() => onNavigate('interestSent')}

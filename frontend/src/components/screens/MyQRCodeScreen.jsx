@@ -6,7 +6,7 @@ import { ChevronLeft, QrCode, Share2, Info, Search } from 'lucide-react';
 
 export const MyQRCodeScreen = ({ onNavigate, profilePercentage = 50 }) => {
   return (
-    <ScreenContainer hasFooter className="bg-background">
+    <ScreenContainer hasFooter >
       {/* Back Button */}
       <button 
         onClick={() => onNavigate('cvCompleted')}

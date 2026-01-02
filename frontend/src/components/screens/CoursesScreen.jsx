@@ -10,7 +10,7 @@ export const CoursesScreen = ({ onNavigate, coursesCompleted, onCompleteCourse }
   const allCompleted = online && physical;
   
   return (
-    <ScreenContainer className="bg-background">
+    <ScreenContainer >
       {/* Back Button */}
       <button 
         onClick={() => onNavigate('cvCompleted')}

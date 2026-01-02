@@ -5,7 +5,7 @@ import { ChevronLeft, QrCode, Download, Share2, Info, Printer, Building2 } from 
 
 export const CompanyQRCodeScreen = ({ onNavigate }) => {
   return (
-    <ScreenContainer className="bg-background">
+    <ScreenContainer >
       {/* Back Button */}
       <button 
         onClick={() => onNavigate('employerDashboard')}

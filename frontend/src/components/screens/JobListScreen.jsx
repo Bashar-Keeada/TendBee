@@ -14,7 +14,7 @@ export const JobListScreen = ({ onNavigate, onSelectJob, profilePercentage = 50 
   };
   
   return (
-    <ScreenContainer className="bg-background">
+    <ScreenContainer >
       {/* Back Button */}
       <button 
         onClick={() => onNavigate('cvCompleted')}

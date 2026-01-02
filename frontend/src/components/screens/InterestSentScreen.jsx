@@ -5,7 +5,7 @@ import { CheckCircle2, ChevronRight, Calendar, Bell, Search } from 'lucide-react
 
 export const InterestSentScreen = ({ onNavigate }) => {
   return (
-    <ScreenContainer className="bg-background">
+    <ScreenContainer >
       {/* Success Header */}
       <div className="text-center pt-12 pb-8">
         <div className="w-20 h-20 bg-secondary/10 rounded-full flex items-center justify-center mx-auto mb-4 animate-scale-in">

@@ -40,7 +40,7 @@ export const JobRequirementsScreen = ({ onNavigate }) => {
   };
   
   return (
-    <ScreenContainer hasFooter className="bg-background">
+    <ScreenContainer hasFooter >
       {/* Back Button */}
       <button 
         onClick={() => onNavigate('createJob')}

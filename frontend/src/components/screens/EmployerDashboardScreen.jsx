@@ -5,7 +5,7 @@ import { Briefcase, Users, QrCode, PlusCircle, Building2, TrendingUp } from 'luc
 
 export const EmployerDashboardScreen = ({ onNavigate }) => {
   return (
-    <ScreenContainer hasFooter className="bg-background">
+    <ScreenContainer hasFooter >
       {/* Header */}
       <div className="mb-6">
         <h1 className="text-2xl font-bold text-foreground mb-1">

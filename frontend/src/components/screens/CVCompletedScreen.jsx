@@ -6,7 +6,7 @@ import { CheckCircle2, QrCode, Search, GraduationCap, ArrowRight, Sparkles } fro
 
 export const CVCompletedScreen = ({ onNavigate, profilePercentage = 50 }) => {
   return (
-    <ScreenContainer className="bg-background">
+    <ScreenContainer >
       {/* Success Header */}
       <div className="text-center pt-8 pb-6">
         <div className="w-20 h-20 bg-secondary/10 rounded-full flex items-center justify-center mx-auto mb-4 animate-scale-in">

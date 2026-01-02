@@ -13,7 +13,7 @@ export const CandidateListScreen = ({ onNavigate }) => {
   };
   
   return (
-    <ScreenContainer className="bg-background">
+    <ScreenContainer >
       {/* Back Button */}
       <button 
         onClick={() => onNavigate('employerDashboard')}

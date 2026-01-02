@@ -42,7 +42,7 @@ export const CVQuestion2Screen = ({ onNavigate, onUpdateProfile }) => {
   };
   
   return (
-    <ScreenContainer hasFooter className="bg-background">
+    <ScreenContainer hasFooter >
       {/* Back Button */}
       <button 
         onClick={() => onNavigate('cvQuestion1')}
