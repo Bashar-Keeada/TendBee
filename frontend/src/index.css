@@ -123,19 +123,26 @@ body {
     .app-wrapper h1,
     .app-wrapper h2,
     .app-wrapper h3,
-    .app-wrapper .text-foreground {
+    .app-wrapper .text-foreground,
+    .app-wrapper [class*="text-foreground"] {
         color: white !important;
     }
     
     .app-wrapper p,
     .app-wrapper label,
     .app-wrapper .text-muted-foreground,
+    .app-wrapper [class*="text-muted-foreground"],
     .app-wrapper .form-label {
         color: rgba(255, 255, 255, 0.7) !important;
     }
     
     .app-wrapper span {
-        color: rgba(255, 255, 255, 0.8);
+        color: rgba(255, 255, 255, 0.9);
+    }
+    
+    .app-wrapper span.text-foreground,
+    .app-wrapper span[class*="font-medium"] {
+        color: white !important;
     }
     
     /* Inputs & Selects */
