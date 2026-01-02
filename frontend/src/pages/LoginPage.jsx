@@ -378,7 +378,7 @@ export default function LoginPage() {
         
         {/* Admin Link */}
         <button
-          onClick={() => navigate('/admin')}
+          onClick={() => navigate('/admin-login')}
           className="inline-flex items-center gap-2 text-white/20 hover:text-white/50 text-xs transition-colors"
         >
           <Settings className="w-3 h-3" />
