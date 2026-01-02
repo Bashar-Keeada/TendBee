@@ -10,7 +10,7 @@ export const ScreenContainer = ({
   return (
     <div 
       className={cn(
-        'screen-container scrollbar-hide',
+        'w-full',
         hasFooter && 'pb-28',
         animate && 'animate-fade-in',
         className
