@@ -595,11 +595,11 @@ export default function TendbeeLanding() {
               </p>
             </div>
             <div className="flex flex-wrap gap-4">
-              <button className="btn-white text-lg">
+              <button onClick={handleDemo} className="btn-white text-lg">
                 Request Demo
                 <ArrowRight className="w-5 h-5" />
               </button>
-              <button className="btn-outline-enterprise text-lg border-white/30 text-white hover:bg-white/10">
+              <button onClick={handleDemo} className="btn-outline-enterprise text-lg border-white/30 text-white hover:bg-white/10">
                 Contact Sales
               </button>
             </div>
