@@ -276,6 +276,83 @@ body {
     .gradient-text {
         @apply bg-gradient-to-r from-[hsl(38_92%_50%)] to-[hsl(32_95%_44%)] bg-clip-text text-transparent;
     }
+    
+    /* Login Page Styles */
+    .login-page-bg {
+        background: linear-gradient(135deg, 
+            hsl(222 47% 11%) 0%, 
+            hsl(222 47% 15%) 40%,
+            hsl(230 50% 20%) 100%);
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .login-card {
+        background: hsl(222 47% 13% / 0.8);
+        backdrop-filter: blur(20px);
+        border: 1px solid hsl(0 0% 100% / 0.1);
+        box-shadow: 0 25px 50px -12px hsl(0 0% 0% / 0.5);
+    }
+    
+    .login-method-btn {
+        @apply py-4 px-6 rounded-xl transition-all duration-200;
+        background: hsl(0 0% 100% / 0.05);
+        border: 1px solid hsl(0 0% 100% / 0.1);
+    }
+    
+    .login-method-btn:hover {
+        background: hsl(0 0% 100% / 0.1);
+        border-color: hsl(38 92% 50% / 0.5);
+        transform: translateY(-2px);
+    }
+    
+    .login-method-btn.bankid-btn {
+        background: linear-gradient(135deg, hsl(197 52% 29% / 0.2) 0%, hsl(197 52% 20% / 0.2) 100%);
+        border-color: hsl(197 52% 29% / 0.3);
+    }
+    
+    .login-method-btn.bankid-btn:hover {
+        background: linear-gradient(135deg, hsl(197 52% 29% / 0.3) 0%, hsl(197 52% 20% / 0.3) 100%);
+        border-color: hsl(197 52% 29% / 0.5);
+    }
+    
+    .login-input {
+        @apply py-3 px-4 rounded-xl text-white placeholder-white/40;
+        background: hsl(0 0% 100% / 0.05);
+        border: 1px solid hsl(0 0% 100% / 0.1);
+        outline: none;
+        transition: all 0.2s;
+    }
+    
+    .login-input:focus {
+        border-color: hsl(38 92% 50% / 0.5);
+        box-shadow: 0 0 0 3px hsl(38 92% 50% / 0.1);
+    }
+    
+    .login-submit-btn {
+        @apply py-4 px-6 rounded-xl font-semibold text-white transition-all duration-200;
+        background: linear-gradient(135deg, hsl(38 92% 50%) 0%, hsl(32 95% 44%) 100%);
+        box-shadow: 0 4px 15px hsl(38 92% 50% / 0.3);
+    }
+    
+    .login-submit-btn:hover:not(:disabled) {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px hsl(38 92% 50% / 0.4);
+    }
+    
+    .login-submit-btn:disabled {
+        opacity: 0.7;
+        cursor: not-allowed;
+    }
+    
+    .login-submit-btn.bankid-submit {
+        background: linear-gradient(135deg, hsl(197 52% 35%) 0%, hsl(197 52% 29%) 100%);
+        box-shadow: 0 4px 15px hsl(197 52% 29% / 0.3);
+    }
+    
+    .login-submit-btn.bankid-submit:hover:not(:disabled) {
+        box-shadow: 0 6px 20px hsl(197 52% 29% / 0.4);
+    }
 }
 
 /* Smooth scroll */
