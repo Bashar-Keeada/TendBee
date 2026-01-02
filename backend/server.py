@@ -367,6 +367,135 @@ async def health_check():
     return {"status": "healthy", "database": "connected"}
 
 
+# ----- Auth Routes -----
+@api_router.post("/auth/register", response_model=AuthResponse)
+async def register_user(input: UserRegister):
+    """Register a new user"""
+    # Check if email already exists
+    existing = await db.users.find_one({"email": input.email.lower()})
+    if existing:
+        raise HTTPException(status_code=400, detail="Email redan registrerad")
+    
+    # Create user
+    user_id = str(uuid.uuid4())
+    hashed_pwd = hash_password(input.password)
+    token = generate_token()
+    
+    user_doc = {
+        "id": user_id,
+        "email": input.email.lower(),
+        "password": hashed_pwd,
+        "first_name": input.first_name,
+        "last_name": input.last_name,
+        "user_type": input.user_type,
+        "profile_id": None,
+        "token": token,
+        "created_at": datetime.now(timezone.utc).isoformat()
+    }
+    
+    await db.users.insert_one(user_doc)
+    
+    # Also create a jobseeker profile if user_type is jobseeker
+    profile_id = None
+    if input.user_type == "jobseeker":
+        profile = JobSeekerProfile(
+            first_name=input.first_name,
+            last_name=input.last_name,
+            age=0,  # Will be updated later
+            phone="",  # Will be updated later
+            email=input.email.lower()
+        )
+        profile_doc = profile.model_dump()
+        profile_doc['created_at'] = profile_doc['created_at'].isoformat()
+        profile_doc['updated_at'] = profile_doc['updated_at'].isoformat()
+        await db.jobseekers.insert_one(profile_doc)
+        profile_id = profile.id
+        
+        # Update user with profile_id
+        await db.users.update_one(
+            {"id": user_id},
+            {"$set": {"profile_id": profile_id}}
+        )
+    
+    return AuthResponse(
+        success=True,
+        message="Konto skapat!",
+        user=UserResponse(
+            id=user_id,
+            email=input.email.lower(),
+            first_name=input.first_name,
+            last_name=input.last_name,
+            user_type=input.user_type,
+            profile_id=profile_id,
+            created_at=user_doc['created_at']
+        ),
+        token=token
+    )
+
+@api_router.post("/auth/login", response_model=AuthResponse)
+async def login_user(input: UserLogin):
+    """Login a user"""
+    # Find user by email
+    user = await db.users.find_one({"email": input.email.lower()}, {"_id": 0})
+    if not user:
+        raise HTTPException(status_code=401, detail="Fel email eller lösenord")
+    
+    # Verify password
+    if not verify_password(input.password, user['password']):
+        raise HTTPException(status_code=401, detail="Fel email eller lösenord")
+    
+    # Generate new token
+    token = generate_token()
+    await db.users.update_one(
+        {"id": user['id']},
+        {"$set": {"token": token}}
+    )
+    
+    return AuthResponse(
+        success=True,
+        message="Inloggning lyckades!",
+        user=UserResponse(
+            id=user['id'],
+            email=user['email'],
+            first_name=user['first_name'],
+            last_name=user['last_name'],
+            user_type=user['user_type'],
+            profile_id=user.get('profile_id'),
+            created_at=user['created_at']
+        ),
+        token=token
+    )
+
+@api_router.get("/auth/me")
+async def get_current_user(token: str = Query(...)):
+    """Get current user by token"""
+    user = await db.users.find_one({"token": token}, {"_id": 0, "password": 0})
+    if not user:
+        raise HTTPException(status_code=401, detail="Ogiltig token")
+    
+    return UserResponse(
+        id=user['id'],
+        email=user['email'],
+        first_name=user['first_name'],
+        last_name=user['last_name'],
+        user_type=user['user_type'],
+        profile_id=user.get('profile_id'),
+        created_at=user['created_at']
+    )
+
+@api_router.post("/auth/logout")
+async def logout_user(token: str = Query(...)):
+    """Logout a user"""
+    result = await db.users.update_one(
+        {"token": token},
+        {"$set": {"token": None}}
+    )
+    if result.modified_count == 0:
+        raise HTTPException(status_code=401, detail="Ogiltig token")
+    
+    return {"success": True, "message": "Utloggad"}
+
+
 # ----- Job Seeker Routes -----
 @api_router.post("/jobseekers", response_model=JobSeekerProfile)
 async def create_jobseeker(input: JobSeekerCreate):
