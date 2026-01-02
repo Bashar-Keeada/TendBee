@@ -256,8 +256,11 @@ export function JobMatchingApp() {
   };
   
   return (
-    <div className="mobile-container bg-background min-h-screen">
-      {renderScreen()}
+    <div className="app-wrapper">
+      <div className="app-content">
+        {renderScreen()}
+      </div>
+    </div>
     </div>
   );
 }
