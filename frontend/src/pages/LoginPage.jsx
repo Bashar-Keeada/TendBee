@@ -463,6 +463,18 @@ export default function LoginPage() {
                     )}
                   </button>
                 </form>
+
+                <div className="mt-6 pt-6 border-t border-white/10 text-center">
+                  <p className="text-white/50 text-sm">
+                    Har du inget konto?{' '}
+                    <button 
+                      onClick={() => { setLoginMethod('register'); setError(''); }}
+                      className="text-secondary hover:text-secondary/80 font-medium"
+                    >
+                      Skapa konto
+                    </button>
+                  </p>
+                </div>
               </>
             ) : loginMethod === 'google' ? (
               // Google Login
