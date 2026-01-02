@@ -372,9 +372,18 @@ export default function LoginPage() {
 
       {/* Footer */}
       <footer className="relative z-10 p-6 text-center">
-        <p className="text-white/30 text-sm">
+        <p className="text-white/30 text-sm mb-4">
           © 2025 Tendbee AB. All rights reserved.
         </p>
+        
+        {/* Admin Link */}
+        <button
+          onClick={() => navigate('/admin')}
+          className="inline-flex items-center gap-2 text-white/20 hover:text-white/50 text-xs transition-colors"
+        >
+          <Settings className="w-3 h-3" />
+          <span>Admin</span>
+        </button>
       </footer>
     </div>
   );
