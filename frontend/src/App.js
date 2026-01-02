@@ -1,7 +1,8 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import TendbeeLanding from './pages/TendbeeLanding';
 import LoginPage from './pages/LoginPage';
+import AuthCallback from './pages/AuthCallback';
 import AdminLoginPage, { isAdminAuthenticated, logoutAdmin } from './pages/AdminLoginPage';
 import JobMatchingApp from './components/JobMatchingApp';
 import { AdminPanel } from './components/AdminPanel';
@@ -14,37 +15,54 @@ function ProtectedAdminRoute({ children }) {
   return children;
 }
 
-function App() {
+// App Router with session_id detection
+function AppRouter() {
+  const location = useLocation();
+  
+  // Check URL fragment for session_id (Google OAuth callback)
+  if (location.hash?.includes('session_id=')) {
+    return <AuthCallback />;
+  }
+  
   const handleAdminExit = () => {
     logoutAdmin();
     window.location.href = '/';
   };
 
   return (
+    <Routes>
+      {/* Landing Page - Tendbee Marketing Site */}
+      <Route path="/" element={<TendbeeLanding />} />
+      
+      {/* Login Page */}
+      <Route path="/login" element={<LoginPage />} />
+      
+      {/* Auth Callback for Google OAuth */}
+      <Route path="/auth/callback" element={<AuthCallback />} />
+      
+      {/* Admin Login Page */}
+      <Route path="/admin-login" element={<AdminLoginPage />} />
+      
+      {/* Job Matching Application */}
+      <Route path="/app/*" element={<JobMatchingApp />} />
+      
+      {/* Protected Admin Panel */}
+      <Route 
+        path="/admin/*" 
+        element={
+          <ProtectedAdminRoute>
+            <AdminPanel onExit={handleAdminExit} />
+          </ProtectedAdminRoute>
+        } 
+      />
+    </Routes>
+  );
+}
+
+function App() {
+  return (
     <Router>
-      <Routes>
-        {/* Landing Page - Tendbee Marketing Site */}
-        <Route path="/" element={<TendbeeLanding />} />
-        
-        {/* Login Page */}
-        <Route path="/login" element={<LoginPage />} />
-        
-        {/* Admin Login Page */}
-        <Route path="/admin-login" element={<AdminLoginPage />} />
-        
-        {/* Job Matching Application */}
-        <Route path="/app/*" element={<JobMatchingApp />} />
-        
-        {/* Protected Admin Panel */}
-        <Route 
-          path="/admin/*" 
-          element={
-            <ProtectedAdminRoute>
-              <AdminPanel onExit={handleAdminExit} />
-            </ProtectedAdminRoute>
-          } 
-        />
-      </Routes>
+      <AppRouter />
     </Router>
   );
 }
