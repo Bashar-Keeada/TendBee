@@ -244,8 +244,134 @@ export default function LoginPage() {
                 <div className="mt-8 pt-6 border-t border-white/10 text-center">
                   <p className="text-white/50 text-sm">
                     Har du inget konto?{' '}
-                    <button className="text-secondary hover:text-secondary/80 font-medium">
+                    <button 
+                      onClick={() => setLoginMethod('register')}
+                      className="text-secondary hover:text-secondary/80 font-medium"
+                    >
                       Skapa konto
+                    </button>
+                  </p>
+                </div>
+              </>
+            ) : loginMethod === 'register' ? (
+              // Registration Form
+              <>
+                <div className="text-center mb-8">
+                  <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-green-500/20 flex items-center justify-center">
+                    <User className="w-8 h-8 text-green-400" />
+                  </div>
+                  <h1 className="text-2xl font-bold text-white mb-2" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
+                    Skapa konto
+                  </h1>
+                  <p className="text-white/60 text-sm">
+                    Fyll i dina uppgifter för att registrera dig
+                  </p>
+                </div>
+
+                {error && (
+                  <div className="mb-4 p-3 rounded-lg bg-red-500/10 border border-red-500/20 text-red-400 text-sm">
+                    {error}
+                  </div>
+                )}
+                
+                {success && (
+                  <div className="mb-4 p-3 rounded-lg bg-green-500/10 border border-green-500/20 text-green-400 text-sm">
+                    {success}
+                  </div>
+                )}
+
+                <form onSubmit={handleRegister} className="space-y-4">
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-white/70 text-sm mb-2">Förnamn</label>
+                      <input
+                        type="text"
+                        value={firstName}
+                        onChange={(e) => setFirstName(e.target.value)}
+                        placeholder="Anna"
+                        className="login-input w-full"
+                        required
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-white/70 text-sm mb-2">Efternamn</label>
+                      <input
+                        type="text"
+                        value={lastName}
+                        onChange={(e) => setLastName(e.target.value)}
+                        placeholder="Svensson"
+                        className="login-input w-full"
+                        required
+                      />
+                    </div>
+                  </div>
+                  
+                  <div>
+                    <label className="block text-white/70 text-sm mb-2">Email</label>
+                    <div className="relative">
+                      <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-white/40" />
+                      <input
+                        type="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        placeholder="din@email.se"
+                        className="login-input w-full pl-11"
+                        required
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-white/70 text-sm mb-2">Lösenord</label>
+                    <div className="relative">
+                      <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-white/40" />
+                      <input
+                        type={showPassword ? 'text' : 'password'}
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        placeholder="Minst 6 tecken"
+                        className="login-input w-full pl-11 pr-11"
+                        required
+                        minLength={6}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-white/40 hover:text-white/70"
+                      >
+                        {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                      </button>
+                    </div>
+                  </div>
+
+                  <button
+                    type="submit"
+                    disabled={isLoading}
+                    className="login-submit-btn w-full mt-6"
+                    style={{ background: 'linear-gradient(135deg, #22c55e 0%, #16a34a 100%)' }}
+                  >
+                    {isLoading ? (
+                      <span className="flex items-center justify-center gap-2">
+                        <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                        Skapar konto...
+                      </span>
+                    ) : (
+                      <span className="flex items-center justify-center gap-2">
+                        Skapa konto
+                        <ArrowRight className="w-5 h-5" />
+                      </span>
+                    )}
+                  </button>
+                </form>
+
+                <div className="mt-6 pt-6 border-t border-white/10 text-center">
+                  <p className="text-white/50 text-sm">
+                    Har du redan ett konto?{' '}
+                    <button 
+                      onClick={() => setLoginMethod('email')}
+                      className="text-secondary hover:text-secondary/80 font-medium"
+                    >
+                      Logga in
                     </button>
                   </p>
                 </div>
