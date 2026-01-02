@@ -50,13 +50,21 @@ const TendbeeLogo = ({ className = "h-8" }) => (
 
 export default function LoginPage() {
   const navigate = useNavigate();
-  const [loginMethod, setLoginMethod] = useState(null); // 'email', 'google', 'bankid'
+  const [loginMethod, setLoginMethod] = useState(null); // 'email', 'google', 'bankid', 'register'
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
+
+  const API_URL = process.env.REACT_APP_BACKEND_URL;
 
   const handleBack = () => {
+    setError('');
+    setSuccess('');
     if (loginMethod) {
       setLoginMethod(null);
     } else {
@@ -74,14 +82,76 @@ export default function LoginPage() {
     }, 1000);
   };
 
-  const handleEmailLogin = (e) => {
+  const handleEmailLogin = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-    // Simulate email login
-    setTimeout(() => {
-      alert('Email-login kommer att kopplas till din backend');
+    setError('');
+    
+    try {
+      const response = await fetch(`${API_URL}/api/auth/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password })
+      });
+      
+      const data = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(data.detail || 'Inloggning misslyckades');
+      }
+      
+      // Store user data and token
+      localStorage.setItem('user', JSON.stringify(data.user));
+      localStorage.setItem('token', data.token);
+      
+      // Navigate to app
+      navigate('/app');
+    } catch (err) {
+      setError(err.message);
+    } finally {
       setIsLoading(false);
-    }, 1000);
+    }
+  };
+
+  const handleRegister = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+    setError('');
+    
+    try {
+      const response = await fetch(`${API_URL}/api/auth/register`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          email, 
+          password,
+          first_name: firstName,
+          last_name: lastName,
+          user_type: 'jobseeker'
+        })
+      });
+      
+      const data = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(data.detail || 'Registrering misslyckades');
+      }
+      
+      // Store user data and token
+      localStorage.setItem('user', JSON.stringify(data.user));
+      localStorage.setItem('token', data.token);
+      
+      setSuccess('Konto skapat! Du loggas in...');
+      
+      // Navigate to app after short delay
+      setTimeout(() => {
+        navigate('/app');
+      }, 1500);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleBankIDLogin = () => {
