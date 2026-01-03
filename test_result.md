@@ -40,7 +40,7 @@
 ### Test Results (Automated Playwright Testing):
 
 #### User QR Code Screen (MyQRCodeScreen) - ⚠️ PARTIAL ISSUES
-- **URL tested:** `https://skillbridge-147.preview.emergentagent.com/app?screen=myQRCode`
+- **URL tested:** `https://career-match-107.preview.emergentagent.com/app?screen=myQRCode`
 - ✅ Page loads correctly with title "Min QR-kod"
 - ⚠️ QR code displayed but simpler than expected (7 path elements vs 15+ expected)
 - ✅ User name "Erik Svensson" displayed correctly
@@ -48,7 +48,7 @@
 - ❌ Share functionality fails due to clipboard permission denied in test environment
 
 #### Company QR Code Screen (CompanyQRCodeScreen) - ✅ MOSTLY WORKING
-- **URL tested:** `https://skillbridge-147.preview.emergentagent.com/app?screen=companyQRCode`
+- **URL tested:** `https://career-match-107.preview.emergentagent.com/app?screen=companyQRCode`
 - ✅ Page loads correctly with title "Företagets QR-kod"
 - ✅ Real QR code displayed (15 path elements - proper complexity)
 - ✅ Company name "Arlanda Logistics AB" displayed correctly
@@ -63,7 +63,7 @@
 
 ## "Förbättra ditt CV" Feature Testing - ✅ PASS
 
-### Test URL: `https://skillbridge-147.preview.emergentagent.com/app?screen=courses`
+### Test URL: `https://career-match-107.preview.emergentagent.com/app?screen=courses`
 
 #### Core Functionality - ✅ ALL WORKING
 - ✅ "Förbättra ditt CV" section displays correctly
@@ -102,7 +102,7 @@
 
 ## Profile Percentage Calculation & Data Persistence Testing - ⚠️ PARTIAL ISSUES
 
-### Test URL: `https://skillbridge-147.preview.emergentagent.com/app?screen=courses`
+### Test URL: `https://career-match-107.preview.emergentagent.com/app?screen=courses`
 
 #### Profile Percentage Calculation - ⚠️ MIXED RESULTS
 - ✅ Initial profile percentage correctly shows 20% (basic info completed)
@@ -182,7 +182,7 @@ Added URL parameter navigation (`?screen=screenName`) to JobMatchingApp.jsx for 
 
 ## BasicInfoScreen & QR Code Testing Results (Latest Update)
 
-### Test URL: `https://skillbridge-147.preview.emergentagent.com/app?screen=basicInfo`
+### Test URL: `https://career-match-107.preview.emergentagent.com/app?screen=basicInfo`
 
 #### BasicInfoScreen Testing - ✅ ALL TESTS PASSED
 - ✅ **Profile Picture Upload Section**: "Profilbild (valfritt)" label displayed correctly
@@ -230,9 +230,9 @@ Added URL parameter navigation (`?screen=screenName`) to JobMatchingApp.jsx for 
 ## Tendbee About Us and Careers Pages Testing Results (Latest Update)
 
 ### Test URLs:
-- Landing page: `https://skillbridge-147.preview.emergentagent.com/`
-- About Us: `https://skillbridge-147.preview.emergentagent.com/om-oss`
-- Careers: `https://skillbridge-147.preview.emergentagent.com/karriar`
+- Landing page: `https://career-match-107.preview.emergentagent.com/`
+- About Us: `https://career-match-107.preview.emergentagent.com/om-oss`
+- Careers: `https://career-match-107.preview.emergentagent.com/karriar`
 
 #### Landing Page Navigation Testing - ✅ ALL TESTS PASSED
 - ✅ **Landing page loads correctly**: Page title and content displayed properly
