@@ -84,230 +84,29 @@ body {
 }
 
 @layer components {
-    /* App Screen Container - Centered with proper theme */
+    /* App Screen Container */
     .screen-container {
         @apply min-h-screen px-4 py-6;
-        background: linear-gradient(135deg, 
-            hsl(222 47% 8%) 0%, 
-            hsl(222 47% 11%) 40%,
-            hsl(230 50% 15%) 100%);
         max-width: 480px;
         margin: 0 auto;
     }
     
-    /* Mobile Container - Full screen dark theme */
+    /* Mobile Container */
     .mobile-container {
-        @apply min-h-screen;
-        background: linear-gradient(135deg, 
-            hsl(222 47% 8%) 0%, 
-            hsl(222 47% 11%) 40%,
-            hsl(230 50% 15%) 100%);
+        @apply min-h-screen bg-gray-50;
     }
     
     /* App wrapper for centering */
     .app-wrapper {
-        @apply min-h-screen flex items-center justify-center;
-        background: linear-gradient(135deg, 
-            hsl(222 47% 8%) 0%, 
-            hsl(222 47% 11%) 40%,
-            hsl(230 50% 15%) 100%);
+        @apply min-h-screen flex items-center justify-center bg-gray-50;
     }
     
     .app-content {
         @apply w-full max-w-md px-6 py-8;
     }
-    
-    /* ===== DARK THEME FOR APP SCREENS ===== */
-    
-    /* Text Colors */
-    .app-wrapper h1,
-    .app-wrapper h2,
-    .app-wrapper h3,
-    .app-wrapper .text-foreground,
-    .app-wrapper [class*="text-foreground"] {
-        color: white !important;
-    }
-    
-    .app-wrapper p,
-    .app-wrapper label,
-    .app-wrapper .text-muted-foreground,
-    .app-wrapper [class*="text-muted-foreground"],
-    .app-wrapper .form-label {
-        color: rgba(255, 255, 255, 0.7) !important;
-    }
-    
-    .app-wrapper span {
-        color: rgba(255, 255, 255, 0.9);
-    }
-    
-    .app-wrapper span.text-foreground,
-    .app-wrapper span[class*="font-medium"] {
-        color: white !important;
-    }
-    
-    /* Inputs & Selects */
-    .app-wrapper input,
-    .app-wrapper select,
-    .app-wrapper textarea,
-    .app-wrapper .form-input {
-        background: rgba(255, 255, 255, 0.05) !important;
-        border-color: rgba(255, 255, 255, 0.1) !important;
-        color: white !important;
-    }
-    
-    .app-wrapper input::placeholder,
-    .app-wrapper textarea::placeholder {
-        color: rgba(255, 255, 255, 0.4) !important;
-    }
-    
-    .app-wrapper input:focus,
-    .app-wrapper select:focus,
-    .app-wrapper textarea:focus {
-        border-color: hsl(38 92% 50%) !important;
-        box-shadow: 0 0 0 3px hsl(38 92% 50% / 0.2) !important;
-    }
-    
-    /* Option Cards */
-    .app-wrapper .option-card {
-        background: rgba(255, 255, 255, 0.05) !important;
-        border: 1px solid rgba(255, 255, 255, 0.1) !important;
-        color: white !important;
-    }
-    
-    .app-wrapper .option-card:hover {
-        background: rgba(255, 255, 255, 0.1) !important;
-        border-color: rgba(255, 255, 255, 0.2) !important;
-    }
-    
-    .app-wrapper .option-card.selected {
-        background: rgba(245, 158, 11, 0.1) !important;
-        border-color: hsl(38 92% 50%) !important;
-    }
-    
-    /* Info Boxes */
-    .app-wrapper .info-box,
-    .app-wrapper .info-box-primary,
-    .app-wrapper .info-box-secondary {
-        background: rgba(255, 255, 255, 0.05) !important;
-        border: 1px solid rgba(255, 255, 255, 0.1) !important;
-    }
-    
-    /* Cards */
-    .app-wrapper .card,
-    .app-wrapper .card-interactive {
-        background: rgba(255, 255, 255, 0.05) !important;
-        border: 1px solid rgba(255, 255, 255, 0.1) !important;
-    }
-    
-    /* Primary Button - Gold gradient */
-    .app-wrapper button[class*="bg-primary"],
-    .app-wrapper .btn-primary,
-    .app-wrapper button:not([class*="variant"]):not([class*="ghost"]):not([class*="outline"]):not([class*="secondary"]) {
-        background: linear-gradient(135deg, hsl(38 92% 50%) 0%, hsl(32 95% 44%) 100%) !important;
-        color: white !important;
-        border: none !important;
-    }
-    
-    .app-wrapper button[class*="bg-primary"]:hover,
-    .app-wrapper .btn-primary:hover {
-        opacity: 0.9;
-    }
-    
-    .app-wrapper button[class*="bg-primary"]:disabled,
-    .app-wrapper .btn-primary:disabled {
-        opacity: 0.5;
-    }
-    
-    /* Secondary/Outline Buttons */
-    .app-wrapper button[class*="variant-outline"],
-    .app-wrapper button[class*="variant-secondary"],
-    .app-wrapper .btn-secondary {
-        background: rgba(255, 255, 255, 0.05) !important;
-        border: 1px solid rgba(255, 255, 255, 0.2) !important;
-        color: white !important;
-    }
-    
-    .app-wrapper button[class*="variant-outline"]:hover,
-    .app-wrapper button[class*="variant-secondary"]:hover {
-        background: rgba(255, 255, 255, 0.1) !important;
-    }
-    
-    /* Ghost Buttons */
-    .app-wrapper button[class*="variant-ghost"],
-    .app-wrapper .btn-ghost {
-        background: transparent !important;
-        color: rgba(255, 255, 255, 0.6) !important;
-    }
-    
-    .app-wrapper button[class*="variant-ghost"]:hover {
-        background: rgba(255, 255, 255, 0.05) !important;
-        color: white !important;
-    }
-    
-    /* Back Button */
-    .app-wrapper button[class*="text-muted"] {
-        color: rgba(255, 255, 255, 0.6) !important;
-    }
-    
-    .app-wrapper button[class*="text-muted"]:hover {
-        color: white !important;
-    }
-    
-    /* Progress Bar */
-    .app-wrapper .progress-bar,
-    .app-wrapper [class*="progress"] {
-        background: rgba(255, 255, 255, 0.1) !important;
-    }
-    
-    .app-wrapper .progress-bar-fill,
-    .app-wrapper [class*="progress"] > div {
-        background: linear-gradient(90deg, hsl(38 92% 50%), hsl(32 95% 44%)) !important;
-    }
-    
-    /* Sticky Footer */
-    .app-wrapper .sticky-footer {
-        background: transparent !important;
-        border: none !important;
-    }
-    
-    /* Slider */
-    .app-wrapper [class*="slider"] {
-        background: rgba(255, 255, 255, 0.1) !important;
-    }
-    
-    .app-wrapper [class*="slider"] [class*="track"] {
-        background: rgba(255, 255, 255, 0.1) !important;
-    }
-    
-    .app-wrapper [class*="slider"] [class*="range"] {
-        background: hsl(38 92% 50%) !important;
-    }
-    
-    .app-wrapper [class*="slider"] [class*="thumb"] {
-        background: hsl(38 92% 50%) !important;
-        border-color: hsl(38 92% 50%) !important;
-    }
-    
-    /* Checkbox */
-    .app-wrapper [class*="checkbox"] {
-        border-color: rgba(255, 255, 255, 0.3) !important;
-        background: rgba(255, 255, 255, 0.05) !important;
-    }
-    
-    .app-wrapper [class*="checkbox"][data-state="checked"] {
-        background: hsl(38 92% 50%) !important;
-        border-color: hsl(38 92% 50%) !important;
-    }
-    
-    /* Badges */
-    .app-wrapper .badge,
-    .app-wrapper [class*="badge"] {
-        background: rgba(255, 255, 255, 0.1) !important;
-        color: white !important;
-    }
-    
-    /* Icons in buttons/cards */
-    .app-wrapper .text-primary,
+
+    /* Enterprise Hero */
+    .hero-enterprise {
     .app-wrapper [class*="text-primary"] {
         color: hsl(38 92% 50%) !important;
     }
