@@ -8,7 +8,7 @@ import json
 import tempfile
 import os
 
-BACKEND_URL = "https://career-match-107.preview.emergentagent.com/api"
+BACKEND_URL = "https://tendbee-platform.preview.emergentagent.com/api"
 
 def test_specific_requirements():
     """Test the specific requirements from the review request"""

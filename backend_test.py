@@ -13,7 +13,7 @@ import uuid
 import time
 
 # Get backend URL from environment
-BACKEND_URL = "https://career-match-107.preview.emergentagent.com/api"
+BACKEND_URL = "https://tendbee-platform.preview.emergentagent.com/api"
 
 class TendbeeBackendTester:
     def __init__(self):
