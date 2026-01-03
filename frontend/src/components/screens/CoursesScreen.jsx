@@ -196,33 +196,37 @@ export const CoursesScreen = ({ onNavigate, coursesCompleted, onCompleteCourse, 
       {/* Back Button */}
       <button 
         onClick={handleBack}
-        className="flex items-center gap-1 text-muted-foreground hover:text-foreground transition-colors mb-4"
+        className="inline-flex items-center gap-1.5 text-gray-500 hover:text-gray-700 transition-colors mb-6 group"
       >
-        <ChevronLeft className="w-5 h-5" />
-        <span className="text-sm">Tillbaka</span>
+        <ChevronLeft className="w-5 h-5 group-hover:-translate-x-0.5 transition-transform" />
+        <span className="text-sm font-medium">Tillbaka</span>
       </button>
       
       {/* Profile Completeness - Visa aktuell procent */}
-      <ProfileCompleteness percentage={profilePercentage} className="mb-6" />
+      <ProfileCompleteness percentage={profilePercentage} className="mb-8" />
       
       {/* Header */}
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold text-foreground mb-2">
+      <div className="mb-8">
+        <h1 className="text-2xl font-bold text-gray-900 mb-2">
           Kurser & Tester
         </h1>
-        <p className="text-muted-foreground">
+        <p className="text-gray-500">
           Öka ditt profilvärde och stå ut
         </p>
       </div>
       
       {/* Kurser Progress */}
-      <div className="info-box info-box-primary mb-4">
+      <div className="p-4 rounded-2xl mb-6"
+        style={{ background: 'linear-gradient(135deg, #fef3c7 0%, #fde68a 100%)', border: '1px solid #fcd34d' }}
+      >
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <Award className="w-5 h-5 text-primary" />
+            <div className="w-10 h-10 bg-amber-400 rounded-xl flex items-center justify-center">
+              <Award className="w-5 h-5 text-white" />
+            </div>
             <div>
-              <p className="font-medium text-foreground text-sm">Kurser</p>
-              <p className="text-xs text-muted-foreground">
+              <p className="font-semibold text-gray-900 text-sm">Kurser genomförda</p>
+              <p className="text-xs text-amber-700">
                 {online && physical 
                   ? 'Alla kurser genomförda!' 
                   : `Varje kurs ökar din profil`
@@ -230,120 +234,117 @@ export const CoursesScreen = ({ onNavigate, coursesCompleted, onCompleteCourse, 
               </p>
             </div>
           </div>
-          <span className="text-lg font-bold text-primary">
+          <span className="text-2xl font-bold text-amber-600">
             {coursesCompletedCount}/2
           </span>
         </div>
       </div>
       
       {/* Course 1: Online */}
-      <div className={`card-interactive mb-4 ${
-        online ? 'border-secondary bg-secondary/5' : ''
+      <div className={`p-5 rounded-2xl border-2 mb-4 transition-all duration-300 ${
+        online ? 'border-amber-400 bg-amber-50/50' : 'border-gray-100 bg-white hover:border-gray-200 hover:shadow-md'
       }`}>
         <div className="flex items-start gap-4">
-          <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${
-            online ? 'bg-secondary/20' : 'bg-purple-100'
+          <div className={`w-14 h-14 rounded-xl flex items-center justify-center shrink-0 ${
+            online ? 'bg-amber-400' : 'bg-purple-100'
           }`}>
-            <Monitor className={`w-6 h-6 ${online ? 'text-secondary' : 'text-purple-600'}`} />
+            <Monitor className={`w-7 h-7 ${online ? 'text-white' : 'text-purple-600'}`} />
           </div>
-          <div className="flex-1">
+          <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 mb-1">
-              <h3 className="font-semibold text-foreground">Online Kunskapskurs</h3>
-              {online && <CheckCircle2 className="w-4 h-4 text-secondary" />}
+              <h3 className="font-bold text-gray-900">Online Kunskapskurs</h3>
+              {online && <CheckCircle2 className="w-5 h-5 text-amber-500" />}
             </div>
-            <p className="text-sm text-muted-foreground mb-2">
+            <p className="text-sm text-gray-500 mb-3">
               Testa din teoretiska kunskap med vårt online-test
             </p>
-            <div className="flex items-center gap-3 text-xs text-muted-foreground mb-3">
-              <div className="flex items-center gap-1">
+            <div className="flex items-center gap-2 flex-wrap mb-4">
+              <span className="inline-flex items-center gap-1 text-xs text-gray-500 bg-gray-100 px-2.5 py-1 rounded-full">
                 <Clock className="w-3 h-3" />
-                <span>20 min</span>
-              </div>
-              <Badge variant="outline" className="text-xs">
-                {online ? 'Genomförd ✓' : 'Ej genomförd'}
-              </Badge>
-              <Badge className="bg-primary/15 text-primary text-xs border-0">
+                20 min
+              </span>
+              <span className={`text-xs font-medium px-2.5 py-1 rounded-full ${online ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500'}`}>
+                {online ? '✓ Genomförd' : 'Ej genomförd'}
+              </span>
+              <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-amber-100 text-amber-700">
                 +15%
-              </Badge>
+              </span>
             </div>
             {!online && (
-              <Button 
-                size="sm"
-                className="bg-purple-600 hover:bg-purple-700 text-primary-foreground"
+              <button 
+                className="inline-flex items-center gap-2 px-5 py-2.5 bg-purple-600 hover:bg-purple-700 text-white text-sm font-semibold rounded-xl transition-all hover:shadow-lg"
                 onClick={() => onCompleteCourse?.('online')}
               >
                 Starta kurs
                 <ArrowRight className="w-4 h-4" />
-              </Button>
+              </button>
             )}
           </div>
         </div>
       </div>
       
       {/* Course 2: Physical - Keeada Academy */}
-      <div className={`card-interactive mb-6 ${
-        physical ? 'border-secondary bg-secondary/5' : ''
+      <div className={`p-5 rounded-2xl border-2 mb-8 transition-all duration-300 ${
+        physical ? 'border-amber-400 bg-amber-50/50' : 'border-gray-100 bg-white hover:border-gray-200 hover:shadow-md'
       }`}>
         <div className="flex items-start gap-4">
-          <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${
-            physical ? 'bg-secondary/20' : 'bg-accent/20'
+          <div className={`w-14 h-14 rounded-xl flex items-center justify-center shrink-0 ${
+            physical ? 'bg-amber-400' : 'bg-orange-100'
           }`}>
-            <MapPin className={`w-6 h-6 ${physical ? 'text-secondary' : 'text-accent'}`} />
+            <MapPin className={`w-7 h-7 ${physical ? 'text-white' : 'text-orange-600'}`} />
           </div>
-          <div className="flex-1">
+          <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 mb-1">
-              <h3 className="font-semibold text-foreground">Praktisk Kurs</h3>
-              {physical && <CheckCircle2 className="w-4 h-4 text-secondary" />}
+              <h3 className="font-bold text-gray-900">Praktisk Kurs</h3>
+              {physical && <CheckCircle2 className="w-5 h-5 text-amber-500" />}
             </div>
-            <p className="text-sm text-muted-foreground mb-2">
+            <p className="text-sm text-gray-500 mb-3">
               Keeada Academy - Testa dina praktiska färdigheter på plats
             </p>
-            <div className="flex items-center gap-2 mb-3 flex-wrap">
-              <div className="flex items-center gap-1 text-xs text-muted-foreground">
+            <div className="flex items-center gap-2 flex-wrap mb-4">
+              <span className="inline-flex items-center gap-1 text-xs text-gray-500 bg-gray-100 px-2.5 py-1 rounded-full">
                 <Clock className="w-3 h-3" />
-                <span>2-4 veckor</span>
-              </div>
-              <Badge className="bg-secondary/15 text-secondary text-xs border-0">
+                2-4 veckor
+              </span>
+              <span className="text-xs font-medium px-2.5 py-1 rounded-full bg-green-100 text-green-700">
                 Betald praktik
-              </Badge>
-              <Badge className="bg-accent/15 text-accent text-xs border-0">
+              </span>
+              <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-amber-100 text-amber-700">
                 +15%
-              </Badge>
+              </span>
             </div>
             {!physical && (
-              <Button 
-                size="sm"
-                variant="accent"
-                className="bg-accent hover:bg-accent/90 text-accent-foreground"
+              <button 
+                className="inline-flex items-center gap-2 px-5 py-2.5 bg-orange-500 hover:bg-orange-600 text-white text-sm font-semibold rounded-xl transition-all hover:shadow-lg"
                 onClick={() => onCompleteCourse?.('physical')}
               >
                 Ansök till praktik
                 <ArrowRight className="w-4 h-4" />
-              </Button>
+              </button>
             )}
           </div>
         </div>
       </div>
 
       {/* Divider */}
-      <div className="border-t border-border my-6"></div>
+      <div className="border-t border-gray-200 my-8"></div>
 
       {/* NEW SECTION: Förbättra CV */}
       <div className="mb-6">
-        <h2 className="text-xl font-bold text-foreground mb-2">
+        <h2 className="text-xl font-bold text-gray-900 mb-2">
           Förbättra ditt CV
         </h2>
-        <p className="text-sm text-muted-foreground">
+        <p className="text-sm text-gray-500">
           Lägg till kompetenser, utbildning och erfarenhet för att öka din profil
         </p>
       </div>
 
       {/* Selected items summary */}
       {totalAdditions > 0 && (
-        <div className="info-box info-box-secondary mb-4">
+        <div className="p-4 rounded-xl mb-6" style={{ background: 'linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%)', border: '1px solid #6ee7b7' }}>
           <div className="flex items-center gap-2">
-            <CheckCircle2 className="w-5 h-5 text-secondary" />
-            <span className="font-medium text-sm">{totalAdditions} tillagda till din profil</span>
+            <CheckCircle2 className="w-5 h-5 text-green-600" />
+            <span className="font-semibold text-sm text-green-800">{totalAdditions} tillagda till din profil</span>
           </div>
         </div>
       )}
