@@ -143,6 +143,19 @@ body {
     
     /* ===== APP COMPONENT STYLES ===== */
     
+    /* Card Interactive - Modern card with hover effect */
+    .card-interactive {
+        @apply p-5 rounded-2xl border transition-all duration-300;
+        background: white;
+        border-color: #f1f5f9;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    }
+    
+    .card-interactive:hover {
+        border-color: #e2e8f0;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+    }
+    
     /* Option Card - for selection items */
     .option-card {
         @apply flex items-center gap-3 p-4 rounded-xl border-2 transition-all duration-200;
@@ -153,46 +166,57 @@ body {
     .option-card:hover {
         border-color: #d1d5db;
         background: #f9fafb;
+        transform: translateY(-1px);
     }
     
     .option-card.selected {
         border-color: #f59e0b;
-        background: #fffbeb;
+        background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+        box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.1);
     }
     
     /* Info Box */
     .info-box {
         @apply p-4 rounded-xl border;
-        background: #f3f4f6;
-        border-color: #e5e7eb;
+        background: #f8fafc;
+        border-color: #e2e8f0;
     }
     
     .info-box-primary {
-        background: #fef3c7;
+        background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
         border-color: #fcd34d;
     }
     
     .info-box-secondary {
-        background: #ecfdf5;
+        background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
         border-color: #6ee7b7;
     }
     
     /* Form Label */
     .form-label {
-        @apply text-sm font-medium text-gray-700 mb-2 block;
+        @apply text-sm font-semibold text-gray-700 mb-2 block;
     }
     
     /* Form Input */
     .form-input {
-        @apply w-full h-12 px-4 rounded-xl border-2 text-gray-900;
-        border-color: #e5e7eb;
-        background: white;
+        @apply w-full h-12 px-4 rounded-xl border-2 text-gray-900 transition-all duration-200;
+        border-color: #e2e8f0;
+        background: #fafafa;
+    }
+    
+    .form-input:hover {
+        border-color: #cbd5e1;
     }
     
     .form-input:focus {
         border-color: #f59e0b;
+        background: white;
         outline: none;
-        box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.1);
+        box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.1);
+    }
+    
+    .form-input::placeholder {
+        color: #94a3b8;
     }
     
     /* Sticky Footer */
@@ -208,11 +232,20 @@ body {
     
     /* Profile Picture Upload */
     .profile-picture-upload {
-        @apply relative w-24 h-24 mx-auto rounded-full bg-gray-100 border-2 border-dashed border-gray-300 flex items-center justify-center cursor-pointer transition-all hover:border-amber-400 hover:bg-amber-50;
+        @apply relative w-28 h-28 mx-auto rounded-full flex items-center justify-center cursor-pointer transition-all duration-300;
+        background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+        border: 3px dashed #cbd5e1;
+    }
+    
+    .profile-picture-upload:hover {
+        border-color: #f59e0b;
+        background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+        transform: scale(1.02);
     }
     
     .profile-picture-upload.has-image {
-        @apply border-solid border-amber-400;
+        border: 3px solid #f59e0b;
+        box-shadow: 0 8px 24px -8px rgba(245, 158, 11, 0.4);
     }
     
     .profile-picture-upload img {
@@ -221,6 +254,15 @@ body {
     
     .profile-picture-upload input[type="file"] {
         @apply absolute inset-0 w-full h-full opacity-0 cursor-pointer;
+    }
+    
+    /* Section Header */
+    .section-header {
+        @apply text-lg font-bold text-gray-900 mb-1;
+    }
+    
+    .section-description {
+        @apply text-sm text-gray-500;
     }
     
     /* Primary Button Override for App */
