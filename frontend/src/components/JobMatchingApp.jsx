@@ -144,6 +144,83 @@ export function JobMatchingApp() {
     return Math.min(Math.round(percentage), 100);
   }, [userData]);
 
+  // Save userData to localStorage whenever it changes
+  useEffect(() => {
+    try {
+      localStorage.setItem(STORAGE_KEYS.USER_DATA, JSON.stringify(userData));
+      console.log('Saved user data to localStorage:', userData);
+    } catch (e) {
+      console.error('Error saving user data to localStorage:', e);
+    }
+  }, [userData]);
+
+  // Sync userData with backend API
+  const syncWithBackend = useCallback(async (dataToSync) => {
+    const profileId = localStorage.getItem(STORAGE_KEYS.PROFILE_ID);
+    const token = localStorage.getItem(STORAGE_KEYS.USER_TOKEN);
+    
+    if (!profileId || !token) {
+      console.log('No profile ID or token, skipping backend sync');
+      return;
+    }
+
+    try {
+      // Map frontend userData to backend JobSeekerUpdate format
+      const backendData = {
+        online_course_completed: dataToSync.onlineCourseCompleted,
+        physical_course_completed: dataToSync.practicalCourseCompleted,
+      };
+
+      const response = await fetch(`${BACKEND_URL}/api/jobseekers/${profileId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(backendData),
+      });
+
+      if (response.ok) {
+        console.log('Successfully synced with backend');
+      } else {
+        console.error('Failed to sync with backend:', response.status);
+      }
+    } catch (error) {
+      console.error('Error syncing with backend:', error);
+    }
+  }, []);
+
+  // Load user data from backend on mount if logged in
+  useEffect(() => {
+    const loadUserFromBackend = async () => {
+      const token = localStorage.getItem(STORAGE_KEYS.USER_TOKEN);
+      const profileId = localStorage.getItem(STORAGE_KEYS.PROFILE_ID);
+      
+      if (token && profileId) {
+        try {
+          const response = await fetch(`${BACKEND_URL}/api/jobseekers/${profileId}`);
+          if (response.ok) {
+            const backendData = await response.json();
+            console.log('Loaded profile from backend:', backendData);
+            
+            // Merge backend data with local data (local takes precedence for UI state)
+            setUserData(prev => ({
+              ...prev,
+              firstName: backendData.first_name || prev.firstName,
+              lastName: backendData.last_name || prev.lastName,
+              onlineCourseCompleted: backendData.online_course_completed || prev.onlineCourseCompleted,
+              practicalCourseCompleted: backendData.physical_course_completed || prev.practicalCourseCompleted,
+            }));
+          }
+        } catch (error) {
+          console.error('Error loading user from backend:', error);
+        }
+      }
+      setIsLoading(false);
+    };
+
+    loadUserFromBackend();
+  }, []);
+
   // Handle URL-based navigation for testing
   useEffect(() => {
     const screen = searchParams.get('screen');
