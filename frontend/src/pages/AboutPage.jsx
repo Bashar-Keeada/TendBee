@@ -2,7 +2,8 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
   Heart, Target, Users, Lightbulb, Shield, 
-  Globe, Award, Sparkles, ArrowRight
+  Globe, Award, Sparkles, ArrowRight, CheckCircle2,
+  GraduationCap, Scale, Briefcase, Handshake
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { MainNavigation, MainFooter } from '@/components/MainNavigation';
