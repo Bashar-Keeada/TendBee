@@ -45,29 +45,46 @@ export function JobMatchingApp() {
   // State for screen navigation
   const [currentScreen, setCurrentScreen] = useState('landing');
   const [userType, setUserType] = useState(null); // 'jobseeker' or 'employer'
-  const [userData, setUserData] = useState({
-    // Grunduppgifter (basic info) - fylls i under registrering
-    basicInfoCompleted: false,
-    // Kurser
-    onlineCourseCompleted: false,
-    practicalCourseCompleted: false,
-    // CV-förbättringar
-    skills: [],
-    education: [],
-    experience: [],
-    // Plus-medlemskap och integritetsinställningar
-    isPlusMember: false,
-    hideGender: false,
-    hideAge: false,
-    hideProfileImage: false,
-    useAnonymousId: false,
-    // Personlig info
-    firstName: '',
-    lastName: '',
-    gender: '',
-    age: '',
-    profileImage: null,
-  });
+  const [isLoading, setIsLoading] = useState(true);
+  
+  // Initialize userData from localStorage or defaults
+  const getInitialUserData = () => {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEYS.USER_DATA);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        console.log('Loaded user data from localStorage:', parsed);
+        return parsed;
+      }
+    } catch (e) {
+      console.error('Error loading user data from localStorage:', e);
+    }
+    return {
+      // Grunduppgifter (basic info) - fylls i under registrering
+      basicInfoCompleted: false,
+      // Kurser
+      onlineCourseCompleted: false,
+      practicalCourseCompleted: false,
+      // CV-förbättringar
+      skills: [],
+      education: [],
+      experience: [],
+      // Plus-medlemskap och integritetsinställningar
+      isPlusMember: false,
+      hideGender: false,
+      hideAge: false,
+      hideProfileImage: false,
+      useAnonymousId: false,
+      // Personlig info
+      firstName: '',
+      lastName: '',
+      gender: '',
+      age: '',
+      profileImage: null,
+    };
+  };
+
+  const [userData, setUserData] = useState(getInitialUserData);
   const [selectedJob, setSelectedJob] = useState(null);
   const [selectedCandidate, setSelectedCandidate] = useState(null);
   const [companyData, setCompanyData] = useState(null);
