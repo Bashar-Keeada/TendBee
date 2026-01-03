@@ -5,7 +5,7 @@ import { ScreenContainer } from '@/components/ScreenContainer';
 import { ChevronLeft, Download, Share2, Info, Printer, Building2, Check } from 'lucide-react';
 
 export const CompanyQRCodeScreen = ({ onNavigate }) => {
-  const qrRef = useRef(null);
+  const canvasRef = useRef(null);
   const [copied, setCopied] = useState(false);
   const [downloaded, setDownloaded] = useState(false);
   
@@ -21,8 +21,10 @@ export const CompanyQRCodeScreen = ({ onNavigate }) => {
     };
 
     try {
-      if (navigator.share && navigator.canShare(shareData)) {
+      if (navigator.share && navigator.canShare && navigator.canShare(shareData)) {
         await navigator.share(shareData);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
       } else {
         // Fallback: kopiera till urklipp
         await navigator.clipboard.writeText(companyUrl);
@@ -40,6 +42,7 @@ export const CompanyQRCodeScreen = ({ onNavigate }) => {
           setTimeout(() => setCopied(false), 2000);
         } catch (clipboardErr) {
           console.error('Kunde inte kopiera:', clipboardErr);
+          alert('Länk: ' + companyUrl);
         }
       }
     }
@@ -47,7 +50,7 @@ export const CompanyQRCodeScreen = ({ onNavigate }) => {
 
   // Ladda ner QR-kod som PNG (högupplöst för utskrift)
   const handleDownload = useCallback(() => {
-    const canvas = qrRef.current?.querySelector('canvas');
+    const canvas = canvasRef.current;
     if (canvas) {
       // Skapa en ny canvas med vit bakgrund, padding och företagsnamn
       const paddedCanvas = document.createElement('canvas');
@@ -75,10 +78,15 @@ export const CompanyQRCodeScreen = ({ onNavigate }) => {
       const link = document.createElement('a');
       link.download = 'foretag-qr-kod-tendbee.png';
       link.href = url;
+      document.body.appendChild(link);
       link.click();
+      document.body.removeChild(link);
       
       setDownloaded(true);
       setTimeout(() => setDownloaded(false), 2000);
+    } else {
+      console.error('Canvas not found');
+      alert('Kunde inte ladda ner QR-koden. Försök igen.');
     }
   }, []);
 
@@ -103,9 +111,8 @@ export const CompanyQRCodeScreen = ({ onNavigate }) => {
         </p>
       </div>
       
-      {/* QR Code - Nu med riktig QR-kod! */}
-      <div className="qr-container mb-6 animate-scale-in" ref={qrRef}>
-        {/* Synlig SVG QR-kod */}
+      {/* QR Code - Synlig SVG för visning */}
+      <div className="qr-container mb-6 animate-scale-in">
         <QRCodeSVG 
           value={companyUrl}
           size={192}
@@ -115,17 +122,19 @@ export const CompanyQRCodeScreen = ({ onNavigate }) => {
           fgColor="currentColor"
           className="text-foreground"
         />
-        {/* Dold Canvas QR-kod för nedladdning (högupplöst) */}
-        <div className="hidden">
-          <QRCodeCanvas
-            value={companyUrl}
-            size={512}
-            level="H"
-            includeMargin={true}
-            bgColor="#ffffff"
-            fgColor="#000000"
-          />
-        </div>
+      </div>
+
+      {/* Dold Canvas QR-kod för nedladdning */}
+      <div style={{ position: 'absolute', left: '-9999px', top: '-9999px' }}>
+        <QRCodeCanvas
+          ref={canvasRef}
+          value={companyUrl}
+          size={512}
+          level="H"
+          includeMargin={true}
+          bgColor="#ffffff"
+          fgColor="#000000"
+        />
       </div>
       
       {/* Company Info */}
