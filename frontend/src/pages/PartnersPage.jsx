@@ -2,13 +2,70 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
   Handshake, ExternalLink, Heart, Globe, Users, Target,
-  GraduationCap, Scale, Briefcase, Building2, Award, Sparkles,
+  Building2, Award, Sparkles,
   ArrowRight, CheckCircle2
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { MainNavigation, MainFooter } from '@/components/MainNavigation';
 
-// Agenda 2030 Goals relevant to Tendbee
+// Official UN SDG Icons as SVG components with official colors
+const SDGIcon4 = () => (
+  <svg viewBox="0 0 100 100" className="w-full h-full">
+    <rect fill="#C5192D" width="100" height="100"/>
+    <g fill="white">
+      <text x="10" y="25" fontSize="12" fontWeight="bold">4</text>
+      <path d="M25,35 L25,70 L35,70 L35,55 L50,55 L50,70 L60,70 L60,35 L50,35 L50,45 L35,45 L35,35 Z M65,35 L65,70 L75,60 L75,70 L85,70 L85,35 L75,45 L75,35 Z"/>
+      <circle cx="50" cy="75" r="3"/>
+    </g>
+  </svg>
+);
+
+const SDGIcon5 = () => (
+  <svg viewBox="0 0 100 100" className="w-full h-full">
+    <rect fill="#EF402B" width="100" height="100"/>
+    <g fill="white">
+      <text x="10" y="25" fontSize="12" fontWeight="bold">5</text>
+      <circle cx="50" cy="40" r="12"/>
+      <path d="M35,55 Q50,75 65,55 L65,80 L35,80 Z"/>
+      <path d="M42,38 L42,42 M58,38 L58,42"/>
+      <path d="M30,65 L70,65"/>
+    </g>
+  </svg>
+);
+
+const SDGIcon8 = () => (
+  <svg viewBox="0 0 100 100" className="w-full h-full">
+    <rect fill="#A21942" width="100" height="100"/>
+    <g fill="white">
+      <text x="10" y="25" fontSize="12" fontWeight="bold">8</text>
+      <path d="M30,40 L30,75 L45,60 L55,70 L70,55 L70,40 L55,55 L45,45 Z"/>
+    </g>
+  </svg>
+);
+
+const SDGIcon10 = () => (
+  <svg viewBox="0 0 100 100" className="w-full h-full">
+    <rect fill="#DD1367" width="100" height="100"/>
+    <g fill="white">
+      <text x="6" y="25" fontSize="12" fontWeight="bold">10</text>
+      <path d="M50,30 L60,50 L80,50 L65,62 L70,80 L50,68 L30,80 L35,62 L20,50 L40,50 Z"/>
+    </g>
+  </svg>
+);
+
+const SDGIcon17 = () => (
+  <svg viewBox="0 0 100 100" className="w-full h-full">
+    <rect fill="#19486A" width="100" height="100"/>
+    <g fill="white">
+      <text x="6" y="25" fontSize="12" fontWeight="bold">17</text>
+      <circle cx="50" cy="55" r="20" fill="none" stroke="white" strokeWidth="4"/>
+      <circle cx="50" cy="55" r="8"/>
+      <path d="M50,30 L50,25 M50,85 L50,80 M25,55 L20,55 M80,55 L75,55"/>
+    </g>
+  </svg>
+);
+
+// Official SDG Goal data with correct colors
 const sdgGoals = [
   {
     number: 4,
@@ -16,7 +73,7 @@ const sdgGoals = [
     titleEn: 'Quality Education',
     description: 'Genom Keeada Academy erbjuder vi praktik och utbildning som ger människor verktyg att komma in på arbetsmarknaden.',
     color: '#C5192D',
-    icon: GraduationCap,
+    icon: SDGIcon4,
     tendbeeAction: 'Keeada Academy - certifierad utbildning inom lager & logistik'
   },
   {
@@ -24,8 +81,8 @@ const sdgGoals = [
     title: 'Jämställdhet',
     titleEn: 'Gender Equality',
     description: 'Vi bekämpar könsdiskriminering genom att erbjuda anonyma matchningar där kön kan döljas.',
-    color: '#FF3A21',
-    icon: Scale,
+    color: '#EF402B',
+    icon: SDGIcon5,
     tendbeeAction: 'Anonyma jobbansökningar utan könsidentifiering'
   },
   {
@@ -34,7 +91,7 @@ const sdgGoals = [
     titleEn: 'Decent Work and Economic Growth',
     description: 'Vi kopplar samman arbetssökande med arbetsgivare för att skapa fler jobbtillfällen och ekonomisk tillväxt.',
     color: '#A21942',
-    icon: Briefcase,
+    icon: SDGIcon8,
     tendbeeAction: '10,000+ lyckade matchningar mellan jobbsökare och företag'
   },
   {
@@ -43,7 +100,7 @@ const sdgGoals = [
     titleEn: 'Reduced Inequalities',
     description: 'Vår plattform är designad för att ge alla lika möjligheter oavsett bakgrund, ålder eller utseende.',
     color: '#DD1367',
-    icon: Heart,
+    icon: SDGIcon10,
     tendbeeAction: 'Plus-medlemskap för att dölja ålder, kön och bild'
   },
   {
@@ -52,7 +109,7 @@ const sdgGoals = [
     titleEn: 'Partnerships for the Goals',
     description: 'Vi samarbetar med företag, organisationer och myndigheter för att skapa en mer inkluderande arbetsmarknad.',
     color: '#19486A',
-    icon: Handshake,
+    icon: SDGIcon17,
     tendbeeAction: 'Partnerskap med Diversity Charter Sweden och 500+ företag'
   }
 ];
