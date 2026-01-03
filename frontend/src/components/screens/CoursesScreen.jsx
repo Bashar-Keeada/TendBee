@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { ScreenContainer } from '@/components/ScreenContainer';
+import { ProfileCompleteness } from '@/components/ProfileCompleteness';
 import { ChevronLeft, Monitor, MapPin, Clock, CheckCircle2, Award, ArrowRight, GraduationCap, Briefcase, Wrench, Plus, X } from 'lucide-react';
 
 // Fördefinierade kompetenser
@@ -47,12 +48,10 @@ const PREDEFINED_EXPERIENCE = [
   { id: 'exp_food', label: 'Restaurang/Livsmedel', category: 'erfarenhet' },
 ];
 
-export const CoursesScreen = ({ onNavigate, coursesCompleted, onCompleteCourse, userData, onUpdate }) => {
+export const CoursesScreen = ({ onNavigate, coursesCompleted, onCompleteCourse, userData, onUpdate, profilePercentage = 20 }) => {
   const { online = false, physical = false } = coursesCompleted || {};
-  const completedCount = [online, physical].filter(Boolean).length;
-  const allCompleted = online && physical;
   
-  // State för valda kompetenser och utbildningar
+  // State för valda kompetenser och utbildningar - initialisera med userData
   const [selectedSkills, setSelectedSkills] = useState(userData?.skills || []);
   const [selectedEducation, setSelectedEducation] = useState(userData?.education || []);
   const [selectedExperience, setSelectedExperience] = useState(userData?.experience || []);
@@ -63,6 +62,17 @@ export const CoursesScreen = ({ onNavigate, coursesCompleted, onCompleteCourse, 
   const [showEducationInput, setShowEducationInput] = useState(false);
   const [showExperienceInput, setShowExperienceInput] = useState(false);
   const [activeSection, setActiveSection] = useState(null); // 'skills', 'education', 'experience'
+  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
+
+  // Synkronisera med userData när det ändras
+  useEffect(() => {
+    if (userData?.skills) setSelectedSkills(userData.skills);
+    if (userData?.education) setSelectedEducation(userData.education);
+    if (userData?.experience) setSelectedExperience(userData.experience);
+  }, [userData]);
+
+  // Markera att det finns osparade ändringar
+  const markUnsaved = () => setHasUnsavedChanges(true);
 
   // Hantera val av fördefinierad kompetens
   const toggleSkill = (skill) => {
@@ -73,6 +83,7 @@ export const CoursesScreen = ({ onNavigate, coursesCompleted, onCompleteCourse, 
       }
       return [...prev, skill];
     });
+    markUnsaved();
   };
 
   // Hantera val av fördefinierad utbildning
@@ -84,6 +95,7 @@ export const CoursesScreen = ({ onNavigate, coursesCompleted, onCompleteCourse, 
       }
       return [...prev, edu];
     });
+    markUnsaved();
   };
 
   // Hantera val av fördefinierad erfarenhet
@@ -95,6 +107,7 @@ export const CoursesScreen = ({ onNavigate, coursesCompleted, onCompleteCourse, 
       }
       return [...prev, exp];
     });
+    markUnsaved();
   };
 
   // Lägg till egen kompetens
@@ -104,6 +117,7 @@ export const CoursesScreen = ({ onNavigate, coursesCompleted, onCompleteCourse, 
       setSelectedSkills(prev => [...prev, newSkill]);
       setCustomSkill('');
       setShowSkillInput(false);
+      markUnsaved();
     }
   };
 
@@ -114,6 +128,7 @@ export const CoursesScreen = ({ onNavigate, coursesCompleted, onCompleteCourse, 
       setSelectedEducation(prev => [...prev, newEdu]);
       setCustomEducation('');
       setShowEducationInput(false);
+      markUnsaved();
     }
   };
 
@@ -124,46 +139,69 @@ export const CoursesScreen = ({ onNavigate, coursesCompleted, onCompleteCourse, 
       setSelectedExperience(prev => [...prev, newExp]);
       setCustomExperience('');
       setShowExperienceInput(false);
+      markUnsaved();
     }
   };
 
   // Ta bort kompetens
   const removeSkill = (skillId) => {
     setSelectedSkills(prev => prev.filter(s => s.id !== skillId));
+    markUnsaved();
   };
 
   // Ta bort utbildning
   const removeEducation = (eduId) => {
     setSelectedEducation(prev => prev.filter(e => e.id !== eduId));
+    markUnsaved();
   };
 
   // Ta bort erfarenhet
   const removeExperience = (expId) => {
     setSelectedExperience(prev => prev.filter(e => e.id !== expId));
+    markUnsaved();
   };
 
-  // Spara alla val
+  // Spara alla val och gå tillbaka
   const handleSave = () => {
+    // Uppdatera userData med alla valda värden
     onUpdate?.({
       skills: selectedSkills,
       education: selectedEducation,
       experience: selectedExperience,
     });
+    setHasUnsavedChanges(false);
+    onNavigate('cvCompleted');
+  };
+
+  // Gå tillbaka utan att spara (men spara först om det finns ändringar)
+  const handleBack = () => {
+    if (hasUnsavedChanges && (selectedSkills.length > 0 || selectedEducation.length > 0 || selectedExperience.length > 0)) {
+      // Auto-spara ändringar
+      onUpdate?.({
+        skills: selectedSkills,
+        education: selectedEducation,
+        experience: selectedExperience,
+      });
+    }
     onNavigate('cvCompleted');
   };
 
   const totalAdditions = selectedSkills.length + selectedEducation.length + selectedExperience.length;
+  const coursesCompletedCount = [online, physical].filter(Boolean).length;
   
   return (
     <ScreenContainer>
       {/* Back Button */}
       <button 
-        onClick={() => onNavigate('cvCompleted')}
+        onClick={handleBack}
         className="flex items-center gap-1 text-muted-foreground hover:text-foreground transition-colors mb-4"
       >
         <ChevronLeft className="w-5 h-5" />
         <span className="text-sm">Tillbaka</span>
       </button>
+      
+      {/* Profile Completeness - Visa aktuell procent */}
+      <ProfileCompleteness percentage={profilePercentage} className="mb-6" />
       
       {/* Header */}
       <div className="mb-6">
@@ -175,23 +213,23 @@ export const CoursesScreen = ({ onNavigate, coursesCompleted, onCompleteCourse, 
         </p>
       </div>
       
-      {/* Progress */}
-      <div className="info-box info-box-primary mb-6">
+      {/* Kurser Progress */}
+      <div className="info-box info-box-primary mb-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <Award className="w-5 h-5 text-primary" />
             <div>
-              <p className="font-medium text-foreground text-sm">Öka din profil</p>
+              <p className="font-medium text-foreground text-sm">Kurser</p>
               <p className="text-xs text-muted-foreground">
-                {allCompleted 
+                {online && physical 
                   ? 'Alla kurser genomförda!' 
-                  : `Varje kurs ökar din profil med 25%`
+                  : `Varje kurs ökar din profil`
                 }
               </p>
             </div>
           </div>
           <span className="text-lg font-bold text-primary">
-            {completedCount}/2
+            {coursesCompletedCount}/2
           </span>
         </div>
       </div>
@@ -220,7 +258,10 @@ export const CoursesScreen = ({ onNavigate, coursesCompleted, onCompleteCourse, 
                 <span>20 min</span>
               </div>
               <Badge variant="outline" className="text-xs">
-                {online ? 'Genomförd' : 'Ej genomförd'}
+                {online ? 'Genomförd ✓' : 'Ej genomförd'}
+              </Badge>
+              <Badge className="bg-primary/15 text-primary text-xs border-0">
+                +15%
               </Badge>
             </div>
             {!online && (
@@ -255,7 +296,7 @@ export const CoursesScreen = ({ onNavigate, coursesCompleted, onCompleteCourse, 
             <p className="text-sm text-muted-foreground mb-2">
               Keeada Academy - Testa dina praktiska färdigheter på plats
             </p>
-            <div className="flex items-center gap-2 mb-3">
+            <div className="flex items-center gap-2 mb-3 flex-wrap">
               <div className="flex items-center gap-1 text-xs text-muted-foreground">
                 <Clock className="w-3 h-3" />
                 <span>2-4 veckor</span>
@@ -264,7 +305,7 @@ export const CoursesScreen = ({ onNavigate, coursesCompleted, onCompleteCourse, 
                 Betald praktik
               </Badge>
               <Badge className="bg-accent/15 text-accent text-xs border-0">
-                Möjlig anställning
+                +15%
               </Badge>
             </div>
             {!physical && (
@@ -291,7 +332,7 @@ export const CoursesScreen = ({ onNavigate, coursesCompleted, onCompleteCourse, 
           Förbättra ditt CV
         </h2>
         <p className="text-sm text-muted-foreground">
-          Lägg till kompetenser, utbildning och erfarenhet
+          Lägg till kompetenser, utbildning och erfarenhet för att öka din profil
         </p>
       </div>
 
@@ -300,7 +341,7 @@ export const CoursesScreen = ({ onNavigate, coursesCompleted, onCompleteCourse, 
         <div className="info-box info-box-secondary mb-4">
           <div className="flex items-center gap-2">
             <CheckCircle2 className="w-5 h-5 text-secondary" />
-            <span className="font-medium text-sm">{totalAdditions} tillagda</span>
+            <span className="font-medium text-sm">{totalAdditions} tillagda till din profil</span>
           </div>
         </div>
       )}
@@ -322,7 +363,7 @@ export const CoursesScreen = ({ onNavigate, coursesCompleted, onCompleteCourse, 
               )}
             </div>
             <p className="text-sm text-muted-foreground">
-              Truckkort, kurser, färdigheter
+              Truckkort, kurser, färdigheter (+20%)
             </p>
           </div>
           <ArrowRight className={`w-5 h-5 text-muted-foreground transition-transform ${activeSection === 'skills' ? 'rotate-90' : ''}`} />
@@ -420,7 +461,7 @@ export const CoursesScreen = ({ onNavigate, coursesCompleted, onCompleteCourse, 
               )}
             </div>
             <p className="text-sm text-muted-foreground">
-              Högskola, YH, gymnasium, kurser
+              Högskola, YH, gymnasium, kurser (+15%)
             </p>
           </div>
           <ArrowRight className={`w-5 h-5 text-muted-foreground transition-transform ${activeSection === 'education' ? 'rotate-90' : ''}`} />
@@ -518,7 +559,7 @@ export const CoursesScreen = ({ onNavigate, coursesCompleted, onCompleteCourse, 
               )}
             </div>
             <p className="text-sm text-muted-foreground">
-              Arbetslivserfarenhet inom olika områden
+              Arbetslivserfarenhet inom olika områden (+15%)
             </p>
           </div>
           <ArrowRight className={`w-5 h-5 text-muted-foreground transition-transform ${activeSection === 'experience' ? 'rotate-90' : ''}`} />
@@ -599,36 +640,21 @@ export const CoursesScreen = ({ onNavigate, coursesCompleted, onCompleteCourse, 
         )}
       </div>
       
-      {/* All Completed Message */}
-      {allCompleted && (
-        <div className="info-box info-box-secondary animate-fade-in mb-6">
-          <div className="flex items-center gap-3">
-            <Award className="w-6 h-6 text-secondary" />
-            <div>
-              <p className="font-semibold text-foreground">Alla kurser genomförda!</p>
-              <p className="text-sm text-muted-foreground">
-                Din profil är nu 100% komplett
-              </p>
-            </div>
-          </div>
-        </div>
-      )}
-      
       {/* Save & Back buttons */}
       <div className="space-y-3 mt-6">
-        {totalAdditions > 0 && (
+        {(hasUnsavedChanges || totalAdditions > 0) && (
           <Button 
             className="w-full h-12 bg-gradient-to-r from-primary to-secondary"
             onClick={handleSave}
           >
             <CheckCircle2 className="w-5 h-5 mr-2" />
-            Spara ändringar ({totalAdditions} tillagda)
+            Spara ändringar {totalAdditions > 0 && `(${totalAdditions} tillagda)`}
           </Button>
         )}
         <Button 
           variant="outline"
           className="w-full h-12"
-          onClick={() => onNavigate('cvCompleted')}
+          onClick={handleBack}
         >
           Tillbaka till profil
         </Button>
