@@ -70,9 +70,6 @@ export const CoursesScreen = ({ onNavigate, coursesCompleted, onCompleteCourse, 
     if (userData?.experience) setSelectedExperience(userData.experience);
   }, [userData]);
 
-  // Markera att det finns osparade ändringar
-  const markUnsaved = () => setHasUnsavedChanges(true);
-
   // Hantera val av fördefinierad kompetens
   const toggleSkill = (skill) => {
     setSelectedSkills(prev => {
