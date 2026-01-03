@@ -58,6 +58,45 @@
 - ✅ Uses Web Share API on supported devices
 - ✅ Falls back to clipboard copy with "Länk kopierad!" feedback
 
+## "Förbättra ditt CV" Feature Testing - ✅ PASS
+
+### Test URL: `https://skillbridge-147.preview.emergentagent.com/app?screen=courses`
+
+#### Core Functionality - ✅ ALL WORKING
+- ✅ "Förbättra ditt CV" section displays correctly
+- ✅ Three expandable sections: Kompetenser & Certifikat, Utbildning, Erfarenhet
+- ✅ Section toggles work properly (expand/collapse)
+- ✅ Counter badges show number of selections correctly
+
+#### Kompetenser & Certifikat Section - ✅ PASS
+- ✅ All predefined skills visible: Truckkort A, Truckkort B, Gaffeltruckkort, Skjutstativtruck, ADR-certifikat, Livsmedelshygien, Första hjälpen, Brandskyddsutbildning, Excel, Lagersystem (WMS), Inventering, Plockning & Pack, Godsmottagning, Kvalitetskontroll
+- ✅ Selection functionality working - items turn blue with checkmark
+- ✅ "Valda:" section appears with selected items as blue badges
+- ✅ Counter badge shows correct number (tested with 3 selections)
+- ✅ Custom entry "Övrigt - Lägg till egen" working
+- ✅ Input field appears with correct placeholder "Skriv egen kompetens..."
+- ✅ Custom skills can be added and appear in selected section
+- ✅ Remove functionality working (X button on badges)
+
+#### Utbildning Section - ✅ PASS
+- ✅ All predefined education options visible: Gymnasium, Högskola/Universitet, Yrkeshögskola, Lager & Logistik (YH), Transport & Spedition, Ekonomi/Administration, IT/Data, Handel & Service
+- ✅ Selection functionality working
+- ✅ Custom education entry working
+- ✅ Selected items display as green badges
+
+#### Erfarenhet Section - ✅ PASS
+- ✅ All predefined experience options visible: Lagerarbete, Logistik, Butik/Handel, Kundtjänst, Produktion/Industri, Transport, Städ/Lokalvård, Restaurang/Livsmedel
+- ✅ Selection functionality working
+- ✅ Custom experience entry working
+- ✅ Selected items display as orange badges
+
+#### Save & Navigation - ✅ PASS
+- ✅ "Spara ändringar (X tillagda)" button appears when selections made
+- ✅ Save button shows correct count of additions
+- ✅ Save functionality triggers navigation
+- ✅ "Tillbaka till profil" button working
+- ✅ Navigation between screens working correctly
+
 ## Summary
 
 All authentication methods are implemented:
@@ -69,6 +108,7 @@ New features implemented and tested:
 4. ✅ QR Code generation - WORKING
 5. ✅ Download QR as PNG - WORKING
 6. ✅ Share/Copy link functionality - WORKING
+7. ✅ "Förbättra ditt CV" functionality - WORKING
 
 ## Testing Notes
 
@@ -80,3 +120,4 @@ Added URL parameter navigation (`?screen=screenName`) to JobMatchingApp.jsx for 
 - CV Completed: `/app?screen=cvCompleted`
 - Job List: `/app?screen=jobList`
 - Employer Dashboard: `/app?screen=employerDashboard`
+- Courses (CV Improvement): `/app?screen=courses`
