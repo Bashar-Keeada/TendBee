@@ -56,9 +56,9 @@ export function JobMatchingApp() {
   // - Grunduppgifter: 20%
   // - Online kurs: 15%
   // - Praktik/Ansökan: 15%
-  // - Kompetenser & Certifikat: 20%
-  // - Utbildning: 15%
-  // - Erfarenhet: 15%
+  // - Kompetenser & Certifikat: 20% (max)
+  // - Utbildning: 15% (max)
+  // - Erfarenhet: 15% (max)
   // Total: 100%
   const profilePercentage = useMemo(() => {
     let percentage = 0;
@@ -78,24 +78,27 @@ export function JobMatchingApp() {
       percentage += 15;
     }
     
-    // Kompetenser & Certifikat (20%) - max 20% om man har minst 3 kompetenser
+    // Kompetenser & Certifikat (20% max) - gradvis ökning
+    // 1 kompetens = 5%, 2 = 10%, 3 = 15%, 4+ = 20%
     const skillsCount = userData.skills?.length || 0;
     if (skillsCount > 0) {
-      const skillsPercentage = Math.min(skillsCount * 7, 20); // ~7% per kompetens, max 20%
+      const skillsPercentage = Math.min(skillsCount * 5, 20);
       percentage += skillsPercentage;
     }
     
-    // Utbildning (15%) - max 15% om man har minst 2 utbildningar
+    // Utbildning (15% max) - gradvis ökning
+    // 1 utbildning = 8%, 2+ = 15%
     const educationCount = userData.education?.length || 0;
     if (educationCount > 0) {
-      const educationPercentage = Math.min(educationCount * 8, 15); // ~8% per utbildning, max 15%
+      const educationPercentage = Math.min(educationCount * 8, 15);
       percentage += educationPercentage;
     }
     
-    // Erfarenhet (15%) - max 15% om man har minst 2 erfarenheter
+    // Erfarenhet (15% max) - gradvis ökning
+    // 1 erfarenhet = 8%, 2+ = 15%
     const experienceCount = userData.experience?.length || 0;
     if (experienceCount > 0) {
-      const experiencePercentage = Math.min(experienceCount * 8, 15); // ~8% per erfarenhet, max 15%
+      const experiencePercentage = Math.min(experienceCount * 8, 15);
       percentage += experiencePercentage;
     }
     
