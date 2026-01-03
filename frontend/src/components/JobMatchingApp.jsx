@@ -311,7 +311,7 @@ export function JobMatchingApp() {
     localStorage.removeItem(STORAGE_KEYS.USER_TOKEN);
     localStorage.removeItem(STORAGE_KEYS.USER_ID);
     localStorage.removeItem(STORAGE_KEYS.PROFILE_ID);
-    setUserData(getInitialUserData());
+    setUserData(getDefaultUserData());
     setCurrentScreen('landing');
     setUserType(null);
   }, []);
