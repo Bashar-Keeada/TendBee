@@ -1330,22 +1330,48 @@ async def admin_list_interests(
         .limit(limit) \
         .to_list(limit)
     
+    # Batch fetch related data
+    jobseeker_ids = list(set(doc.get("jobseeker_id") for doc in docs if doc.get("jobseeker_id")))
+    job_ids = list(set(doc.get("job_id") for doc in docs if doc.get("job_id")))
+    
+    # Batch fetch jobseekers
+    jobseekers = await db.jobseekers.find(
+        {"id": {"$in": jobseeker_ids}}, 
+        {"_id": 0, "id": 1, "first_name": 1, "last_name": 1}
+    ).to_list(len(jobseeker_ids))
+    jobseeker_map = {js.get('id'): js for js in jobseekers}
+    
+    # Batch fetch jobs
+    jobs = await db.jobs.find(
+        {"id": {"$in": job_ids}}, 
+        {"_id": 0, "id": 1, "title": 1, "company_id": 1}
+    ).to_list(len(job_ids))
+    job_map = {j.get('id'): j for j in jobs}
+    
+    # Batch fetch companies from jobs
+    company_ids = list(set(j.get('company_id') for j in jobs if j.get('company_id')))
+    companies = await db.companies.find(
+        {"id": {"$in": company_ids}}, 
+        {"_id": 0, "id": 1, "company_name": 1}
+    ).to_list(len(company_ids))
+    company_map = {c.get('id'): c for c in companies}
+    
     # Enrich with jobseeker and job info
     interests = []
     for doc in docs:
         interest = await serialize_doc(doc)
         
-        # Get jobseeker info
-        jobseeker = await db.jobseekers.find_one({"id": interest.get("jobseeker_id")}, {"_id": 0})
+        # Get jobseeker info from map
+        jobseeker = jobseeker_map.get(interest.get("jobseeker_id"), {})
         if jobseeker:
             interest["jobseeker_name"] = f"{jobseeker.get('first_name', '')} {jobseeker.get('last_name', '')}"
         
-        # Get job info
-        job = await db.jobs.find_one({"id": interest.get("job_id")}, {"_id": 0})
+        # Get job info from map
+        job = job_map.get(interest.get("job_id"), {})
         if job:
             interest["job_title"] = job.get("title", "")
-            company = await db.companies.find_one({"id": job.get("company_id")}, {"_id": 0})
-            interest["company_name"] = company.get("company_name") if company else ""
+            company = company_map.get(job.get("company_id"), {})
+            interest["company_name"] = company.get("company_name", "")
         
         interests.append(interest)
     
