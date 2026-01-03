@@ -226,3 +226,75 @@ Added URL parameter navigation (`?screen=screenName`) to JobMatchingApp.jsx for 
 2. **User QR code complexity**: May need investigation for proper QR code generation
 3. **Profile percentage calculation inconsistency**: Previous issue still exists
 4. **Profile percentage not persisting**: Previous issue still exists
+
+## Tendbee About Us and Careers Pages Testing Results (Latest Update)
+
+### Test URLs:
+- Landing page: `https://skillbridge-147.preview.emergentagent.com/`
+- About Us: `https://skillbridge-147.preview.emergentagent.com/om-oss`
+- Careers: `https://skillbridge-147.preview.emergentagent.com/karriar`
+
+#### Landing Page Navigation Testing - ✅ ALL TESTS PASSED
+- ✅ **Landing page loads correctly**: Page title and content displayed properly
+- ✅ **Header navigation links**: "Om oss" and "Karriär" links visible and functional
+- ✅ **Navigation to About Us**: Successfully navigates to `/om-oss` when clicking "Om oss"
+- ✅ **Navigation to Careers**: Successfully navigates to `/karriar` when clicking "Karriär"
+
+#### About Us Page (/om-oss) Testing - ✅ ALL TESTS PASSED
+- ✅ **Page title**: "Vi bygger framtidens rekrytering" displayed correctly
+- ✅ **Anti-discrimination badge**: "Världens första anti-diskriminerande jobbplattform" badge present
+- ✅ **Mission section**: "Vår mission" section exists and displays content
+- ✅ **Values section**: "Våra värderingar" section with exactly 6 value cards
+- ✅ **Team section**: "Teamet bakom Tendbee" section with team member cards
+- ✅ **Keeada Academy section**: Complete section with benefits and statistics
+- ✅ **Footer navigation**: Footer with proper navigation links present
+- ✅ **Swedish translations**: All content properly translated and displayed
+
+#### Careers Page (/karriar) Testing - ✅ ALL TESTS PASSED
+- ✅ **Page title**: "Bygg framtiden med oss" displayed correctly
+- ✅ **Jobs badge**: "5 lediga tjänster" badge present and accurate
+- ✅ **Perks section**: "Varför jobba på Tendbee?" section with 6 perk cards
+- ✅ **Jobs section**: "Lediga tjänster" section properly displayed
+- ✅ **Department filters**: All 6 filter buttons present (Alla avdelningar, Tech, Design, Sälj, Marketing, Utbildning)
+- ✅ **Filter functionality**: 
+  - Tech filter shows 1 Tech job correctly
+  - Design filter shows 1 Design job correctly
+  - "Alla avdelningar" shows all 5 jobs correctly
+- ✅ **Job card expansion**: "Visa mer" button expands job details showing:
+  - "Om rollen" section
+  - "Vi söker dig som" requirements section
+  - "Vi erbjuder" benefits section
+- ✅ **Apply buttons**: "Ansök nu" button present on each job card
+- ✅ **Spontaneous application**: "Spontanansökan" section with "Skicka spontanansökan" button
+
+#### Cross-page Navigation Testing - ✅ ALL TESTS PASSED
+- ✅ **About to Careers**: Successfully navigates from /om-oss to /karriar via header
+- ✅ **Careers to About**: Successfully navigates from /karriar to /om-oss via header
+- ✅ **Back to homepage**: "Tillbaka till startsidan" links work correctly on both pages
+- ✅ **Landing to Careers**: Direct navigation from landing page to careers works
+- ✅ **Landing to About**: Direct navigation from landing page to about works
+
+#### Swedish Translations Verification - ✅ ALL TESTS PASSED
+- ✅ **Navigation**: "Om oss" (About Us), "Karriär" (Careers) correctly translated
+- ✅ **Job listings**: "Lediga tjänster" (Open positions) properly displayed
+- ✅ **Departments**: "Alla avdelningar" (All departments) filter working
+- ✅ **Job actions**: "Ansök nu" (Apply now), "Visa mer" (Show more) buttons functional
+- ✅ **Application**: "Spontanansökan" (Spontaneous application) section present
+- ✅ **Navigation**: "Tillbaka till startsidan" (Back to homepage) links working
+
+### Testing Summary:
+- **Total test scenarios**: 13 comprehensive test scenarios executed
+- **All critical functionality working**: ✅ 100% pass rate
+- **No console errors detected**: Clean implementation
+- **Responsive design**: Pages render correctly on desktop viewport
+- **User experience**: Smooth navigation and interactions
+- **Content accuracy**: All Swedish content properly implemented
+
+### Files Tested:
+- `/app/frontend/src/pages/TendbeeLanding.jsx` - Landing page with navigation
+- `/app/frontend/src/pages/AboutPage.jsx` - About Us page content and structure
+- `/app/frontend/src/pages/CareersPage.jsx` - Careers page with job filtering and expansion
+- `/app/frontend/src/App.js` - Routing configuration
+
+### No Critical Issues Found:
+All functionality is working as expected. The About Us and Careers pages are fully functional with proper Swedish translations, smooth navigation, and all interactive elements working correctly.
