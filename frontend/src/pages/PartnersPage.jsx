@@ -1,461 +1,510 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
   Handshake, ExternalLink, Heart, Globe, Users, Target,
-  Building2, Award, Sparkles, Scale,
-  ArrowRight, CheckCircle2
+  Building2, Award, Sparkles, Scale, Briefcase, GraduationCap,
+  ArrowRight, CheckCircle2, AlertTriangle, TrendingUp, UserPlus,
+  Clock, MapPin, Shield, Zap, ChevronRight, Mail, Phone,
+  Factory, Truck, HeartHandshake, Lightbulb, BarChart3
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { MainNavigation, MainFooter } from '@/components/MainNavigation';
 
-// Official UN SDG Icons as SVG components with official colors
-const SDGIcon4 = () => (
-  <svg viewBox="0 0 100 100" className="w-full h-full">
-    <rect fill="#C5192D" width="100" height="100"/>
-    <g fill="white">
-      <text x="10" y="25" fontSize="12" fontWeight="bold">4</text>
-      <path d="M25,35 L25,70 L35,70 L35,55 L50,55 L50,70 L60,70 L60,35 L50,35 L50,45 L35,45 L35,35 Z M65,35 L65,70 L75,60 L75,70 L85,70 L85,35 L75,45 L75,35 Z"/>
-      <circle cx="50" cy="75" r="3"/>
-    </g>
-  </svg>
-);
-
-const SDGIcon5 = () => (
-  <svg viewBox="0 0 100 100" className="w-full h-full">
-    <rect fill="#EF402B" width="100" height="100"/>
-    <g fill="white">
-      <text x="10" y="25" fontSize="12" fontWeight="bold">5</text>
-      <circle cx="50" cy="40" r="12"/>
-      <path d="M35,55 Q50,75 65,55 L65,80 L35,80 Z"/>
-      <path d="M42,38 L42,42 M58,38 L58,42"/>
-      <path d="M30,65 L70,65"/>
-    </g>
-  </svg>
-);
-
-const SDGIcon8 = () => (
-  <svg viewBox="0 0 100 100" className="w-full h-full">
-    <rect fill="#A21942" width="100" height="100"/>
-    <g fill="white">
-      <text x="10" y="25" fontSize="12" fontWeight="bold">8</text>
-      <path d="M30,40 L30,75 L45,60 L55,70 L70,55 L70,40 L55,55 L45,45 Z"/>
-    </g>
-  </svg>
-);
-
-const SDGIcon10 = () => (
-  <svg viewBox="0 0 100 100" className="w-full h-full">
-    <rect fill="#DD1367" width="100" height="100"/>
-    <g fill="white">
-      <text x="6" y="25" fontSize="12" fontWeight="bold">10</text>
-      <path d="M50,30 L60,50 L80,50 L65,62 L70,80 L50,68 L30,80 L35,62 L20,50 L40,50 Z"/>
-    </g>
-  </svg>
-);
-
-const SDGIcon17 = () => (
-  <svg viewBox="0 0 100 100" className="w-full h-full">
-    <rect fill="#19486A" width="100" height="100"/>
-    <g fill="white">
-      <text x="6" y="25" fontSize="12" fontWeight="bold">17</text>
-      <circle cx="50" cy="55" r="20" fill="none" stroke="white" strokeWidth="4"/>
-      <circle cx="50" cy="55" r="8"/>
-      <path d="M50,30 L50,25 M50,85 L50,80 M25,55 L20,55 M80,55 L75,55"/>
-    </g>
-  </svg>
-);
-
-// Official SDG Goal data with correct colors
-const sdgGoals = [
-  {
-    number: 4,
-    title: 'God utbildning för alla',
-    titleEn: 'Quality Education',
-    description: 'Genom Keeada Academy erbjuder vi praktik och utbildning som ger människor verktyg att komma in på arbetsmarknaden.',
-    color: '#C5192D',
-    icon: SDGIcon4,
-    tendbeeAction: 'Keeada Academy - certifierad utbildning inom lager & logistik'
-  },
-  {
-    number: 5,
-    title: 'Jämställdhet',
-    titleEn: 'Gender Equality',
-    description: 'Vi bekämpar könsdiskriminering genom att erbjuda anonyma matchningar där kön kan döljas.',
-    color: '#EF402B',
-    icon: SDGIcon5,
-    tendbeeAction: 'Anonyma jobbansökningar utan könsidentifiering'
-  },
-  {
-    number: 8,
-    title: 'Anständiga arbetsvillkor och ekonomisk tillväxt',
-    titleEn: 'Decent Work and Economic Growth',
-    description: 'Vi kopplar samman arbetssökande med arbetsgivare för att skapa fler jobbtillfällen och ekonomisk tillväxt.',
-    color: '#A21942',
-    icon: SDGIcon8,
-    tendbeeAction: '10,000+ lyckade matchningar mellan jobbsökare och företag'
-  },
-  {
-    number: 10,
-    title: 'Minskad ojämlikhet',
-    titleEn: 'Reduced Inequalities',
-    description: 'Vår plattform är designad för att ge alla lika möjligheter oavsett bakgrund, ålder eller utseende.',
-    color: '#DD1367',
-    icon: SDGIcon10,
-    tendbeeAction: 'Plus-medlemskap för att dölja ålder, kön och bild'
-  },
-  {
-    number: 17,
-    title: 'Genomförande och globalt partnerskap',
-    titleEn: 'Partnerships for the Goals',
-    description: 'Vi samarbetar med företag, organisationer och myndigheter för att skapa en mer inkluderande arbetsmarknad.',
-    color: '#19486A',
-    icon: SDGIcon17,
-    tendbeeAction: 'Partnerskap med Diversity Charter Sweden och 500+ företag'
-  }
+// Statistics about unemployment and exclusion
+const impactStats = [
+  { value: '350 000+', label: 'Långtidsarbetslösa i Sverige', icon: Users },
+  { value: '23%', label: 'Ungdomsarbetslöshet', icon: TrendingUp },
+  { value: '2x', label: 'Högre arbetslöshet för utrikesfödda', icon: Globe },
+  { value: '40%', label: 'Upplever diskriminering vid rekrytering', icon: AlertTriangle },
 ];
 
-// UN Global Compact 10 Principles
-const globalCompactPrinciples = [
-  { category: 'Mänskliga rättigheter', principles: ['Stödja och respektera internationellt erkända mänskliga rättigheter', 'Försäkra att företaget inte är delaktigt i kränkningar av mänskliga rättigheter'] },
-  { category: 'Arbetsrätt', principles: ['Upprätthålla föreningsfrihet och erkänna rätten till kollektiva förhandlingar', 'Avskaffa alla former av tvångsarbete', 'Avskaffa barnarbete', 'Eliminera diskriminering i arbetslivet'] },
-  { category: 'Miljö', principles: ['Stödja försiktighetsprincipen vad gäller miljörisker', 'Ta initiativ för att främja större miljömässigt ansvarstagande', 'Uppmuntra utveckling och spridning av miljövänlig teknik'] },
-  { category: 'Antikorruption', principles: ['Motarbeta alla former av korruption, inklusive utpressning och mutor'] }
+// Challenge points for companies
+const challengePoints = [
+  {
+    title: 'Era CSR-mål är inte bara rapporter',
+    description: 'Varje år publiceras tusentals hållbarhetsrapporter. Men hur många leder till faktisk förändring? Det är dags att gå från ord till handling.',
+    icon: BarChart3,
+  },
+  {
+    title: 'Mångfald kräver mod',
+    description: 'Att rekrytera kompetensbaserat innebär att ifrågasätta gamla mönster. Är ni redo att se bortom CV:t och ge alla en ärlig chans?',
+    icon: Shield,
+  },
+  {
+    title: 'Praktik förändrar liv',
+    description: 'En praktikplats kan vara skillnaden mellan utanförskap och karriär. Varje plats ni erbjuder är en investering i framtiden.',
+    icon: Lightbulb,
+  },
 ];
 
-// Partner organizations
-const partners = [
+// What companies can offer
+const opportunityTypes = [
   {
-    name: 'Diversity Charter Sweden',
-    description: 'Nätverk för företag och organisationer som arbetar för mångfald och inkludering på arbetsplatsen.',
-    type: 'Huvudpartner',
-    url: 'https://diversitycharter.se',
-    featured: true
+    type: 'Praktikplatser',
+    description: 'Ge unga och nyanlända en första erfarenhet av svenskt arbetsliv',
+    duration: '2-6 månader',
+    icon: GraduationCap,
+    color: 'blue',
+    benefits: ['Lär känna framtida talanger', 'Bidra till integration', 'Skatteavdrag möjligt'],
   },
   {
-    name: 'Arbetsförmedlingen',
-    description: 'Sveriges offentliga arbetsförmedling som vi samarbetar med för att hjälpa arbetssökande.',
-    type: 'Myndighetspartner',
-    url: 'https://arbetsformedlingen.se',
-    featured: true
+    type: 'Arbetsträning',
+    description: 'Hjälp långtidsarbetslösa tillbaka till arbetsmarknaden',
+    duration: '3-12 månader',
+    icon: Briefcase,
+    color: 'green',
+    benefits: ['Subventionerad lönekostnad', 'Stöd från Arbetsförmedlingen', 'Social hållbarhet'],
   },
   {
-    name: 'Svenskt Näringsliv',
-    description: 'Företräder näringslivets intressen och främjar en bra företagsmiljö.',
-    type: 'Branschpartner',
-    url: 'https://svensktnaringsliv.se',
-    featured: false
+    type: 'Anställning',
+    description: 'Rekrytera kompetensbaserat utan fördomar',
+    duration: 'Tillsvidareanställning',
+    icon: UserPlus,
+    color: 'amber',
+    benefits: ['Breddad rekryteringsbas', 'Ökad innovation', 'Stärkt arbetsgivarvarumärke'],
   },
-  {
-    name: 'Almega',
-    description: 'Arbetsgivarorganisation för tjänsteföretag i Sverige.',
-    type: 'Branschpartner',
-    url: 'https://almega.se',
-    featured: false
-  },
-  {
-    name: 'IF Metall',
-    description: 'Fackförbund för industriarbetare som vi samarbetar med kring rättvisa arbetsvillkor.',
-    type: 'Facklig partner',
-    url: 'https://ifmetall.se',
-    featured: false
-  },
-  {
-    name: 'Länsstyrelserna',
-    description: 'Samarbete för att främja integration och sysselsättning regionalt.',
-    type: 'Myndighetspartner',
-    url: 'https://lansstyrelsen.se',
-    featured: false
-  }
 ];
 
-// SDG Card Component with Official Icons
-const SDGCard = ({ goal }) => {
-  const IconComponent = goal.icon;
-  return (
-    <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg transition-all group">
-      <div className="h-2" style={{ backgroundColor: goal.color }}></div>
-      <div className="p-6">
-        <div className="flex items-start gap-4 mb-4">
-          <div 
-            className="w-16 h-16 rounded-xl overflow-hidden flex-shrink-0 shadow-md group-hover:shadow-lg transition-shadow"
-          >
-            <IconComponent />
-          </div>
-          <div>
-            <h3 className="font-bold text-gray-900 mb-1">{goal.title}</h3>
-            <p className="text-sm text-gray-500">{goal.titleEn}</p>
-          </div>
-        </div>
-        <p className="text-gray-600 text-sm mb-4">{goal.description}</p>
-        <div className="flex items-start gap-2 p-3 bg-amber-50 rounded-xl">
-          <CheckCircle2 className="w-5 h-5 text-amber-600 mt-0.5 flex-shrink-0" />
-          <p className="text-sm text-amber-800 font-medium">{goal.tendbeeAction}</p>
-        </div>
-      </div>
-    </div>
-  );
-};
+// Global Compact Swedish Network members (examples)
+const globalCompactMembers = [
+  'H&M Group', 'Volvo', 'IKEA', 'Ericsson', 'Sandvik', 'Atlas Copco', 
+  'Electrolux', 'SKF', 'Scania', 'Telia', 'SEB', 'Handelsbanken'
+];
 
-// Partner Card Component
-const PartnerCard = ({ partner }) => (
-  <div className={`bg-white rounded-2xl p-6 border transition-all hover:shadow-lg ${
-    partner.featured ? 'border-amber-200 shadow-sm' : 'border-gray-100'
-  }`}>
-    {partner.featured && (
-      <span className="inline-flex items-center gap-1 text-xs font-medium text-amber-600 bg-amber-100 px-2 py-1 rounded-full mb-4">
-        <Award className="w-3 h-3" />
-        {partner.type}
-      </span>
-    )}
-    {!partner.featured && (
-      <span className="inline-block text-xs font-medium text-gray-500 bg-gray-100 px-2 py-1 rounded-full mb-4">
-        {partner.type}
-      </span>
-    )}
-    <div className="w-16 h-16 bg-gradient-to-br from-gray-100 to-gray-200 rounded-xl flex items-center justify-center mb-4">
-      <span className="text-2xl font-bold text-gray-400">{partner.name.charAt(0)}</span>
-    </div>
-    <h3 className="font-bold text-gray-900 mb-2">{partner.name}</h3>
-    <p className="text-gray-600 text-sm mb-4">{partner.description}</p>
-    <a 
-      href={partner.url}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="inline-flex items-center gap-1 text-amber-600 hover:text-amber-700 font-medium text-sm"
-    >
-      Besök webbplats
-      <ExternalLink className="w-4 h-4" />
-    </a>
-  </div>
-);
+// Diversity Charter Sweden members (examples)
+const diversityCharterMembers = [
+  'Swedbank', 'Spotify', 'Klarna', 'Bonnier', 'Praktikertjänst', 
+  'Akademikerförbundet', 'SKR', 'Malmö stad', 'Göteborgs stad'
+];
+
+// SDG Goals with icons
+const relevantSDGs = [
+  { number: 4, title: 'God utbildning', color: '#C5192D' },
+  { number: 5, title: 'Jämställdhet', color: '#EF402B' },
+  { number: 8, title: 'Anständiga arbetsvillkor', color: '#A21942' },
+  { number: 10, title: 'Minskad ojämlikhet', color: '#DD1367' },
+  { number: 17, title: 'Partnerskap', color: '#19486A' },
+];
+
+// Success stories
+const successStories = [
+  {
+    company: 'Logistikföretag X',
+    role: 'Lagermedarbetare',
+    story: 'Efter 3 månaders praktik genom TendBee fick Ali fast anställning. Idag är han teamledare.',
+    result: '+15 anställningar via praktik',
+  },
+  {
+    company: 'IT-företag Y',
+    role: 'Utvecklare',
+    story: 'Maria, nyexaminerad från bootcamp, fick sin första chans genom arbetsträning.',
+    result: '100% av praktikanter erbjöds jobb',
+  },
+];
 
 export default function PartnersPage() {
   const navigate = useNavigate();
+  const [activeTab, setActiveTab] = useState('praktik');
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Shared Navigation */}
       <MainNavigation transparent={true} />
 
-      {/* Hero Section */}
-      <section className="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white pt-32 pb-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="max-w-3xl">
-            <div className="inline-flex items-center gap-2 bg-amber-500/20 text-amber-400 px-4 py-2 rounded-full text-sm font-medium mb-6">
-              <Globe className="w-4 h-4" />
-              Agenda 2030 & Hållbarhet
+      {/* HERO - The Challenge */}
+      <section className="relative bg-gradient-to-br from-gray-900 via-slate-900 to-gray-900 text-white pt-32 pb-24 overflow-hidden">
+        {/* Background pattern */}
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute inset-0" style={{
+            backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.4'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
+          }} />
+        </div>
+        
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="max-w-4xl">
+            <div className="inline-flex items-center gap-2 bg-amber-500/20 text-amber-400 px-4 py-2 rounded-full text-sm font-bold mb-6 animate-pulse">
+              <AlertTriangle className="w-4 h-4" />
+              EN UTMANING TILL SVERIGES FÖRETAG
             </div>
-            <h1 className="text-4xl md:text-5xl font-bold mb-6">
-              Partners & <span className="text-amber-400">Hållbarhet</span>
+            
+            <h1 className="text-4xl md:text-6xl font-black mb-6 leading-tight">
+              Ni pratar om <span className="text-amber-400">CSR</span>.<br/>
+              Vi utmanar er att <span className="text-amber-400">agera</span>.
             </h1>
-            <p className="text-xl text-gray-300 mb-8">
-              Vi arbetar enligt FN:s Agenda 2030 och Global Compacts 10 principer. 
-              Tillsammans med våra partners skapar vi en mer inkluderande arbetsmarknad.
+            
+            <p className="text-xl md:text-2xl text-gray-300 mb-8 leading-relaxed">
+              Hundratusentals människor står utanför arbetsmarknaden. Ert företag kan göra skillnad 
+              – genom praktik, arbetsträning och rättvisa anställningar. <strong className="text-white">Är ni redo?</strong>
             </p>
+
+            <div className="flex flex-wrap gap-4 mb-12">
+              <a 
+                href="#join" 
+                className="inline-flex items-center gap-2 px-8 py-4 bg-amber-500 text-gray-900 rounded-xl font-bold text-lg hover:bg-amber-400 transition-all hover:scale-105 shadow-xl shadow-amber-500/30"
+              >
+                Acceptera utmaningen
+                <ArrowRight className="w-5 h-5" />
+              </a>
+              <a 
+                href="#impact" 
+                className="inline-flex items-center gap-2 px-8 py-4 border-2 border-white/30 text-white rounded-xl font-semibold hover:bg-white/10 transition-all"
+              >
+                Se vår påverkan
+              </a>
+            </div>
+
+            {/* Quick stats */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              {impactStats.map((stat, idx) => (
+                <div key={idx} className="bg-white/5 backdrop-blur-sm rounded-xl p-4 border border-white/10">
+                  <stat.icon className="w-6 h-6 text-amber-400 mb-2" />
+                  <p className="text-2xl md:text-3xl font-bold text-white">{stat.value}</p>
+                  <p className="text-xs text-gray-400">{stat.label}</p>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Agenda 2030 Section */}
+      {/* The Challenge Section */}
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <div className="inline-flex items-center gap-2 bg-blue-100 text-blue-700 px-4 py-2 rounded-full text-sm font-medium mb-4">
-              <Target className="w-4 h-4" />
-              FN:s Globala mål
-            </div>
+          <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Agenda 2030
+              Vår utmaning till er
             </h2>
-            <p className="text-gray-600 max-w-2xl mx-auto">
-              Vi har identifierat fem av FN:s 17 globala mål för hållbar utveckling 
-              som är särskilt relevanta för vår verksamhet och vision.
+            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+              Till alla medlemmar i <strong>Global Compact Swedish Network</strong>, 
+              <strong> Diversity Charter Sweden</strong> och företag med CSR-ambitioner.
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-            {sdgGoals.map((goal) => (
-              <SDGCard key={goal.number} goal={goal} />
+          <div className="grid md:grid-cols-3 gap-8 mb-16">
+            {challengePoints.map((point, idx) => (
+              <div key={idx} className="relative group">
+                <div className="absolute -inset-1 bg-gradient-to-r from-amber-500 to-orange-500 rounded-2xl blur opacity-25 group-hover:opacity-50 transition-all"></div>
+                <div className="relative bg-white rounded-2xl p-8 border border-gray-100 h-full">
+                  <div className="w-14 h-14 bg-amber-100 rounded-xl flex items-center justify-center mb-6">
+                    <point.icon className="w-7 h-7 text-amber-600" />
+                  </div>
+                  <h3 className="text-xl font-bold text-gray-900 mb-3">{point.title}</h3>
+                  <p className="text-gray-600 leading-relaxed">{point.description}</p>
+                </div>
+              </div>
             ))}
           </div>
 
-          {/* SDG Wheel Image Placeholder */}
-          <div className="text-center">
-            <div className="inline-flex items-center justify-center w-32 h-32 bg-gradient-to-br from-blue-500 via-green-500 to-amber-500 rounded-full mb-4">
-              <Globe className="w-16 h-16 text-white" />
-            </div>
-            <p className="text-sm text-gray-500">FN:s 17 globala mål för hållbar utveckling</p>
+          {/* Quote */}
+          <div className="bg-gradient-to-r from-gray-900 to-slate-800 rounded-3xl p-8 md:p-12 text-white text-center">
+            <blockquote className="text-2xl md:text-3xl font-medium mb-6 leading-relaxed">
+              "Det enda som krävs för att ondskan ska segra är att goda människor 
+              inte gör någonting."
+            </blockquote>
+            <p className="text-gray-400">– Edmund Burke</p>
+            <p className="text-amber-400 mt-4 font-semibold">
+              Detsamma gäller arbetsmarknaden. Passivitet är inte neutralt.
+            </p>
           </div>
         </div>
       </section>
 
-      {/* Global Compact Section */}
-      <section className="py-20 bg-gray-50">
+      {/* Networks We Challenge */}
+      <section className="py-20 bg-gray-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <div className="inline-flex items-center gap-2 bg-purple-100 text-purple-700 px-4 py-2 rounded-full text-sm font-medium mb-4">
-              <Scale className="w-4 h-4" />
-              UN Global Compact
+              <Building2 className="w-4 h-4" />
+              Till dessa nätverk och deras medlemmar
             </div>
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              De 10 principerna
+              Vi riktar oss till er
             </h2>
-            <p className="text-gray-600 max-w-2xl mx-auto">
-              Vi stödjer FN:s Global Compact och dess tio principer inom områdena 
-              mänskliga rättigheter, arbetsrätt, miljö och antikorruption.
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-8 mb-12">
+            {/* Global Compact */}
+            <div className="bg-white rounded-2xl p-8 border-2 border-blue-200 hover:border-blue-400 transition-all">
+              <div className="flex items-center gap-4 mb-6">
+                <div className="w-16 h-16 bg-blue-600 rounded-xl flex items-center justify-center">
+                  <Globe className="w-8 h-8 text-white" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold text-gray-900">Global Compact Swedish Network</h3>
+                  <p className="text-blue-600 font-medium">FN:s initiativ för hållbart företagande</p>
+                </div>
+              </div>
+              <p className="text-gray-600 mb-6">
+                Ni har åtagit er att följa FN:s 10 principer – inklusive att <strong>eliminera diskriminering 
+                i arbetslivet</strong> (princip 6). TendBee hjälper er att leva upp till det löftet.
+              </p>
+              <div className="flex flex-wrap gap-2">
+                {globalCompactMembers.slice(0, 8).map((member, idx) => (
+                  <span key={idx} className="px-3 py-1 bg-blue-50 text-blue-700 text-sm rounded-full font-medium">
+                    {member}
+                  </span>
+                ))}
+                <span className="px-3 py-1 bg-blue-100 text-blue-800 text-sm rounded-full font-bold">
+                  +200 fler
+                </span>
+              </div>
+            </div>
+
+            {/* Diversity Charter */}
+            <div className="bg-white rounded-2xl p-8 border-2 border-purple-200 hover:border-purple-400 transition-all">
+              <div className="flex items-center gap-4 mb-6">
+                <div className="w-16 h-16 bg-purple-600 rounded-xl flex items-center justify-center">
+                  <Users className="w-8 h-8 text-white" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold text-gray-900">Diversity Charter Sweden</h3>
+                  <p className="text-purple-600 font-medium">Nätverk för mångfald och inkludering</p>
+                </div>
+              </div>
+              <p className="text-gray-600 mb-6">
+                Som medlemmar har ni förbundit er att <strong>aktivt arbeta för inkludering</strong>. 
+                Nu erbjuder vi ett konkret verktyg för att gå från löften till resultat.
+              </p>
+              <div className="flex flex-wrap gap-2">
+                {diversityCharterMembers.slice(0, 8).map((member, idx) => (
+                  <span key={idx} className="px-3 py-1 bg-purple-50 text-purple-700 text-sm rounded-full font-medium">
+                    {member}
+                  </span>
+                ))}
+                <span className="px-3 py-1 bg-purple-100 text-purple-800 text-sm rounded-full font-bold">
+                  +70 fler
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {/* All companies with CSR */}
+          <div className="bg-gradient-to-r from-amber-500 to-orange-500 rounded-2xl p-8 md:p-12 text-center">
+            <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
+              Och till ALLA företag med CSR-ambitioner
+            </h3>
+            <p className="text-lg text-amber-900 mb-6 max-w-2xl mx-auto">
+              Oavsett om ni är medlemmar i något nätverk eller inte – om ni har en hållbarhetsrapport, 
+              ett CSR-mål eller bara en vilja att göra gott – <strong>den här utmaningen gäller er</strong>.
+            </p>
+            <a 
+              href="#join" 
+              className="inline-flex items-center gap-2 px-8 py-4 bg-gray-900 text-white rounded-xl font-bold hover:bg-gray-800 transition-all"
+            >
+              Vi vill vara med
+              <ChevronRight className="w-5 h-5" />
+            </a>
+          </div>
+        </div>
+      </section>
+
+      {/* What You Can Offer */}
+      <section id="opportunities" className="py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <div className="inline-flex items-center gap-2 bg-green-100 text-green-700 px-4 py-2 rounded-full text-sm font-medium mb-4">
+              <HeartHandshake className="w-4 h-4" />
+              Så kan ni bidra
+            </div>
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+              Tre sätt att göra skillnad
+            </h2>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              Välj det som passar er organisation bäst – eller kombinera alla tre för maximal påverkan.
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-6">
-            {globalCompactPrinciples.map((category, index) => (
-              <div key={index} className="bg-white rounded-2xl p-6 border border-gray-100">
-                <h3 className="font-bold text-gray-900 mb-4 flex items-center gap-2">
-                  <div className="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center">
-                    <span className="text-purple-600 font-bold text-sm">{index + 1}</span>
-                  </div>
-                  {category.category}
-                </h3>
-                <ul className="space-y-3">
-                  {category.principles.map((principle, i) => (
-                    <li key={i} className="flex items-start gap-2 text-sm text-gray-600">
-                      <CheckCircle2 className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
-                      {principle}
-                    </li>
+          <div className="grid md:grid-cols-3 gap-8">
+            {opportunityTypes.map((opp, idx) => (
+              <div 
+                key={idx} 
+                className={`relative bg-white rounded-3xl border-2 p-8 transition-all hover:shadow-2xl hover:-translate-y-2 ${
+                  opp.color === 'blue' ? 'border-blue-200 hover:border-blue-400' :
+                  opp.color === 'green' ? 'border-green-200 hover:border-green-400' :
+                  'border-amber-200 hover:border-amber-400'
+                }`}
+              >
+                <div className={`w-16 h-16 rounded-2xl flex items-center justify-center mb-6 ${
+                  opp.color === 'blue' ? 'bg-blue-100' :
+                  opp.color === 'green' ? 'bg-green-100' :
+                  'bg-amber-100'
+                }`}>
+                  <opp.icon className={`w-8 h-8 ${
+                    opp.color === 'blue' ? 'text-blue-600' :
+                    opp.color === 'green' ? 'text-green-600' :
+                    'text-amber-600'
+                  }`} />
+                </div>
+                
+                <h3 className="text-2xl font-bold text-gray-900 mb-2">{opp.type}</h3>
+                <p className="text-gray-600 mb-4">{opp.description}</p>
+                
+                <div className="flex items-center gap-2 text-sm text-gray-500 mb-6">
+                  <Clock className="w-4 h-4" />
+                  {opp.duration}
+                </div>
+
+                <div className="space-y-3">
+                  <p className="text-sm font-semibold text-gray-700">Fördelar för er:</p>
+                  {opp.benefits.map((benefit, bidx) => (
+                    <div key={bidx} className="flex items-start gap-2">
+                      <CheckCircle2 className={`w-5 h-5 mt-0.5 ${
+                        opp.color === 'blue' ? 'text-blue-500' :
+                        opp.color === 'green' ? 'text-green-500' :
+                        'text-amber-500'
+                      }`} />
+                      <span className="text-sm text-gray-600">{benefit}</span>
+                    </div>
                   ))}
-                </ul>
+                </div>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Partners Section */}
+      {/* Impact & SDGs */}
+      <section id="impact" className="py-20 bg-gradient-to-br from-slate-900 to-gray-900 text-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">
+              Bidra till Agenda 2030
+            </h2>
+            <p className="text-lg text-gray-400 max-w-2xl mx-auto">
+              Genom att samarbeta med TendBee bidrar ni direkt till FN:s globala mål för hållbar utveckling.
+            </p>
+          </div>
+
+          <div className="flex flex-wrap justify-center gap-6 mb-16">
+            {relevantSDGs.map((sdg) => (
+              <div 
+                key={sdg.number}
+                className="flex items-center gap-3 px-6 py-4 rounded-xl"
+                style={{ backgroundColor: sdg.color }}
+              >
+                <span className="text-3xl font-black text-white">{sdg.number}</span>
+                <span className="text-sm font-medium text-white/90">{sdg.title}</span>
+              </div>
+            ))}
+          </div>
+
+          {/* Impact metrics */}
+          <div className="grid md:grid-cols-4 gap-6">
+            {[
+              { value: '10 000+', label: 'Matchningar gjorda', icon: Handshake },
+              { value: '500+', label: 'Partnerföretag', icon: Building2 },
+              { value: '73%', label: 'Fick jobb efter praktik', icon: TrendingUp },
+              { value: '100%', label: 'Diskrimineringsfri matchning', icon: Shield },
+            ].map((metric, idx) => (
+              <div key={idx} className="text-center p-6 bg-white/5 rounded-2xl backdrop-blur-sm border border-white/10">
+                <metric.icon className="w-8 h-8 text-amber-400 mx-auto mb-4" />
+                <p className="text-3xl font-bold text-white mb-1">{metric.value}</p>
+                <p className="text-sm text-gray-400">{metric.label}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* How It Works */}
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <div className="inline-flex items-center gap-2 bg-amber-100 text-amber-700 px-4 py-2 rounded-full text-sm font-medium mb-4">
-              <Handshake className="w-4 h-4" />
-              Vårt nätverk
-            </div>
+          <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Våra partners
+              Så enkelt kommer ni igång
             </h2>
-            <p className="text-gray-600 max-w-2xl mx-auto">
-              Vi samarbetar med ledande organisationer för att skapa en mer 
-              inkluderande och rättvis arbetsmarknad i Sverige.
-            </p>
           </div>
 
-          {/* Featured Partners */}
-          <div className="grid md:grid-cols-2 gap-6 mb-8">
-            {partners.filter(p => p.featured).map((partner, index) => (
-              <PartnerCard key={index} partner={partner} />
+          <div className="grid md:grid-cols-4 gap-8">
+            {[
+              { step: '1', title: 'Kontakta oss', desc: 'Berätta om er organisation och era mål', icon: Mail },
+              { step: '2', title: 'Skapa konto', desc: 'Vi sätter upp ert företagskonto på 24h', icon: Building2 },
+              { step: '3', title: 'Publicera möjligheter', desc: 'Lägg ut praktik, arbetsträning eller jobb', icon: Briefcase },
+              { step: '4', title: 'Matcha & Anställ', desc: 'AI matchar er med rätt kandidater', icon: Zap },
+            ].map((item, idx) => (
+              <div key={idx} className="relative text-center">
+                <div className="text-7xl font-black text-gray-100 absolute -top-2 left-1/2 -translate-x-1/2">
+                  {item.step}
+                </div>
+                <div className="relative z-10 pt-10">
+                  <div className="w-14 h-14 bg-amber-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                    <item.icon className="w-7 h-7 text-amber-600" />
+                  </div>
+                  <h3 className="font-bold text-gray-900 mb-2">{item.title}</h3>
+                  <p className="text-sm text-gray-600">{item.desc}</p>
+                </div>
+              </div>
             ))}
-          </div>
-
-          {/* Other Partners */}
-          <h3 className="font-semibold text-gray-900 mb-4">Fler partners</h3>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
-            {partners.filter(p => !p.featured).map((partner, index) => (
-              <PartnerCard key={index} partner={partner} />
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Diversity Charter Highlight */}
-      <section className="py-20 bg-gradient-to-br from-purple-600 to-purple-800 text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div>
-              <div className="inline-flex items-center gap-2 bg-white/20 text-white px-4 py-2 rounded-full text-sm font-medium mb-6">
-                <Award className="w-4 h-4" />
-                Stolt medlem
-              </div>
-              <h2 className="text-3xl md:text-4xl font-bold mb-6">
-                Diversity Charter Sweden
-              </h2>
-              <p className="text-purple-100 mb-6 text-lg">
-                Tendbee är stolt medlem av Diversity Charter Sweden - ett nätverk 
-                av över 70 organisationer som tillsammans representerar mer än 
-                300 000 anställda.
-              </p>
-              <p className="text-purple-100 mb-8">
-                Genom vårt medlemskap förbinder vi oss att skapa och upprätthålla 
-                inkluderande arbetsmiljöer utan diskriminering baserat på kön, 
-                etnicitet, religion, ålder, funktionsnedsättning eller sexuell läggning.
-              </p>
-              <div className="flex flex-wrap gap-4">
-                <div className="bg-white/10 backdrop-blur rounded-xl p-4 text-center">
-                  <p className="text-2xl font-bold">70+</p>
-                  <p className="text-xs text-purple-200">Medlemsorganisationer</p>
-                </div>
-                <div className="bg-white/10 backdrop-blur rounded-xl p-4 text-center">
-                  <p className="text-2xl font-bold">300K+</p>
-                  <p className="text-xs text-purple-200">Anställda totalt</p>
-                </div>
-                <div className="bg-white/10 backdrop-blur rounded-xl p-4 text-center">
-                  <p className="text-2xl font-bold">27</p>
-                  <p className="text-xs text-purple-200">EU-länder</p>
-                </div>
-              </div>
-            </div>
-            <div className="bg-white/10 backdrop-blur rounded-3xl p-8">
-              <div className="text-center">
-                <div className="w-24 h-24 bg-white rounded-2xl flex items-center justify-center mx-auto mb-6">
-                  <Users className="w-12 h-12 text-purple-600" />
-                </div>
-                <h3 className="text-xl font-bold mb-4">Vårt åtagande</h3>
-                <ul className="text-left space-y-3">
-                  {[
-                    'Främja mångfald i rekrytering',
-                    'Skapa inkluderande arbetsplatser',
-                    'Motverka diskriminering aktivt',
-                    'Utbilda om omedvetna fördomar',
-                    'Mäta och följa upp mångfaldsarbete'
-                  ].map((item, i) => (
-                    <li key={i} className="flex items-center gap-2 text-sm">
-                      <CheckCircle2 className="w-4 h-4 text-amber-400" />
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
           </div>
         </div>
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-gray-900 text-white">
+      <section id="join" className="py-20 bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-6">
-            Vill du bli partner?
+          <h2 className="text-3xl md:text-5xl font-black text-gray-900 mb-6">
+            Accepterar ni utmaningen?
           </h2>
-          <p className="text-gray-400 mb-8 text-lg">
-            Är din organisation intresserad av att samarbeta med oss för en mer 
-            inkluderande arbetsmarknad? Kontakta oss för att diskutera partnerskap.
+          <p className="text-xl text-amber-900 mb-8 max-w-2xl mx-auto">
+            Bli en del av förändringen. Erbjud praktikplatser, arbetsträning eller anställningar 
+            – och gör verklig skillnad för människor och samhälle.
           </p>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Button 
-              onClick={() => window.location.href = 'mailto:partners@tendbee.se'}
-              className="bg-amber-500 hover:bg-amber-600 text-white px-8 py-6 text-lg"
-            >
-              Kontakta oss
-              <ArrowRight className="w-5 h-5 ml-2" />
-            </Button>
-            <Button 
-              onClick={() => navigate('/om-oss')}
-              variant="outline"
-              className="border-gray-600 text-white hover:bg-gray-800 px-8 py-6 text-lg"
-            >
-              Läs mer om oss
-            </Button>
+          
+          <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-8 mb-8">
+            <h3 className="text-2xl font-bold text-gray-900 mb-4">
+              Vi lovar att göra det enkelt för er
+            </h3>
+            <div className="grid md:grid-cols-3 gap-4 text-left">
+              {[
+                'Inga komplicerade processer',
+                'Stöd i hela matchningen',
+                'Mätbar CSR-påverkan',
+                'Rapporter för hållbarhetsredovisning',
+                'Kostnadsfri uppsättning',
+                'Dedikerad kontaktperson',
+              ].map((item, idx) => (
+                <div key={idx} className="flex items-center gap-2">
+                  <CheckCircle2 className="w-5 h-5 text-gray-900" />
+                  <span className="text-sm font-medium text-gray-900">{item}</span>
+                </div>
+              ))}
+            </div>
           </div>
+
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <a 
+              href="mailto:partners@tendbee.se?subject=Vi accepterar utmaningen!"
+              className="inline-flex items-center gap-2 px-10 py-5 bg-gray-900 text-white rounded-xl font-bold text-lg hover:bg-gray-800 transition-all shadow-xl"
+            >
+              <Mail className="w-5 h-5" />
+              partners@tendbee.se
+            </a>
+            <a 
+              href="tel:+46701234567"
+              className="inline-flex items-center gap-2 px-10 py-5 bg-white text-gray-900 rounded-xl font-bold text-lg hover:bg-gray-100 transition-all"
+            >
+              <Phone className="w-5 h-5" />
+              Ring oss direkt
+            </a>
+          </div>
+
+          <p className="mt-8 text-amber-900 font-medium">
+            🐝 Tillsammans bygger vi ett Sverige där kompetens, inte bakgrund, avgör vem som får jobbet.
+          </p>
         </div>
       </section>
 
-      {/* Shared Footer */}
+      {/* Final Message */}
+      <section className="py-16 bg-gray-900 text-white">
+        <div className="max-w-4xl mx-auto px-4 text-center">
+          <p className="text-2xl font-medium text-gray-300 leading-relaxed">
+            "Varje praktikplats ni erbjuder är en investering i en människa. 
+            Varje anställning ni gör är ett steg mot ett mer jämlikt samhälle. 
+            <span className="text-amber-400 font-bold"> Ni har makten att förändra.</span>"
+          </p>
+          <p className="text-amber-500 mt-6 font-semibold">– TendBee-teamet</p>
+        </div>
+      </section>
+
       <MainFooter />
     </div>
   );
