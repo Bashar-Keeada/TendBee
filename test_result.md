@@ -97,6 +97,44 @@
 - ✅ "Tillbaka till profil" button working
 - ✅ Navigation between screens working correctly
 
+## Profile Percentage Calculation & Data Persistence Testing - ⚠️ PARTIAL ISSUES
+
+### Test URL: `https://skillbridge-147.preview.emergentagent.com/app?screen=courses`
+
+#### Profile Percentage Calculation - ⚠️ MIXED RESULTS
+- ✅ Initial profile percentage correctly shows 20% (basic info completed)
+- ✅ Online course completion increases percentage from 20% to 35% (+15%)
+- ✅ Course counter updates correctly from 0/2 to 1/2
+- ✅ Course shows "Genomförd ✓" status after completion
+- ✅ Skills selection increases profile percentage (3 skills selected)
+- ❌ **ISSUE**: Profile percentage calculation inconsistent - shows 55% after saving skills instead of expected ~41%
+- ❌ **ISSUE**: Profile percentage resets to 20% when navigating directly to CVCompleted screen
+
+#### Skills/Education/Experience Selection - ✅ WORKING
+- ✅ Successfully selected 3 skills: "Truckkort A", "Excel", "Första hjälpen"
+- ✅ Selected skills appear in "Valda:" section as blue badges
+- ✅ Skills counter badge shows correct number (3)
+- ✅ "Spara ändringar (3 tillagda)" button appears with correct count
+- ✅ Save functionality works and navigates to CVCompletedScreen
+
+#### Data Persistence - ⚠️ PARTIAL WORKING
+- ✅ Selected skills persist when navigating back from CVCompleted to courses screen
+- ✅ "Valda:" section maintains selected skills after navigation
+- ✅ Skills remain selected in the interface
+- ❌ **ISSUE**: Profile percentage not maintained across direct navigation to CVCompleted screen
+- ❌ **ISSUE**: Profile percentage calculation appears inconsistent between screens
+
+#### CVCompleted Screen - ✅ WORKING
+- ✅ ProfileCompleteness component displays correctly
+- ✅ "Förbättra min profil" option is available and functional
+- ✅ Navigation between screens works properly
+- ✅ Screen loads without errors
+
+#### Critical Issues Found:
+1. **Profile percentage calculation inconsistency**: Expected ~41% (20% basic + 15% course + ~21% for 3 skills) but got 55%
+2. **Profile percentage not persisting**: Resets to 20% on direct CVCompleted screen access
+3. **Potential state management issue**: Profile percentage calculation may not be properly synchronized across components
+
 ## Summary
 
 All authentication methods are implemented:
@@ -109,6 +147,7 @@ New features implemented and tested:
 5. ✅ Download QR as PNG - WORKING
 6. ✅ Share/Copy link functionality - WORKING
 7. ✅ "Förbättra ditt CV" functionality - WORKING
+8. ⚠️ Profile percentage calculation - PARTIAL ISSUES (calculation inconsistency & persistence problems)
 
 ## Testing Notes
 
