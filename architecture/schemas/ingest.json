@@ -1,0 +1,65 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://tendbee.se/schemas/ingest.json",
+  "title": "IngestPayload",
+  "description": "Schema for job ingestion webhook/API payloads",
+  "type": "object",
+  "required": ["source", "job_id", "payload"],
+  "properties": {
+    "source": {
+      "type": "string",
+      "enum": ["platsbanken", "linkedin", "indeed", "partner", "internal"],
+      "description": "Source system identifier"
+    },
+    "job_id": {
+      "type": "string",
+      "description": "External job ID from source system",
+      "minLength": 1,
+      "maxLength": 255
+    },
+    "action": {
+      "type": "string",
+      "enum": ["create", "update", "delete"],
+      "default": "create",
+      "description": "Action to perform"
+    },
+    "payload": {
+      "type": "object",
+      "description": "Raw job data from source system",
+      "additionalProperties": true
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the event occurred at source"
+    },
+    "idempotency_key": {
+      "type": "string",
+      "description": "Optional client-provided idempotency key"
+    },
+    "priority": {
+      "type": "string",
+      "enum": ["low", "normal", "high"],
+      "default": "normal",
+      "description": "Processing priority"
+    },
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "connector_id": {
+          "type": "string",
+          "description": "ID of the connector that fetched this job"
+        },
+        "fetch_timestamp": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "batch_id": {
+          "type": "string",
+          "description": "ID of the batch this job belongs to"
+        }
+      }
+    }
+  },
+  "additionalProperties": false
+}
