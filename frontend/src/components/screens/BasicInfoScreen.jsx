@@ -163,7 +163,7 @@ export const BasicInfoScreen = ({ onNavigate, onUpdateProfile, onUpdate, isPlusM
 
   // Plus Modal Component
   const PlusModal = () => (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4" onClick={() => setShowPlusModal(false)}>
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4" onClick={() => !isProcessingPayment && setShowPlusModal(false)}>
       <div className="bg-white rounded-2xl p-6 max-w-sm w-full shadow-2xl" onClick={e => e.stopPropagation()}>
         <div className="text-center mb-6">
           <div className="w-16 h-16 bg-gradient-to-br from-amber-400 to-amber-600 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -190,29 +190,80 @@ export const BasicInfoScreen = ({ onNavigate, onUpdateProfile, onUpdate, isPlusM
           </div>
         </div>
 
-        <div className="text-center mb-4">
-          <p className="text-2xl font-bold text-gray-900">49 kr<span className="text-sm font-normal text-gray-500">/månad</span></p>
+        {/* Package Selection */}
+        <div className="space-y-2 mb-4">
+          <button
+            onClick={() => setSelectedPackage('monthly')}
+            className={`w-full p-3 rounded-xl border-2 transition-all text-left ${
+              selectedPackage === 'monthly' 
+                ? 'border-amber-500 bg-amber-50' 
+                : 'border-gray-200 hover:border-amber-300'
+            }`}
+          >
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="font-semibold text-gray-900">Månadsvis</p>
+                <p className="text-sm text-gray-500">Betala månadsvis, avsluta när som helst</p>
+              </div>
+              <p className="text-lg font-bold text-gray-900">49 kr<span className="text-sm font-normal text-gray-500">/mån</span></p>
+            </div>
+          </button>
+          
+          <button
+            onClick={() => setSelectedPackage('yearly')}
+            className={`w-full p-3 rounded-xl border-2 transition-all text-left relative overflow-hidden ${
+              selectedPackage === 'yearly' 
+                ? 'border-amber-500 bg-amber-50' 
+                : 'border-gray-200 hover:border-amber-300'
+            }`}
+          >
+            <div className="absolute top-0 right-0 bg-green-500 text-white text-xs px-2 py-0.5 rounded-bl-lg">
+              Spara 17%
+            </div>
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="font-semibold text-gray-900">Årsvis</p>
+                <p className="text-sm text-gray-500">2 månader gratis!</p>
+              </div>
+              <p className="text-lg font-bold text-gray-900">490 kr<span className="text-sm font-normal text-gray-500">/år</span></p>
+            </div>
+          </button>
         </div>
 
         <Button 
           className="w-full h-12 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700"
-          onClick={() => {
-            // TODO: Implementera betalning
-            setShowPlusModal(false);
-            alert('Betalningsfunktion kommer snart!');
-          }}
+          onClick={handleUpgradeToPlusClick}
+          disabled={isProcessingPayment}
         >
-          <Crown className="w-5 h-5 mr-2" />
-          Uppgradera till Plus
+          {isProcessingPayment ? (
+            <>
+              <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+              Laddar betalning...
+            </>
+          ) : (
+            <>
+              <Crown className="w-5 h-5 mr-2" />
+              Uppgradera till Plus
+            </>
+          )}
         </Button>
 
         <button 
-          className="w-full mt-3 text-sm text-gray-500 hover:text-gray-700"
+          className="w-full mt-3 text-sm text-gray-500 hover:text-gray-700 disabled:opacity-50"
           onClick={() => setShowPlusModal(false)}
+          disabled={isProcessingPayment}
         >
           Kanske senare
         </button>
       </div>
+    </div>
+  );
+
+  // Payment Success Toast
+  const PaymentSuccessToast = () => (
+    <div className="fixed top-4 left-1/2 -translate-x-1/2 bg-green-500 text-white px-6 py-3 rounded-xl shadow-lg flex items-center gap-3 z-50 animate-pulse">
+      <Check className="w-5 h-5" />
+      <span className="font-medium">Grattis! Du är nu Tendbee Plus-medlem!</span>
     </div>
   );
 
