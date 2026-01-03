@@ -1,0 +1,159 @@
+{
+  "platsbanken_example": {
+    "id": "28156789",
+    "rubrik": "Systemutvecklare Python",
+    "beskrivning": "Vi söker en erfaren Python-utvecklare till vårt team i Stockholm. Du kommer att arbeta med utveckling av vår AI-plattform och API:er.\n\nArbetsuppgifter:\n- Utveckla och underhålla Python-baserade tjänster\n- Designa och implementera REST API:er\n- Arbeta med PostgreSQL och Redis\n- Delta i kodgranskningar och teknisk planering\n\nKrav:\n- Minst 3 års erfarenhet av Python\n- Erfarenhet av FastAPI eller Flask\n- God kunskap i SQL och databaser\n- Flytande svenska och engelska",
+    "arbetsgivare": {
+      "namn": "Tech Innovation AB",
+      "organisationsnummer": "559123-4567",
+      "webbplats": "https://techinnovation.se"
+    },
+    "arbetsort": {
+      "namn": "Stockholm",
+      "kommunkod": "0180"
+    },
+    "lan": {
+      "namn": "Stockholms län",
+      "lanskod": "01"
+    },
+    "anstallningstyp": "heltid",
+    "varaktighet": "tillsvidare",
+    "publiceringsdatum": "2025-07-01T08:00:00Z",
+    "sista_ansokningsdag": "2025-07-31",
+    "kontaktperson": {
+      "namn": "Anna Andersson",
+      "telefon": "+46701234567",
+      "epost": "anna@techinnovation.se"
+    },
+    "webbplats": "https://techinnovation.se/jobb/python-dev",
+    "antal_platser": 1,
+    "erfarenhet_kravs": true,
+    "kompetenser": [
+      {"namn": "Python", "vikt": "krav"},
+      {"namn": "FastAPI", "vikt": "krav"},
+      {"namn": "PostgreSQL", "vikt": "krav"},
+      {"namn": "Redis", "vikt": "merit"},
+      {"namn": "Docker", "vikt": "merit"}
+    ]
+  },
+  
+  "linkedin_example": {
+    "id": "3847561234",
+    "title": "Senior Frontend Developer - React",
+    "description": "Join our growing team as a Senior Frontend Developer!\n\nAbout the role:\nWe are looking for an experienced React developer to help build our next-generation web applications.\n\nResponsibilities:\n- Develop responsive web applications using React and TypeScript\n- Collaborate with UX designers to implement user interfaces\n- Write clean, maintainable code with comprehensive tests\n- Mentor junior developers\n\nRequirements:\n- 5+ years of frontend development experience\n- Strong proficiency in React and TypeScript\n- Experience with state management (Redux, MobX)\n- Excellent communication skills in English",
+    "company": {
+      "id": "12345",
+      "name": "Digital Solutions AB",
+      "logo": "https://media.licdn.com/company-logo.jpg",
+      "url": "https://linkedin.com/company/digital-solutions"
+    },
+    "location": "Stockholm, Sweden",
+    "locationInfo": {
+      "city": "Stockholm",
+      "country": "Sweden",
+      "countryCode": "SE"
+    },
+    "employmentType": "FULL_TIME",
+    "experienceLevel": "MID_SENIOR",
+    "workRemoteAllowed": true,
+    "workplaceType": "HYBRID",
+    "postedAt": "2025-07-01T10:30:00Z",
+    "expiresAt": "2025-08-01T23:59:59Z",
+    "applyUrl": "https://linkedin.com/jobs/view/3847561234/apply",
+    "salary": {
+      "min": 55000,
+      "max": 70000,
+      "currency": "SEK",
+      "period": "MONTHLY"
+    },
+    "skills": [
+      "React",
+      "TypeScript",
+      "JavaScript",
+      "Redux",
+      "HTML",
+      "CSS",
+      "Git"
+    ],
+    "industries": [
+      "Information Technology & Services"
+    ]
+  },
+  
+  "indeed_example": {
+    "jobkey": "abc123def456",
+    "jobtitle": "Lagerarbetare med truckkort",
+    "company": "Logistik Partner AB",
+    "city": "Göteborg",
+    "state": "Västra Götaland",
+    "country": "SE",
+    "language": "sv",
+    "formattedLocation": "Göteborg, Västra Götaland",
+    "source": "Logistik Partner AB",
+    "date": "2025-07-01T06:00:00Z",
+    "snippet": "Vi söker lagerarbetare med truckkort A och B till vårt lager i Göteborg. Du kommer att arbeta med godsmottagning, plockning och utleverans...",
+    "url": "https://se.indeed.com/viewjob?jk=abc123def456",
+    "onmousedown": "indeed_clk(this,'');",
+    "latitude": 57.7089,
+    "longitude": 11.9746,
+    "jobType": "Heltid",
+    "salary": "28 000 - 32 000 kr/månad",
+    "requirements": [
+      "Truckkort A",
+      "Truckkort B",
+      "God svenska",
+      "Fysisk god hälsa"
+    ]
+  },
+  
+  "normalized_output_example": {
+    "job_id": "platsbanken:28156789",
+    "source": "platsbanken",
+    "title": "Systemutvecklare Python",
+    "description": "Vi söker en erfaren Python-utvecklare till vårt team i Stockholm...",
+    "company": "Tech Innovation AB",
+    "company_logo": null,
+    "location": {
+      "city": "Stockholm",
+      "region": "Stockholms län",
+      "country": "Sverige",
+      "lat": 59.3293,
+      "lon": 18.0686
+    },
+    "employment_type": "heltid",
+    "remote": "hybrid",
+    "salary_range": {
+      "min": 45000,
+      "max": 60000,
+      "currency": "SEK",
+      "period": "monthly"
+    },
+    "required_skills": [
+      "Python",
+      "FastAPI",
+      "PostgreSQL"
+    ],
+    "preferred_skills": [
+      "Redis",
+      "Docker"
+    ],
+    "experience_years": 3,
+    "education_level": null,
+    "languages": [
+      {"language": "svenska", "level": "fluent", "required": true},
+      {"language": "engelska", "level": "fluent", "required": true}
+    ],
+    "published_at": "2025-07-01T08:00:00Z",
+    "expires_at": "2025-07-31T23:59:59Z",
+    "application_url": "https://techinnovation.se/jobb/python-dev",
+    "contact_person": "Anna Andersson",
+    "contact_phone": "+46701234567",
+    "fingerprint": "sha256:abc123...",
+    "embedding": [0.123, -0.456, 0.789],
+    "raw_payload": {},
+    "status": "active",
+    "created_at": "2025-07-01T08:05:00Z",
+    "updated_at": "2025-07-01T08:05:00Z",
+    "indexed_at": "2025-07-01T08:05:30Z"
+  }
+}
