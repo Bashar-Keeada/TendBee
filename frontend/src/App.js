@@ -40,6 +40,9 @@ function AppRouter() {
       {/* About Us Page */}
       <Route path="/om-oss" element={<AboutPage />} />
       
+      {/* Partners & Sustainability Page */}
+      <Route path="/partners" element={<PartnersPage />} />
+      
       {/* Careers Page */}
       <Route path="/karriar" element={<CareersPage />} />
       
