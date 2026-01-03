@@ -189,6 +189,7 @@ export const MainFooter = () => {
           <div className="flex items-center gap-6">
             <button onClick={() => navigate('/')} className="hover:text-white transition-colors">Hem</button>
             <button onClick={() => navigate('/om-oss')} className="hover:text-white transition-colors">Om oss</button>
+            <button onClick={() => navigate('/partners')} className="hover:text-white transition-colors">Partners</button>
             <button onClick={() => navigate('/karriar')} className="hover:text-white transition-colors">Karriär</button>
             <a href="mailto:kontakt@tendbee.se" className="hover:text-white transition-colors">Kontakt</a>
           </div>
