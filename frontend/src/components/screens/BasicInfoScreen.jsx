@@ -1,31 +1,76 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { ScreenContainer } from '@/components/ScreenContainer';
 import { ProgressBar } from '@/components/ProgressBar';
-import { ChevronLeft, ArrowRight } from 'lucide-react';
+import { ChevronLeft, ArrowRight, Camera, User, X } from 'lucide-react';
 
-export const BasicInfoScreen = ({ onNavigate, onUpdateProfile }) => {
+export const BasicInfoScreen = ({ onNavigate, onUpdateProfile, onUpdate }) => {
+  const fileInputRef = useRef(null);
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
     age: '',
     phone: '',
+    gender: '',
+    profileImage: null,
   });
+  const [previewUrl, setPreviewUrl] = useState(null);
   
   const handleChange = (field, value) => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
+
+  // Hantera bilduppladdning
+  const handleImageUpload = (e) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      // Validera filtyp
+      if (!file.type.startsWith('image/')) {
+        alert('Vänligen välj en bildfil');
+        return;
+      }
+      // Validera filstorlek (max 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        alert('Bilden får max vara 5MB');
+        return;
+      }
+      
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPreviewUrl(reader.result);
+        setFormData(prev => ({ ...prev, profileImage: reader.result }));
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  // Ta bort bild
+  const removeImage = () => {
+    setPreviewUrl(null);
+    setFormData(prev => ({ ...prev, profileImage: null }));
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  };
   
-  const isValid = formData.firstName && formData.lastName && formData.age && formData.phone;
+  const isValid = formData.firstName && formData.lastName && formData.age && formData.phone && formData.gender;
   
   const handleContinue = () => {
     if (isValid) {
       onUpdateProfile?.(formData);
+      onUpdate?.(formData);
       onNavigate('employmentStatus');
     }
   };
+
+  const genderOptions = [
+    { value: 'man', label: 'Man' },
+    { value: 'kvinna', label: 'Kvinna' },
+    { value: 'annat', label: 'Annat' },
+    { value: 'vill_ej_ange', label: 'Vill ej ange' },
+  ];
   
   return (
     <ScreenContainer hasFooter>
@@ -50,6 +95,44 @@ export const BasicInfoScreen = ({ onNavigate, onUpdateProfile }) => {
           Berätta lite om dig själv
         </p>
       </div>
+
+      {/* Profile Picture Upload */}
+      <div className="mb-6">
+        <Label className="form-label text-center block mb-3">Profilbild (valfritt)</Label>
+        <div className="relative w-28 h-28 mx-auto">
+          <div 
+            className={`profile-picture-upload ${previewUrl ? 'has-image' : ''}`}
+            onClick={() => fileInputRef.current?.click()}
+          >
+            {previewUrl ? (
+              <img src={previewUrl} alt="Profilbild" />
+            ) : (
+              <div className="flex flex-col items-center text-gray-400">
+                <Camera className="w-8 h-8 mb-1" />
+                <span className="text-xs">Lägg till</span>
+              </div>
+            )}
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              onChange={handleImageUpload}
+              className="hidden"
+            />
+          </div>
+          {previewUrl && (
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                removeImage();
+              }}
+              className="absolute -top-2 -right-2 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center hover:bg-red-600 transition-colors"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          )}
+        </div>
+      </div>
       
       {/* Form */}
       <div className="space-y-5">
@@ -73,6 +156,23 @@ export const BasicInfoScreen = ({ onNavigate, onUpdateProfile }) => {
               onChange={(e) => handleChange('lastName', e.target.value)}
               className="form-input"
             />
+          </div>
+        </div>
+
+        {/* Kön */}
+        <div>
+          <Label className="form-label">Kön</Label>
+          <div className="grid grid-cols-2 gap-3">
+            {genderOptions.map((option) => (
+              <button
+                key={option.value}
+                type="button"
+                onClick={() => handleChange('gender', option.value)}
+                className={`option-card justify-center ${formData.gender === option.value ? 'selected' : ''}`}
+              >
+                <span className="text-sm font-medium">{option.label}</span>
+              </button>
+            ))}
           </div>
         </div>
         
