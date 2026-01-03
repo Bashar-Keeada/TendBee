@@ -69,35 +69,12 @@ export const MainNavigation = ({ transparent = false, activePage = '' }) => {
             <button onClick={() => navigate('/')} className={navLinkClass('/')}>
               Hem
             </button>
-            <a href="/#platform" className={anchorClass}>Platform</a>
-            <div className="relative group">
-              <button className={`${anchorClass} flex items-center gap-1`}>
-                Solutions <ChevronDown className="w-4 h-4" />
-              </button>
-              <div className="absolute top-full left-0 mt-2 w-64 bg-white rounded-xl shadow-xl border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 p-2">
-                <a href="/#enterprise" className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-50">
-                  <Building2 className="w-5 h-5 text-amber-500" />
-                  <div>
-                    <p className="font-medium text-gray-900">Enterprise</p>
-                    <p className="text-xs text-gray-500">For large organizations</p>
-                  </div>
-                </a>
-                <a href="/#public" className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-50">
-                  <Globe className="w-5 h-5 text-amber-500" />
-                  <div>
-                    <p className="font-medium text-gray-900">Public Sector</p>
-                    <p className="text-xs text-gray-500">Government & municipalities</p>
-                  </div>
-                </a>
-                <a href="/#staffing" className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-50">
-                  <Users className="w-5 h-5 text-amber-500" />
-                  <div>
-                    <p className="font-medium text-gray-900">Staffing Agencies</p>
-                    <p className="text-xs text-gray-500">Scale your placements</p>
-                  </div>
-                </a>
-              </div>
-            </div>
+            <button onClick={() => navigate('/plattform')} className={navLinkClass('/plattform')}>
+              Plattform
+            </button>
+            <button onClick={() => navigate('/losningar')} className={navLinkClass('/losningar')}>
+              Lösningar
+            </button>
             <button onClick={() => navigate('/om-oss')} className={navLinkClass('/om-oss')}>
               Om oss
             </button>
@@ -107,7 +84,9 @@ export const MainNavigation = ({ transparent = false, activePage = '' }) => {
             <button onClick={() => navigate('/karriar')} className={navLinkClass('/karriar')}>
               Karriär
             </button>
-            <a href="/#pricing" className={anchorClass}>Pricing</a>
+            <button onClick={() => navigate('/priser')} className={navLinkClass('/priser')}>
+              Priser
+            </button>
           </div>
           
           {/* Right side buttons */}
