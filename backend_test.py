@@ -313,15 +313,44 @@ class TendbeeBackendTester:
             self.log_test("Serve Uploaded File", False, f"Exception: {str(e)}")
             return False
     
+    def create_test_user(self):
+        """Create a test user for image deletion test"""
+        try:
+            user_data = {
+                "email": f"test-{uuid.uuid4().hex[:8]}@tendbee.se",
+                "password": "testpassword123",
+                "first_name": "Test",
+                "last_name": "User",
+                "user_type": "jobseeker"
+            }
+            
+            response = self.session.post(
+                f"{self.base_url}/auth/register",
+                json=user_data,
+                timeout=10
+            )
+            
+            if response.status_code == 200:
+                data = response.json()
+                if data.get("success") and data.get("user"):
+                    return data["user"]["id"]
+            
+            return None
+            
+        except Exception as e:
+            return None
+    
     def test_delete_profile_image(self):
         """Test DELETE /api/upload/profile-image/{user_id}"""
-        if not hasattr(self, 'test_user_id'):
-            self.log_test("Delete Profile Image", False, "No user_id from previous test")
+        # First create a real user
+        real_user_id = self.create_test_user()
+        if not real_user_id:
+            self.log_test("Delete Profile Image", False, "Could not create test user")
             return False
         
         try:
             response = self.session.delete(
-                f"{self.base_url}/upload/profile-image/{self.test_user_id}",
+                f"{self.base_url}/upload/profile-image/{real_user_id}",
                 timeout=10
             )
             
