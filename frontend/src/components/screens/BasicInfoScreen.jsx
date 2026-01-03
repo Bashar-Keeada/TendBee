@@ -379,7 +379,12 @@ export const BasicInfoScreen = ({ onNavigate, onUpdateProfile, onUpdate, isPlusM
             className={`profile-picture-upload ${previewUrl ? 'has-image' : ''} ${formData.hideProfileImage ? 'opacity-50' : ''}`}
             onClick={() => fileInputRef.current?.click()}
           >
-            {previewUrl ? (
+            {isUploadingImage ? (
+              <div className="flex flex-col items-center text-amber-500">
+                <Loader2 className="w-8 h-8 mb-1 animate-spin" />
+                <span className="text-xs">Laddar upp...</span>
+              </div>
+            ) : previewUrl ? (
               <>
                 <img src={previewUrl} alt="Profilbild" />
                 {formData.hideProfileImage && (
@@ -400,9 +405,10 @@ export const BasicInfoScreen = ({ onNavigate, onUpdateProfile, onUpdate, isPlusM
               accept="image/*"
               onChange={handleImageUpload}
               className="hidden"
+              disabled={isUploadingImage}
             />
           </div>
-          {previewUrl && !formData.hideProfileImage && (
+          {previewUrl && !formData.hideProfileImage && !isUploadingImage && (
             <button
               onClick={(e) => {
                 e.stopPropagation();
