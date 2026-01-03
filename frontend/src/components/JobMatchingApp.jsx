@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
 // Import all screens
@@ -35,11 +35,72 @@ export function JobMatchingApp() {
   // State for screen navigation
   const [currentScreen, setCurrentScreen] = useState('landing');
   const [userType, setUserType] = useState(null); // 'jobseeker' or 'employer'
-  const [userData, setUserData] = useState({});
+  const [userData, setUserData] = useState({
+    // Grunduppgifter (basic info) - fylls i under registrering
+    basicInfoCompleted: false,
+    // Kurser
+    onlineCourseCompleted: false,
+    practicalCourseCompleted: false,
+    // CV-förbättringar
+    skills: [],
+    education: [],
+    experience: [],
+  });
   const [selectedJob, setSelectedJob] = useState(null);
   const [selectedCandidate, setSelectedCandidate] = useState(null);
   const [companyData, setCompanyData] = useState(null);
   const [currentJobId, setCurrentJobId] = useState(null);
+
+  // Beräkna profilprocent baserat på alla kategorier
+  // Fördelning:
+  // - Grunduppgifter: 20%
+  // - Online kurs: 15%
+  // - Praktik/Ansökan: 15%
+  // - Kompetenser & Certifikat: 20%
+  // - Utbildning: 15%
+  // - Erfarenhet: 15%
+  // Total: 100%
+  const profilePercentage = useMemo(() => {
+    let percentage = 0;
+    
+    // Grunduppgifter (20%) - antar att det är klart om man har gått genom registreringen
+    if (userData.basicInfoCompleted) {
+      percentage += 20;
+    }
+    
+    // Online kurs (15%)
+    if (userData.onlineCourseCompleted) {
+      percentage += 15;
+    }
+    
+    // Praktik/Ansökan (15%)
+    if (userData.practicalCourseCompleted) {
+      percentage += 15;
+    }
+    
+    // Kompetenser & Certifikat (20%) - max 20% om man har minst 3 kompetenser
+    const skillsCount = userData.skills?.length || 0;
+    if (skillsCount > 0) {
+      const skillsPercentage = Math.min(skillsCount * 7, 20); // ~7% per kompetens, max 20%
+      percentage += skillsPercentage;
+    }
+    
+    // Utbildning (15%) - max 15% om man har minst 2 utbildningar
+    const educationCount = userData.education?.length || 0;
+    if (educationCount > 0) {
+      const educationPercentage = Math.min(educationCount * 8, 15); // ~8% per utbildning, max 15%
+      percentage += educationPercentage;
+    }
+    
+    // Erfarenhet (15%) - max 15% om man har minst 2 erfarenheter
+    const experienceCount = userData.experience?.length || 0;
+    if (experienceCount > 0) {
+      const experiencePercentage = Math.min(experienceCount * 8, 15); // ~8% per erfarenhet, max 15%
+      percentage += experiencePercentage;
+    }
+    
+    return Math.min(Math.round(percentage), 100);
+  }, [userData]);
 
   // Handle URL-based navigation for testing
   useEffect(() => {
@@ -47,8 +108,10 @@ export function JobMatchingApp() {
     if (screen) {
       setCurrentScreen(screen);
       // Set appropriate user type based on screen
-      if (['myQRCode', 'cvCompleted', 'jobList', 'jobDetails'].includes(screen)) {
+      if (['myQRCode', 'cvCompleted', 'jobList', 'jobDetails', 'courses'].includes(screen)) {
         setUserType('jobseeker');
+        // Simulera att grunduppgifter är klara för testning
+        setUserData(prev => ({ ...prev, basicInfoCompleted: true }));
       } else if (['companyQRCode', 'employerDashboard', 'candidateList'].includes(screen)) {
         setUserType('employer');
       }
@@ -74,6 +137,11 @@ export function JobMatchingApp() {
     if (screen === 'jobRequirements' && data?.jobId) {
       setCurrentJobId(data.jobId);
     }
+
+    // Markera grunduppgifter som klara när man kommer till cvCompleted
+    if (screen === 'cvCompleted' && !userData.basicInfoCompleted) {
+      setUserData(prev => ({ ...prev, basicInfoCompleted: true }));
+    }
     
     setCurrentScreen(screen);
   };
@@ -81,6 +149,15 @@ export function JobMatchingApp() {
   // Update user data during registration flow
   const handleUpdateUserData = (newData) => {
     setUserData(prev => ({ ...prev, ...newData }));
+  };
+
+  // Hantera kursavslutning
+  const handleCompleteCourse = (courseType) => {
+    if (courseType === 'online') {
+      setUserData(prev => ({ ...prev, onlineCourseCompleted: true }));
+    } else if (courseType === 'physical') {
+      setUserData(prev => ({ ...prev, practicalCourseCompleted: true }));
+    }
   };
   
   // Update company data
@@ -98,6 +175,7 @@ export function JobMatchingApp() {
     const commonProps = {
       onNavigate: handleNavigate,
       userType,
+      profilePercentage, // Skicka profilprocent till alla skärmar
     };
     
     switch (currentScreen) {
@@ -176,6 +254,12 @@ export function JobMatchingApp() {
           <CoursesScreen 
             {...commonProps}
             userData={userData}
+            onUpdate={handleUpdateUserData}
+            onCompleteCourse={handleCompleteCourse}
+            coursesCompleted={{
+              online: userData.onlineCourseCompleted,
+              physical: userData.practicalCourseCompleted,
+            }}
           />
         );
       case 'myQRCode':
