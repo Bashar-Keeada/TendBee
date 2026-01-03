@@ -117,10 +117,13 @@ export const CoursesScreen = ({ onNavigate, coursesCompleted, onCompleteCourse, 
   const addCustomSkill = () => {
     if (customSkill.trim()) {
       const newSkill = { id: `custom_${Date.now()}`, label: customSkill.trim(), category: 'övrigt' };
-      setSelectedSkills(prev => [...prev, newSkill]);
+      setSelectedSkills(prev => {
+        const newSkills = [...prev, newSkill];
+        onUpdate?.({ skills: newSkills });
+        return newSkills;
+      });
       setCustomSkill('');
       setShowSkillInput(false);
-      markUnsaved();
     }
   };
 
@@ -128,10 +131,13 @@ export const CoursesScreen = ({ onNavigate, coursesCompleted, onCompleteCourse, 
   const addCustomEducation = () => {
     if (customEducation.trim()) {
       const newEdu = { id: `custom_edu_${Date.now()}`, label: customEducation.trim(), category: 'övrigt' };
-      setSelectedEducation(prev => [...prev, newEdu]);
+      setSelectedEducation(prev => {
+        const newEducation = [...prev, newEdu];
+        onUpdate?.({ education: newEducation });
+        return newEducation;
+      });
       setCustomEducation('');
       setShowEducationInput(false);
-      markUnsaved();
     }
   };
 
@@ -139,7 +145,11 @@ export const CoursesScreen = ({ onNavigate, coursesCompleted, onCompleteCourse, 
   const addCustomExperience = () => {
     if (customExperience.trim()) {
       const newExp = { id: `custom_exp_${Date.now()}`, label: customExperience.trim(), category: 'övrigt' };
-      setSelectedExperience(prev => [...prev, newExp]);
+      setSelectedExperience(prev => {
+        const newExperience = [...prev, newExp];
+        onUpdate?.({ experience: newExperience });
+        return newExperience;
+      });
       setCustomExperience('');
       setShowExperienceInput(false);
       markUnsaved();
