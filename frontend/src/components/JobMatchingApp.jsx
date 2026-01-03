@@ -38,6 +38,31 @@ import { CompanyQRCodeScreen } from './screens/CompanyQRCodeScreen';
 // Admin Panel
 import { AdminPanel } from './AdminPanel';
 
+// Default user data structure
+const getDefaultUserData = () => ({
+  // Grunduppgifter (basic info) - fylls i under registrering
+  basicInfoCompleted: false,
+  // Kurser
+  onlineCourseCompleted: false,
+  practicalCourseCompleted: false,
+  // CV-förbättringar
+  skills: [],
+  education: [],
+  experience: [],
+  // Plus-medlemskap och integritetsinställningar
+  isPlusMember: false,
+  hideGender: false,
+  hideAge: false,
+  hideProfileImage: false,
+  useAnonymousId: false,
+  // Personlig info
+  firstName: '',
+  lastName: '',
+  gender: '',
+  age: '',
+  profileImage: null,
+});
+
 export function JobMatchingApp() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
