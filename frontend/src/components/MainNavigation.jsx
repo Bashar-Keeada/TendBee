@@ -152,6 +152,9 @@ export const MainNavigation = ({ transparent = false, activePage = '' }) => {
             <button onClick={() => { navigate('/om-oss'); setMobileMenuOpen(false); }} className={`block py-2 font-medium w-full text-left ${isActive('/om-oss') ? 'text-amber-500' : 'text-gray-900'}`}>
               Om oss
             </button>
+            <button onClick={() => { navigate('/partners'); setMobileMenuOpen(false); }} className={`block py-2 font-medium w-full text-left ${isActive('/partners') ? 'text-amber-500' : 'text-gray-900'}`}>
+              Partners
+            </button>
             <button onClick={() => { navigate('/karriar'); setMobileMenuOpen(false); }} className={`block py-2 font-medium w-full text-left ${isActive('/karriar') ? 'text-amber-500' : 'text-gray-900'}`}>
               Karriär
             </button>
