@@ -194,6 +194,29 @@ body {
     .sticky-footer {
         @apply mt-8 pt-4;
     }
+
+    /* QR Code Container - Centered */
+    .qr-container {
+        @apply flex items-center justify-center p-6 bg-white rounded-2xl border-2 border-gray-100 shadow-sm mx-auto;
+        max-width: 280px;
+    }
+    
+    /* Profile Picture Upload */
+    .profile-picture-upload {
+        @apply relative w-24 h-24 mx-auto rounded-full bg-gray-100 border-2 border-dashed border-gray-300 flex items-center justify-center cursor-pointer transition-all hover:border-amber-400 hover:bg-amber-50;
+    }
+    
+    .profile-picture-upload.has-image {
+        @apply border-solid border-amber-400;
+    }
+    
+    .profile-picture-upload img {
+        @apply w-full h-full object-cover rounded-full;
+    }
+    
+    .profile-picture-upload input[type="file"] {
+        @apply absolute inset-0 w-full h-full opacity-0 cursor-pointer;
+    }
     
     /* Primary Button Override for App */
     .sticky-footer button,
