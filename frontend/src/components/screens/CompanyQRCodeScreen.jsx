@@ -1,22 +1,24 @@
-import React, { useCallback, useState } from 'react';
+import React, { useRef, useCallback, useState, useEffect } from 'react';
 import { QRCodeSVG, QRCodeCanvas } from 'qrcode.react';
 import { Button } from '@/components/ui/button';
 import { ScreenContainer } from '@/components/ScreenContainer';
 import { ChevronLeft, Download, Share2, Info, Printer, Building2, Check } from 'lucide-react';
 
 export const CompanyQRCodeScreen = ({ onNavigate }) => {
-  const [canvasElement, setCanvasElement] = useState(null);
+  const canvasContainerRef = useRef(null);
   const [copied, setCopied] = useState(false);
   const [downloaded, setDownloaded] = useState(false);
+  const [isReady, setIsReady] = useState(false);
   
   // Generera en unik företags-URL
   const companyUrl = `${window.location.origin}/app?company=arlanda-logistics-ab`;
 
-  // Callback ref för att få canvas-elementet
-  const canvasRefCallback = useCallback((node) => {
-    if (node !== null) {
-      setCanvasElement(node);
-    }
+  // Vänta på att canvas ska renderas
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsReady(true);
+    }, 500);
+    return () => clearTimeout(timer);
   }, []);
   
   // Dela QR-kod/länk
@@ -54,14 +56,16 @@ export const CompanyQRCodeScreen = ({ onNavigate }) => {
 
   // Ladda ner QR-kod som PNG (högupplöst för utskrift)
   const handleDownload = useCallback(() => {
-    if (canvasElement) {
+    const canvas = canvasContainerRef.current?.querySelector('canvas');
+    
+    if (canvas) {
       try {
         // Skapa en ny canvas med vit bakgrund, padding och företagsnamn
         const paddedCanvas = document.createElement('canvas');
         const padding = 48;
         const textHeight = 60;
-        paddedCanvas.width = canvasElement.width + padding * 2;
-        paddedCanvas.height = canvasElement.height + padding * 2 + textHeight;
+        paddedCanvas.width = canvas.width + padding * 2;
+        paddedCanvas.height = canvas.height + padding * 2 + textHeight;
         
         const ctx = paddedCanvas.getContext('2d');
         
@@ -70,21 +74,28 @@ export const CompanyQRCodeScreen = ({ onNavigate }) => {
         ctx.fillRect(0, 0, paddedCanvas.width, paddedCanvas.height);
         
         // QR-kod
-        ctx.drawImage(canvasElement, padding, padding);
+        ctx.drawImage(canvas, padding, padding);
         
         // Företagsnamn under QR-koden
         ctx.fillStyle = '#000000';
         ctx.font = 'bold 24px Arial, sans-serif';
         ctx.textAlign = 'center';
-        ctx.fillText('Arlanda Logistics AB', paddedCanvas.width / 2, canvasElement.height + padding + 40);
+        ctx.fillText('Arlanda Logistics AB', paddedCanvas.width / 2, canvas.height + padding + 40);
         
-        const url = paddedCanvas.toDataURL('image/png');
+        const dataUrl = paddedCanvas.toDataURL('image/png');
+        
+        // Skapa länk och ladda ner
         const link = document.createElement('a');
         link.download = 'foretag-qr-kod-tendbee.png';
-        link.href = url;
+        link.href = dataUrl;
+        link.style.display = 'none';
         document.body.appendChild(link);
         link.click();
-        document.body.removeChild(link);
+        
+        // Rensa
+        setTimeout(() => {
+          document.body.removeChild(link);
+        }, 100);
         
         setDownloaded(true);
         setTimeout(() => setDownloaded(false), 2000);
@@ -94,9 +105,9 @@ export const CompanyQRCodeScreen = ({ onNavigate }) => {
       }
     } else {
       console.error('Canvas not found');
-      alert('QR-koden laddas fortfarande. Vänta och försök igen.');
+      alert('QR-koden laddas fortfarande. Vänta en sekund och försök igen.');
     }
-  }, [canvasElement]);
+  }, []);
 
   return (
     <ScreenContainer>
@@ -133,9 +144,17 @@ export const CompanyQRCodeScreen = ({ onNavigate }) => {
       </div>
 
       {/* Dold Canvas QR-kod för nedladdning */}
-      <div style={{ position: 'absolute', left: '-9999px', top: '-9999px', opacity: 0 }}>
+      <div 
+        ref={canvasContainerRef}
+        style={{ 
+          position: 'fixed',
+          left: '-9999px',
+          top: 0,
+          visibility: 'hidden',
+          pointerEvents: 'none'
+        }}
+      >
         <QRCodeCanvas
-          ref={canvasRefCallback}
           value={companyUrl}
           size={512}
           level="H"
@@ -187,6 +206,7 @@ export const CompanyQRCodeScreen = ({ onNavigate }) => {
           size="lg"
           className="w-full h-12"
           onClick={handleDownload}
+          disabled={!isReady}
         >
           {downloaded ? <Check className="w-5 h-5" /> : <Download className="w-5 h-5" />}
           {downloaded ? 'Nedladdad!' : 'Ladda ner'}
