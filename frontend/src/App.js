@@ -36,6 +36,12 @@ function AppRouter() {
       {/* Landing Page - Tendbee Marketing Site */}
       <Route path="/" element={<TendbeeLanding />} />
       
+      {/* About Us Page */}
+      <Route path="/om-oss" element={<AboutPage />} />
+      
+      {/* Careers Page */}
+      <Route path="/karriar" element={<CareersPage />} />
+      
       {/* Login Page */}
       <Route path="/login" element={<LoginPage />} />
       
