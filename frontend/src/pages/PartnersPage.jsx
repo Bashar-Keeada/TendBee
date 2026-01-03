@@ -168,19 +168,18 @@ const partners = [
   }
 ];
 
-// SDG Card Component
+// SDG Card Component with Official Icons
 const SDGCard = ({ goal }) => {
-  const Icon = goal.icon;
+  const IconComponent = goal.icon;
   return (
-    <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg transition-all">
+    <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg transition-all group">
       <div className="h-2" style={{ backgroundColor: goal.color }}></div>
       <div className="p-6">
         <div className="flex items-start gap-4 mb-4">
           <div 
-            className="w-14 h-14 rounded-xl flex items-center justify-center text-white font-bold text-xl flex-shrink-0"
-            style={{ backgroundColor: goal.color }}
+            className="w-16 h-16 rounded-xl overflow-hidden flex-shrink-0 shadow-md group-hover:shadow-lg transition-shadow"
           >
-            {goal.number}
+            <IconComponent />
           </div>
           <div>
             <h3 className="font-bold text-gray-900 mb-1">{goal.title}</h3>
