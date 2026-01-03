@@ -43,6 +43,15 @@ function AppRouter() {
       {/* Landing Page - Tendbee Marketing Site */}
       <Route path="/" element={<TendbeeLanding />} />
       
+      {/* Platform Page */}
+      <Route path="/plattform" element={<PlatformPage />} />
+      
+      {/* Solutions Page */}
+      <Route path="/losningar" element={<SolutionsPage />} />
+      
+      {/* Pricing Page */}
+      <Route path="/priser" element={<PricingPage />} />
+      
       {/* About Us Page */}
       <Route path="/om-oss" element={<AboutPage />} />
       
