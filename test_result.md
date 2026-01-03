@@ -179,3 +179,50 @@ Added URL parameter navigation (`?screen=screenName`) to JobMatchingApp.jsx for 
 2. **User QR code complexity**: May need investigation for proper QR code generation
 3. **Profile percentage calculation inconsistency**: Previous issue still exists
 4. **Profile percentage not persisting**: Previous issue still exists
+
+## BasicInfoScreen & QR Code Testing Results (Latest Update)
+
+### Test URL: `https://skillbridge-147.preview.emergentagent.com/app?screen=basicInfo`
+
+#### BasicInfoScreen Testing - ✅ ALL TESTS PASSED
+- ✅ **Profile Picture Upload Section**: "Profilbild (valfritt)" label displayed correctly
+- ✅ **Upload Area Design**: Circular upload area with camera icon and "Lägg till" text visible and clickable
+- ✅ **Gender Selection (Kön)**: All 4 options displayed correctly: "Man", "Kvinna", "Annat", "Vill ej ange"
+- ✅ **Gender Selection Functionality**: 
+  - "Man" option gets amber/yellow border and light yellow background when selected
+  - Selection changes properly when clicking different options
+  - Only one option can be selected at a time (mutual exclusivity working)
+- ✅ **Form Validation**: 
+  - "Fortsätt" button initially disabled until all required fields filled
+  - Required fields: Förnamn, Efternamn, Kön, Ålder, Telefonnummer
+  - Profilbild correctly marked as optional (valfritt)
+  - Button enables after all required fields are completed
+
+#### QR Code Screens Testing - ✅ ALL TESTS PASSED
+
+##### User QR Code Screen (`/app?screen=myQRCode`) - ✅ WORKING
+- ✅ Page loads with correct title "Min QR-kod"
+- ✅ QR code is properly centered in white box with rounded corners
+- ✅ QR code has proper contrast (dark on white background)
+- ✅ User name "Erik Svensson" displayed correctly
+- ✅ QR code SVG element visible and properly rendered
+
+##### Company QR Code Screen (`/app?screen=companyQRCode`) - ✅ WORKING
+- ✅ Page loads with correct title "Företagets QR-kod"
+- ✅ QR code is properly centered in white box with rounded corners
+- ✅ QR code has proper contrast (dark on white background)
+- ✅ Company name "Arlanda Logistics AB" displayed correctly
+- ✅ QR code SVG element visible and properly rendered
+
+#### Testing Summary:
+- **All Swedish translations working correctly**
+- **All UI elements properly styled and functional**
+- **Form validation working as expected**
+- **QR code centering and styling implemented correctly**
+- **No console errors detected during testing**
+
+### Previous Critical Issues Found:
+1. **Share functionality clipboard permission**: Expected limitation in automated testing
+2. **User QR code complexity**: May need investigation for proper QR code generation
+3. **Profile percentage calculation inconsistency**: Previous issue still exists
+4. **Profile percentage not persisting**: Previous issue still exists
