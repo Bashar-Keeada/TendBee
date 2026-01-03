@@ -146,9 +146,9 @@ All authentication methods are implemented:
 3. ✅ BankID (MOCKED for demo)
 
 New features implemented and tested:
-4. ✅ QR Code generation - WORKING
-5. ✅ Download QR as PNG - WORKING
-6. ✅ Share/Copy link functionality - WORKING
+4. ✅ QR Code generation - WORKING (Company QR code fully working, User QR code has simpler pattern)
+5. ✅ Download QR as PNG - WORKING (Both screens show proper feedback)
+6. ❌ Share/Copy link functionality - CLIPBOARD PERMISSION ISSUE (Expected in test environment)
 7. ✅ "Förbättra ditt CV" functionality - WORKING
 8. ⚠️ Profile percentage calculation - PARTIAL ISSUES (calculation inconsistency & persistence problems)
 
