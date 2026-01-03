@@ -139,6 +139,7 @@ export default function TendbeeLanding() {
                 </div>
               </div>
               <button onClick={() => navigate('/om-oss')} className={`font-medium transition-colors ${scrolled ? 'text-foreground/70 hover:text-foreground' : 'text-white/70 hover:text-white'}`}>Om oss</button>
+              <button onClick={() => navigate('/partners')} className={`font-medium transition-colors ${scrolled ? 'text-foreground/70 hover:text-foreground' : 'text-white/70 hover:text-white'}`}>Partners</button>
               <button onClick={() => navigate('/karriar')} className={`font-medium transition-colors ${scrolled ? 'text-foreground/70 hover:text-foreground' : 'text-white/70 hover:text-white'}`}>Karriär</button>
               <a href="#pricing" className={`font-medium transition-colors ${scrolled ? 'text-foreground/70 hover:text-foreground' : 'text-white/70 hover:text-white'}`}>Pricing</a>
             </div>
