@@ -182,31 +182,68 @@ export const MainFooter = () => {
   return (
     <footer className="bg-gray-950 text-gray-400 py-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-          <button onClick={() => navigate('/')}>
-            <TendbeeLogo />
-          </button>
-          <div className="flex items-center gap-6">
-            <button onClick={() => navigate('/')} className="hover:text-white transition-colors">Hem</button>
-            <button onClick={() => navigate('/om-oss')} className="hover:text-white transition-colors">Om oss</button>
-            <button onClick={() => navigate('/partners')} className="hover:text-white transition-colors">Partners</button>
-            <button onClick={() => navigate('/karriar')} className="hover:text-white transition-colors">Karriär</button>
-            <a href="mailto:kontakt@tendbee.se" className="hover:text-white transition-colors">Kontakt</a>
+        {/* Main Footer Content */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+          {/* Logo & Description */}
+          <div className="md:col-span-1">
+            <button onClick={() => navigate('/')} className="mb-4">
+              <TendbeeLogo />
+            </button>
+            <p className="text-sm text-gray-500">
+              Sveriges första anti-diskriminerande jobbplattform. Vi matchar kompetens, inte förväntningar.
+            </p>
           </div>
-          <div className="flex items-center gap-4">
-            <a href="#" className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-gray-700 transition-colors">
-              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
-            </a>
-            <a href="#" className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-gray-700 transition-colors">
-              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-            </a>
-            <a href="mailto:kontakt@tendbee.se" className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-gray-700 transition-colors">
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
-            </a>
+          
+          {/* Navigation Links */}
+          <div>
+            <h4 className="font-semibold text-white mb-4">Navigering</h4>
+            <div className="space-y-2">
+              <button onClick={() => navigate('/')} className="block hover:text-white transition-colors">Hem</button>
+              <button onClick={() => navigate('/om-oss')} className="block hover:text-white transition-colors">Om oss</button>
+              <button onClick={() => navigate('/partners')} className="block hover:text-white transition-colors">Partners</button>
+              <button onClick={() => navigate('/karriar')} className="block hover:text-white transition-colors">Karriär</button>
+            </div>
+          </div>
+          
+          {/* Legal Links */}
+          <div>
+            <h4 className="font-semibold text-white mb-4">Juridiskt</h4>
+            <div className="space-y-2">
+              <button onClick={() => navigate('/integritetspolicy')} className="block hover:text-white transition-colors">Integritetspolicy</button>
+              <button onClick={() => navigate('/villkor')} className="block hover:text-white transition-colors">Allmänna villkor</button>
+              <button onClick={() => navigate('/cookies')} className="block hover:text-white transition-colors">Cookie-policy</button>
+            </div>
+          </div>
+          
+          {/* Contact & Social */}
+          <div>
+            <h4 className="font-semibold text-white mb-4">Kontakt</h4>
+            <div className="space-y-2 mb-4">
+              <a href="mailto:kontakt@tendbee.se" className="block hover:text-white transition-colors">kontakt@tendbee.se</a>
+              <p className="text-sm">Stockholm, Sverige</p>
+            </div>
+            <div className="flex items-center gap-3">
+              <a href="#" className="w-9 h-9 bg-gray-800 rounded-full flex items-center justify-center hover:bg-gray-700 transition-colors">
+                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+              </a>
+              <a href="#" className="w-9 h-9 bg-gray-800 rounded-full flex items-center justify-center hover:bg-gray-700 transition-colors">
+                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+              </a>
+              <a href="mailto:kontakt@tendbee.se" className="w-9 h-9 bg-gray-800 rounded-full flex items-center justify-center hover:bg-gray-700 transition-colors">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
+              </a>
+            </div>
           </div>
         </div>
-        <div className="border-t border-gray-800 mt-8 pt-8 text-center text-sm">
-          <p>&copy; {new Date().getFullYear()} Tendbee. Alla rättigheter förbehållna.</p>
+        
+        {/* Bottom Bar */}
+        <div className="border-t border-gray-800 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
+          <p className="text-sm">&copy; {new Date().getFullYear()} Tendbee AB. Alla rättigheter förbehållna.</p>
+          <div className="flex items-center gap-6 text-sm">
+            <button onClick={() => navigate('/integritetspolicy')} className="hover:text-white transition-colors">Integritet</button>
+            <button onClick={() => navigate('/villkor')} className="hover:text-white transition-colors">Villkor</button>
+            <button onClick={() => navigate('/cookies')} className="hover:text-white transition-colors">Cookies</button>
+          </div>
         </div>
       </div>
     </footer>
