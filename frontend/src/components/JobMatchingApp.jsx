@@ -45,6 +45,18 @@ export function JobMatchingApp() {
     skills: [],
     education: [],
     experience: [],
+    // Plus-medlemskap och integritetsinställningar
+    isPlusMember: false,
+    hideGender: false,
+    hideAge: false,
+    hideProfileImage: false,
+    useAnonymousId: false,
+    // Personlig info
+    firstName: '',
+    lastName: '',
+    gender: '',
+    age: '',
+    profileImage: null,
   });
   const [selectedJob, setSelectedJob] = useState(null);
   const [selectedCandidate, setSelectedCandidate] = useState(null);
