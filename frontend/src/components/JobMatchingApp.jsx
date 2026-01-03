@@ -207,6 +207,7 @@ export function JobMatchingApp() {
             {...commonProps} 
             userData={userData}
             onUpdate={handleUpdateUserData}
+            isPlusMember={userData.isPlusMember}
           />
         );
       case 'employmentStatus':
