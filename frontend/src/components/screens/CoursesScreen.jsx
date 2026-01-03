@@ -547,34 +547,34 @@ export const CoursesScreen = ({ onNavigate, coursesCompleted, onCompleteCourse, 
           onClick={() => setActiveSection(activeSection === 'experience' ? null : 'experience')}
           className="w-full flex items-center gap-4"
         >
-          <div className="w-12 h-12 rounded-xl flex items-center justify-center bg-orange-100">
+          <div className="w-12 h-12 rounded-xl flex items-center justify-center bg-orange-100 shrink-0">
             <Briefcase className="w-6 h-6 text-orange-600" />
           </div>
           <div className="flex-1 text-left">
             <div className="flex items-center gap-2">
-              <h3 className="font-semibold text-foreground">Erfarenhet</h3>
+              <h3 className="font-bold text-gray-900">Erfarenhet</h3>
               {selectedExperience.length > 0 && (
-                <Badge className="bg-orange-100 text-orange-600 text-xs">{selectedExperience.length}</Badge>
+                <span className="bg-orange-100 text-orange-600 text-xs font-bold px-2 py-0.5 rounded-full">{selectedExperience.length}</span>
               )}
             </div>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-sm text-gray-500">
               Arbetslivserfarenhet inom olika områden (+15%)
             </p>
           </div>
-          <ArrowRight className={`w-5 h-5 text-muted-foreground transition-transform ${activeSection === 'experience' ? 'rotate-90' : ''}`} />
+          <ArrowRight className={`w-5 h-5 text-gray-400 transition-transform duration-300 ${activeSection === 'experience' ? 'rotate-90' : ''}`} />
         </button>
 
         {activeSection === 'experience' && (
-          <div className="mt-4 pt-4 border-t border-border animate-fade-in">
+          <div className="mt-4 pt-4 border-t border-gray-100 animate-fade-in">
             {/* Valda erfarenheter */}
             {selectedExperience.length > 0 && (
               <div className="mb-4">
-                <p className="text-xs text-muted-foreground mb-2">Valda:</p>
+                <p className="text-xs font-semibold text-gray-500 mb-2">Valda:</p>
                 <div className="flex flex-wrap gap-2">
                   {selectedExperience.map(exp => (
                     <Badge 
                       key={exp.id} 
-                      className="bg-orange-100 text-orange-700 hover:bg-orange-200 cursor-pointer flex items-center gap-1"
+                      className="bg-orange-100 text-orange-700 hover:bg-orange-200 cursor-pointer flex items-center gap-1 font-medium"
                       onClick={() => removeExperience(exp.id)}
                     >
                       {exp.label}
@@ -586,7 +586,7 @@ export const CoursesScreen = ({ onNavigate, coursesCompleted, onCompleteCourse, 
             )}
 
             {/* Fördefinierade val */}
-            <p className="text-xs text-muted-foreground mb-2">Välj från listan:</p>
+            <p className="text-xs font-semibold text-gray-500 mb-2">Välj från listan:</p>
             <div className="flex flex-wrap gap-2 mb-4">
               {PREDEFINED_EXPERIENCE.map(exp => {
                 const isSelected = selectedExperience.find(e => e.id === exp.id);
@@ -594,10 +594,10 @@ export const CoursesScreen = ({ onNavigate, coursesCompleted, onCompleteCourse, 
                   <Badge 
                     key={exp.id}
                     variant={isSelected ? "default" : "outline"}
-                    className={`cursor-pointer transition-colors ${
+                    className={`cursor-pointer transition-all duration-200 ${
                       isSelected 
-                        ? 'bg-orange-600 text-white hover:bg-orange-700' 
-                        : 'hover:bg-orange-50 hover:border-orange-300'
+                        ? 'bg-orange-600 text-white hover:bg-orange-700 shadow-sm' 
+                        : 'hover:bg-orange-50 hover:border-orange-300 border-gray-200'
                     }`}
                     onClick={() => toggleExperience(exp)}
                   >
@@ -616,47 +616,48 @@ export const CoursesScreen = ({ onNavigate, coursesCompleted, onCompleteCourse, 
                   value={customExperience}
                   onChange={(e) => setCustomExperience(e.target.value)}
                   onKeyPress={(e) => e.key === 'Enter' && addCustomExperience()}
-                  className="flex-1"
+                  className="flex-1 form-input h-10"
                   autoFocus
                 />
-                <Button size="sm" onClick={addCustomExperience}>Lägg till</Button>
+                <Button size="sm" onClick={addCustomExperience} className="bg-orange-600 hover:bg-orange-700">Lägg till</Button>
                 <Button size="sm" variant="ghost" onClick={() => setShowExperienceInput(false)}>
                   <X className="w-4 h-4" />
                 </Button>
               </div>
             ) : (
-              <Button 
-                variant="outline" 
-                size="sm" 
+              <button 
                 onClick={() => setShowExperienceInput(true)}
-                className="w-full"
+                className="w-full py-2.5 border-2 border-dashed border-gray-200 rounded-xl text-gray-500 text-sm font-medium hover:border-orange-300 hover:text-orange-600 hover:bg-orange-50/50 transition-all flex items-center justify-center gap-2"
               >
-                <Plus className="w-4 h-4 mr-2" />
+                <Plus className="w-4 h-4" />
                 Övrigt - Lägg till egen
-              </Button>
+              </button>
             )}
           </div>
         )}
       </div>
       
       {/* Save & Back buttons */}
-      <div className="space-y-3 mt-6">
+      <div className="space-y-3 mt-8 pb-6">
         {totalAdditions > 0 && (
-          <Button 
-            className="w-full h-12 bg-gradient-to-r from-primary to-secondary"
+          <button 
+            className="w-full h-14 rounded-2xl font-semibold text-white flex items-center justify-center gap-2 transition-all duration-300 hover:scale-[1.02] shadow-xl"
+            style={{
+              background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 50%, #b45309 100%)',
+              boxShadow: '0 12px 35px -8px rgba(245, 158, 11, 0.5)'
+            }}
             onClick={handleSave}
           >
-            <CheckCircle2 className="w-5 h-5 mr-2" />
+            <CheckCircle2 className="w-5 h-5" />
             Spara ändringar {totalAdditions > 0 && `(${totalAdditions} tillagda)`}
-          </Button>
+          </button>
         )}
-        <Button 
-          variant="outline"
-          className="w-full h-12"
+        <button 
+          className="w-full h-12 rounded-xl font-medium text-gray-600 border-2 border-gray-200 hover:bg-gray-50 transition-all"
           onClick={handleBack}
         >
           Tillbaka till profil
-        </Button>
+        </button>
       </div>
     </ScreenContainer>
   );
