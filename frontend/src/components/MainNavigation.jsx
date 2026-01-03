@@ -101,6 +101,9 @@ export const MainNavigation = ({ transparent = false, activePage = '' }) => {
             <button onClick={() => navigate('/om-oss')} className={navLinkClass('/om-oss')}>
               Om oss
             </button>
+            <button onClick={() => navigate('/partners')} className={navLinkClass('/partners')}>
+              Partners
+            </button>
             <button onClick={() => navigate('/karriar')} className={navLinkClass('/karriar')}>
               Karriär
             </button>
