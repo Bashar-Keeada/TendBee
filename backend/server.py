@@ -1693,6 +1693,130 @@ async def get_user_plus_status(user_id: str):
     }
 
 
+# ===================== FILE UPLOAD ROUTES =====================
+
+# Configure upload directory
+UPLOAD_DIR = Path(__file__).parent / "uploads"
+UPLOAD_DIR.mkdir(exist_ok=True)
+
+# Allowed image types
+ALLOWED_IMAGE_TYPES = {"image/jpeg", "image/png", "image/webp", "image/gif"}
+MAX_FILE_SIZE = 5 * 1024 * 1024  # 5MB
+
+
+@api_router.post("/upload/profile-image")
+async def upload_profile_image(
+    request: Request,
+    file: UploadFile = File(...),
+    user_id: Optional[str] = None
+):
+    """Upload a profile image and return the URL"""
+    
+    # Validate file type
+    if file.content_type not in ALLOWED_IMAGE_TYPES:
+        raise HTTPException(
+            status_code=400, 
+            detail="Ogiltig filtyp. Endast JPEG, PNG, WebP och GIF är tillåtna."
+        )
+    
+    # Read file content to check size
+    content = await file.read()
+    if len(content) > MAX_FILE_SIZE:
+        raise HTTPException(
+            status_code=400, 
+            detail="Filen är för stor. Max 5MB tillåtet."
+        )
+    
+    # Generate unique filename
+    file_extension = Path(file.filename).suffix.lower() or ".jpg"
+    unique_filename = f"{uuid.uuid4()}{file_extension}"
+    file_path = UPLOAD_DIR / unique_filename
+    
+    # Save file
+    try:
+        with open(file_path, "wb") as f:
+            f.write(content)
+    except Exception as e:
+        logger.error(f"Error saving file: {e}")
+        raise HTTPException(status_code=500, detail="Kunde inte spara filen")
+    
+    # Generate URL
+    host_url = str(request.base_url).rstrip('/')
+    image_url = f"{host_url}/api/uploads/{unique_filename}"
+    
+    # If user_id provided, update user profile
+    if user_id:
+        await db.users.update_one(
+            {"id": user_id},
+            {"$set": {"profile_image": image_url, "updated_at": datetime.now(timezone.utc).isoformat()}}
+        )
+        
+        # Also update jobseeker profile if exists
+        await db.jobseekers.update_one(
+            {"user_id": user_id},
+            {"$set": {"profile_image": image_url, "updated_at": datetime.now(timezone.utc).isoformat()}}
+        )
+    
+    return {
+        "url": image_url,
+        "filename": unique_filename,
+        "size": len(content),
+        "content_type": file.content_type
+    }
+
+
+@api_router.get("/uploads/{filename}")
+async def get_uploaded_file(filename: str):
+    """Serve uploaded files"""
+    from fastapi.responses import FileResponse
+    
+    file_path = UPLOAD_DIR / filename
+    
+    if not file_path.exists():
+        raise HTTPException(status_code=404, detail="Filen hittades inte")
+    
+    # Security check - prevent directory traversal
+    if not file_path.resolve().is_relative_to(UPLOAD_DIR.resolve()):
+        raise HTTPException(status_code=403, detail="Åtkomst nekad")
+    
+    return FileResponse(file_path)
+
+
+@api_router.delete("/upload/profile-image/{user_id}")
+async def delete_profile_image(user_id: str):
+    """Delete a user's profile image"""
+    
+    user = await db.users.find_one({"id": user_id}, {"_id": 0})
+    if not user:
+        raise HTTPException(status_code=404, detail="Användare hittades inte")
+    
+    profile_image = user.get("profile_image")
+    if profile_image:
+        # Extract filename from URL
+        filename = profile_image.split("/")[-1]
+        file_path = UPLOAD_DIR / filename
+        
+        # Delete file if exists
+        if file_path.exists():
+            try:
+                file_path.unlink()
+            except Exception as e:
+                logger.error(f"Error deleting file: {e}")
+    
+    # Update user profile
+    await db.users.update_one(
+        {"id": user_id},
+        {"$set": {"profile_image": None, "updated_at": datetime.now(timezone.utc).isoformat()}}
+    )
+    
+    await db.jobseekers.update_one(
+        {"user_id": user_id},
+        {"$set": {"profile_image": None, "updated_at": datetime.now(timezone.utc).isoformat()}}
+    )
+    
+    return {"message": "Profilbild borttagen"}
+
+
 # Include the router in the main app
 app.include_router(api_router)
 
