@@ -301,6 +301,29 @@ export function JobMatchingApp() {
   const handleBackToHome = () => {
     navigate('/');
   };
+
+  // Clear all saved data (for debugging/logout)
+  const handleClearData = useCallback(() => {
+    localStorage.removeItem(STORAGE_KEYS.USER_DATA);
+    localStorage.removeItem(STORAGE_KEYS.USER_TOKEN);
+    localStorage.removeItem(STORAGE_KEYS.USER_ID);
+    localStorage.removeItem(STORAGE_KEYS.PROFILE_ID);
+    setUserData(getInitialUserData());
+    setCurrentScreen('landing');
+    setUserType(null);
+  }, []);
+  
+  // Show loading state
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="text-center">
+          <div className="w-12 h-12 border-4 border-amber-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-gray-600">Laddar...</p>
+        </div>
+      </div>
+    );
+  }
   
   // Render current screen based on state
   const renderScreen = () => {
@@ -308,6 +331,7 @@ export function JobMatchingApp() {
       onNavigate: handleNavigate,
       userType,
       profilePercentage, // Skicka profilprocent till alla skärmar
+      onClearData: handleClearData, // For logout functionality
     };
     
     switch (currentScreen) {
