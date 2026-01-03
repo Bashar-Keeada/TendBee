@@ -294,6 +294,7 @@ export const BasicInfoScreen = ({ onNavigate, onUpdateProfile, onUpdate, isPlusM
   return (
     <ScreenContainer hasFooter>
       {showPlusModal && <PlusModal />}
+      {paymentSuccess && <PaymentSuccessToast />}
 
       {/* Back Button */}
       <button 
