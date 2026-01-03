@@ -157,9 +157,25 @@ New features implemented and tested:
 Added URL parameter navigation (`?screen=screenName`) to JobMatchingApp.jsx for easier testing access to specific screens without going through the full registration flow.
 
 **Test URLs:**
-- User QR Code: `/app?screen=myQRCode`
-- Company QR Code: `/app?screen=companyQRCode`
+- User QR Code: `/app?screen=myQRCode` - ⚠️ QR code simpler than expected, download working
+- Company QR Code: `/app?screen=companyQRCode` - ✅ Fully working
 - CV Completed: `/app?screen=cvCompleted`
 - Job List: `/app?screen=jobList`
 - Employer Dashboard: `/app?screen=employerDashboard`
 - Courses (CV Improvement): `/app?screen=courses`
+
+## Latest Testing Notes (Automated Playwright Testing)
+
+### QR Code Testing Results:
+- **Download functionality**: ✅ Working perfectly on both screens
+- **Share functionality**: ❌ Fails due to clipboard permission denied (expected in test environment)
+- **User QR Code**: ⚠️ Simpler pattern than Company QR code (7 vs 15 path elements)
+- **Company QR Code**: ✅ Proper complex QR code pattern
+- **Button feedback**: ✅ Both download buttons show "Nedladdad!" with checkmark icons
+- **Visual design**: ✅ Both screens render correctly with proper styling
+
+### Critical Issues Found:
+1. **Share functionality clipboard permission**: Expected limitation in automated testing
+2. **User QR code complexity**: May need investigation for proper QR code generation
+3. **Profile percentage calculation inconsistency**: Previous issue still exists
+4. **Profile percentage not persisting**: Previous issue still exists
