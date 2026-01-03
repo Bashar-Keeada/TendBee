@@ -317,23 +317,23 @@ export const BasicInfoScreen = ({ onNavigate, onUpdateProfile, onUpdate, isPlusM
 
   // Privacy Toggle Component
   const PrivacyToggle = ({ label, description, field, icon: Icon }) => (
-    <div className="flex items-center justify-between p-3 bg-gray-50 rounded-xl border border-gray-100">
-      <div className="flex items-center gap-3">
-        <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${formData[field] ? 'bg-amber-100' : 'bg-gray-200'}`}>
-          <Icon className={`w-4 h-4 ${formData[field] ? 'text-amber-600' : 'text-gray-500'}`} />
+    <div className="flex items-center justify-between p-4 bg-gray-50 rounded-xl border border-gray-100 hover:bg-gray-100/50 transition-colors">
+      <div className="flex items-center gap-4">
+        <div className={`w-10 h-10 rounded-xl flex items-center justify-center transition-colors ${formData[field] ? 'bg-amber-100' : 'bg-gray-200'}`}>
+          <Icon className={`w-5 h-5 transition-colors ${formData[field] ? 'text-amber-600' : 'text-gray-400'}`} />
         </div>
         <div>
-          <p className="text-sm font-medium text-gray-900">{label}</p>
+          <p className="text-sm font-semibold text-gray-800">{label}</p>
           <p className="text-xs text-gray-500">{description}</p>
         </div>
       </div>
-      <div className="flex items-center gap-2">
-        {!isPlusMember && <Lock className="w-4 h-4 text-gray-400" />}
+      <div className="flex items-center gap-3">
+        {!isPlusMember && <Lock className="w-4 h-4 text-gray-300" />}
         <Switch 
           checked={formData[field]}
           onCheckedChange={() => handlePrivacyToggle(field)}
           disabled={!isPlusMember}
-          className={isPlusMember ? '' : 'opacity-50'}
+          className={isPlusMember ? '' : 'opacity-40'}
         />
       </div>
     </div>
