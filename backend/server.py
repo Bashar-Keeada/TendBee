@@ -1238,13 +1238,29 @@ async def admin_list_jobs(
         .limit(limit) \
         .to_list(limit)
     
+    # Batch fetch companies and interest counts
+    job_ids = [doc.get('id') for doc in docs]
+    company_ids = [doc.get('company_id') for doc in docs if doc.get('company_id')]
+    
+    # Batch fetch companies
+    companies = await db.companies.find({"id": {"$in": company_ids}}, {"_id": 0}).to_list(len(company_ids))
+    company_map = {c.get('id'): c for c in companies}
+    
+    # Batch get interest counts using aggregation
+    interest_counts_pipeline = [
+        {"$match": {"job_id": {"$in": job_ids}}},
+        {"$group": {"_id": "$job_id", "count": {"$sum": 1}}}
+    ]
+    interest_counts_result = await db.interests.aggregate(interest_counts_pipeline).to_list(len(job_ids))
+    interest_count_map = {item['_id']: item['count'] for item in interest_counts_result}
+    
     # Add company name and interest count for each job
     jobs = []
     for doc in docs:
         job = await serialize_doc(doc)
-        company = await db.companies.find_one({"id": job.get("company_id")}, {"_id": 0})
-        job["company_name"] = company.get("company_name") if company else "Okänt"
-        job["interest_count"] = await db.interests.count_documents({"job_id": job["id"]})
+        company = company_map.get(job.get("company_id"), {})
+        job["company_name"] = company.get("company_name", "Okänt")
+        job["interest_count"] = interest_count_map.get(job["id"], 0)
         jobs.append(job)
     
     return {
