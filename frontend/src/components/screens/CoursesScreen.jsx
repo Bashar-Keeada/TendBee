@@ -62,7 +62,6 @@ export const CoursesScreen = ({ onNavigate, coursesCompleted, onCompleteCourse, 
   const [showEducationInput, setShowEducationInput] = useState(false);
   const [showExperienceInput, setShowExperienceInput] = useState(false);
   const [activeSection, setActiveSection] = useState(null); // 'skills', 'education', 'experience'
-  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
 
   // Synkronisera med userData när det ändras
   useEffect(() => {
