@@ -93,7 +93,7 @@ export const BasicInfoScreen = ({ onNavigate, onUpdateProfile }) => {
         <div>
           <Label htmlFor="phone" className="form-label">Telefonnummer</Label>
           <div className="flex gap-2">
-            <div className="flex items-center justify-center px-4 h-12 bg-white/5 rounded-xl border border-white/10 text-sm font-medium text-white/60">
+            <div className="flex items-center justify-center px-4 h-12 bg-muted rounded-xl border border-border text-sm font-medium text-muted-foreground">
               +46
             </div>
             <Input
@@ -102,7 +102,7 @@ export const BasicInfoScreen = ({ onNavigate, onUpdateProfile }) => {
               placeholder="70 123 45 67"
               value={formData.phone}
               onChange={(e) => handleChange('phone', e.target.value)}
-              className="bg-white/5 border-white/10 text-white placeholder-white/40 flex-1"
+              className="form-input flex-1"
             />
           </div>
         </div>
@@ -112,7 +112,7 @@ export const BasicInfoScreen = ({ onNavigate, onUpdateProfile }) => {
       <div className="mt-8 pb-4">
         <Button 
           size="lg"
-          className="w-full h-14 bg-gradient-to-r from-secondary to-accent text-white font-semibold hover:opacity-90"
+          className="w-full h-14"
           disabled={!isValid}
           onClick={handleContinue}
         >
