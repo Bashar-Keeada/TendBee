@@ -1155,12 +1155,20 @@ async def admin_list_companies(
         .limit(limit) \
         .to_list(limit)
     
+    # Batch get job counts using aggregation
+    company_ids = [doc.get('id') for doc in docs]
+    job_counts_pipeline = [
+        {"$match": {"company_id": {"$in": company_ids}}},
+        {"$group": {"_id": "$company_id", "count": {"$sum": 1}}}
+    ]
+    job_counts_result = await db.jobs.aggregate(job_counts_pipeline).to_list(len(company_ids))
+    job_count_map = {item['_id']: item['count'] for item in job_counts_result}
+    
     # Add job count for each company
     companies = []
     for doc in docs:
         company = await serialize_doc(doc)
-        job_count = await db.jobs.count_documents({"company_id": company["id"]})
-        company["job_count"] = job_count
+        company["job_count"] = job_count_map.get(company["id"], 0)
         companies.append(company)
     
     return {
