@@ -126,8 +126,12 @@ export const MainNavigation = ({ transparent = false, activePage = '' }) => {
             <button onClick={() => { navigate('/'); setMobileMenuOpen(false); }} className="block py-2 text-gray-900 font-medium w-full text-left">
               Hem
             </button>
-            <a href="/#platform" className="block py-2 text-gray-900 font-medium">Platform</a>
-            <a href="/#solutions" className="block py-2 text-gray-900 font-medium">Solutions</a>
+            <button onClick={() => { navigate('/plattform'); setMobileMenuOpen(false); }} className={`block py-2 font-medium w-full text-left ${isActive('/plattform') ? 'text-amber-500' : 'text-gray-900'}`}>
+              Plattform
+            </button>
+            <button onClick={() => { navigate('/losningar'); setMobileMenuOpen(false); }} className={`block py-2 font-medium w-full text-left ${isActive('/losningar') ? 'text-amber-500' : 'text-gray-900'}`}>
+              Lösningar
+            </button>
             <button onClick={() => { navigate('/om-oss'); setMobileMenuOpen(false); }} className={`block py-2 font-medium w-full text-left ${isActive('/om-oss') ? 'text-amber-500' : 'text-gray-900'}`}>
               Om oss
             </button>
@@ -137,7 +141,9 @@ export const MainNavigation = ({ transparent = false, activePage = '' }) => {
             <button onClick={() => { navigate('/karriar'); setMobileMenuOpen(false); }} className={`block py-2 font-medium w-full text-left ${isActive('/karriar') ? 'text-amber-500' : 'text-gray-900'}`}>
               Karriär
             </button>
-            <a href="/#pricing" className="block py-2 text-gray-900 font-medium">Pricing</a>
+            <button onClick={() => { navigate('/priser'); setMobileMenuOpen(false); }} className={`block py-2 font-medium w-full text-left ${isActive('/priser') ? 'text-amber-500' : 'text-gray-900'}`}>
+              Priser
+            </button>
             <button onClick={() => { handleLogin(); setMobileMenuOpen(false); }} className="block py-2 text-gray-900 font-medium w-full text-left">
               Login
             </button>
