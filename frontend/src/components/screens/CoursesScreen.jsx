@@ -644,7 +644,7 @@ export const CoursesScreen = ({ onNavigate, coursesCompleted, onCompleteCourse, 
       
       {/* Save & Back buttons */}
       <div className="space-y-3 mt-6">
-        {(hasUnsavedChanges || totalAdditions > 0) && (
+        {totalAdditions > 0 && (
           <Button 
             className="w-full h-12 bg-gradient-to-r from-primary to-secondary"
             onClick={handleSave}
