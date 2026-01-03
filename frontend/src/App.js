@@ -4,6 +4,9 @@ import TendbeeLanding from './pages/TendbeeLanding';
 import AboutPage from './pages/AboutPage';
 import PartnersPage from './pages/PartnersPage';
 import CareersPage from './pages/CareersPage';
+import PrivacyPolicyPage from './pages/PrivacyPolicyPage';
+import TermsOfServicePage from './pages/TermsOfServicePage';
+import CookiePolicyPage from './pages/CookiePolicyPage';
 import LoginPage from './pages/LoginPage';
 import AuthCallback from './pages/AuthCallback';
 import AdminLoginPage, { isAdminAuthenticated, logoutAdmin } from './pages/AdminLoginPage';
@@ -45,6 +48,11 @@ function AppRouter() {
       
       {/* Careers Page */}
       <Route path="/karriar" element={<CareersPage />} />
+      
+      {/* Legal Pages */}
+      <Route path="/integritetspolicy" element={<PrivacyPolicyPage />} />
+      <Route path="/villkor" element={<TermsOfServicePage />} />
+      <Route path="/cookies" element={<CookiePolicyPage />} />
       
       {/* Login Page */}
       <Route path="/login" element={<LoginPage />} />
