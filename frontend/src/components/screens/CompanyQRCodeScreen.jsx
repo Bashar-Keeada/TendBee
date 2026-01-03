@@ -134,12 +134,11 @@ export const CompanyQRCodeScreen = ({ onNavigate }) => {
       <div className="qr-container mb-6 animate-scale-in">
         <QRCodeSVG 
           value={companyUrl}
-          size={192}
+          size={180}
           level="H"
           includeMargin={false}
           bgColor="transparent"
-          fgColor="currentColor"
-          className="text-foreground"
+          fgColor="#1e293b"
         />
       </div>
 
