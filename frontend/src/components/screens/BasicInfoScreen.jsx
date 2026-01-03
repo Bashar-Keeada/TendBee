@@ -110,15 +110,18 @@ export const BasicInfoScreen = ({ onNavigate, onUpdateProfile }) => {
       
       {/* Footer Button */}
       <div className="mt-8 pb-4">
-        <Button 
-          size="lg"
-          className="w-full h-14"
+        <button 
+          className="w-full h-14 rounded-xl font-semibold text-white flex items-center justify-center gap-2 transition-all duration-200 hover:scale-[1.02] shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+          style={{
+            background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 50%, #b45309 100%)',
+            boxShadow: '0 10px 30px -5px rgba(245, 158, 11, 0.4)'
+          }}
           disabled={!isValid}
           onClick={handleContinue}
         >
           Fortsätt
           <ArrowRight className="w-5 h-5" />
-        </Button>
+        </button>
       </div>
     </ScreenContainer>
   );
