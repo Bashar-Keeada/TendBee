@@ -1,5 +1,15 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || '';
+
+// LocalStorage keys
+const STORAGE_KEYS = {
+  USER_DATA: 'tendbee_user_data',
+  USER_TOKEN: 'tendbee_user_token',
+  USER_ID: 'tendbee_user_id',
+  PROFILE_ID: 'tendbee_profile_id',
+};
 
 // Import all screens
 import { LandingScreen } from './screens/LandingScreen';
