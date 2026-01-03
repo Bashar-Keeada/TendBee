@@ -2,7 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
   Handshake, ExternalLink, Heart, Globe, Users, Target,
-  Building2, Award, Sparkles,
+  Building2, Award, Sparkles, Scale,
   ArrowRight, CheckCircle2
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
