@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import TendbeeLanding from './pages/TendbeeLanding';
 import AboutPage from './pages/AboutPage';
+import PartnersPage from './pages/PartnersPage';
 import CareersPage from './pages/CareersPage';
 import LoginPage from './pages/LoginPage';
 import AuthCallback from './pages/AuthCallback';
