@@ -32,7 +32,7 @@ export const BasicInfoScreen = ({ onNavigate, onUpdateProfile }) => {
       {/* Back Button */}
       <button 
         onClick={() => onNavigate('login')}
-        className="flex items-center gap-1 text-white/60 hover:text-white transition-colors mb-4"
+        className="flex items-center gap-1 text-muted-foreground hover:text-foreground transition-colors mb-4"
       >
         <ChevronLeft className="w-5 h-5" />
         <span className="text-sm">Tillbaka</span>
@@ -43,10 +43,10 @@ export const BasicInfoScreen = ({ onNavigate, onUpdateProfile }) => {
       
       {/* Header */}
       <div className="mb-6">
-        <h1 className="text-2xl font-bold text-white mb-2">
+        <h1 className="text-2xl font-bold text-foreground mb-2">
           Grundläggande information
         </h1>
-        <p className="text-white/60">
+        <p className="text-muted-foreground">
           Berätta lite om dig själv
         </p>
       </div>
@@ -55,29 +55,29 @@ export const BasicInfoScreen = ({ onNavigate, onUpdateProfile }) => {
       <div className="space-y-5">
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <Label htmlFor="firstName" className="text-white/70 text-sm mb-2 block">Förnamn</Label>
+            <Label htmlFor="firstName" className="form-label">Förnamn</Label>
             <Input
               id="firstName"
               placeholder="Erik"
               value={formData.firstName}
               onChange={(e) => handleChange('firstName', e.target.value)}
-              className="bg-white/5 border-white/10 text-white placeholder-white/40"
+              className="form-input"
             />
           </div>
           <div>
-            <Label htmlFor="lastName" className="text-white/70 text-sm mb-2 block">Efternamn</Label>
+            <Label htmlFor="lastName" className="form-label">Efternamn</Label>
             <Input
               id="lastName"
               placeholder="Svensson"
               value={formData.lastName}
               onChange={(e) => handleChange('lastName', e.target.value)}
-              className="bg-white/5 border-white/10 text-white placeholder-white/40"
+              className="form-input"
             />
           </div>
         </div>
         
         <div>
-          <Label htmlFor="age" className="text-white/70 text-sm mb-2 block">Ålder</Label>
+          <Label htmlFor="age" className="form-label">Ålder</Label>
           <Input
             id="age"
             type="number"
@@ -86,12 +86,12 @@ export const BasicInfoScreen = ({ onNavigate, onUpdateProfile }) => {
             max="100"
             value={formData.age}
             onChange={(e) => handleChange('age', e.target.value)}
-            className="bg-white/5 border-white/10 text-white placeholder-white/40"
+            className="form-input"
           />
         </div>
         
         <div>
-          <Label htmlFor="phone" className="text-white/70 text-sm mb-2 block">Telefonnummer</Label>
+          <Label htmlFor="phone" className="form-label">Telefonnummer</Label>
           <div className="flex gap-2">
             <div className="flex items-center justify-center px-4 h-12 bg-white/5 rounded-xl border border-white/10 text-sm font-medium text-white/60">
               +46
