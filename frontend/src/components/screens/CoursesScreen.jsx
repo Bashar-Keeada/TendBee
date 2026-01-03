@@ -182,28 +182,13 @@ export const CoursesScreen = ({ onNavigate, coursesCompleted, onCompleteCourse, 
     });
   };
 
-  // Spara alla val och gå tillbaka
+  // Spara alla val och gå till nästa steg
   const handleSave = () => {
-    // Uppdatera userData med alla valda värden
-    onUpdate?.({
-      skills: selectedSkills,
-      education: selectedEducation,
-      experience: selectedExperience,
-    });
-    setHasUnsavedChanges(false);
     onNavigate('cvCompleted');
   };
 
-  // Gå tillbaka utan att spara (men spara först om det finns ändringar)
+  // Gå tillbaka
   const handleBack = () => {
-    if (hasUnsavedChanges && (selectedSkills.length > 0 || selectedEducation.length > 0 || selectedExperience.length > 0)) {
-      // Auto-spara ändringar
-      onUpdate?.({
-        skills: selectedSkills,
-        education: selectedEducation,
-        experience: selectedExperience,
-      });
-    }
     onNavigate('cvCompleted');
   };
 
