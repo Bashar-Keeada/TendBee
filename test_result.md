@@ -25,7 +25,7 @@
 - AuthCallback component created
 - Needs live testing with real Google account
 
-## QR Code, Share & Download Functionality - ✅ ALL PASS
+## QR Code, Share & Download Functionality - ⚠️ MOSTLY WORKING
 
 ### Implementation Details:
 - Real QR code generation using `qrcode.react` v4.2.0
@@ -37,26 +37,29 @@
 - `/app/frontend/src/components/screens/CompanyQRCodeScreen.jsx` - Company QR code screen
 - `/app/frontend/src/components/JobMatchingApp.jsx` - Added URL parameter navigation for testing
 
-### Test Results (Manual Testing via Screenshots):
+### Test Results (Automated Playwright Testing):
 
-#### User QR Code Screen (MyQRCodeScreen) - ✅ PASS
-- **URL tested:** `http://localhost:3000/app?screen=myQRCode`
-- ✅ Real QR code displayed (SVG with multiple paths, not just an icon)
-- ✅ QR code is scannable and contains URL: `${origin}/app?profile=erik-svensson-12345`
-- ✅ "Ladda ner QR-kod" button works - shows "Nedladdad!" feedback
-- ✅ Download triggers PNG file save with white background
+#### User QR Code Screen (MyQRCodeScreen) - ⚠️ PARTIAL ISSUES
+- **URL tested:** `https://skillbridge-147.preview.emergentagent.com/app?screen=myQRCode`
+- ✅ Page loads correctly with title "Min QR-kod"
+- ⚠️ QR code displayed but simpler than expected (7 path elements vs 15+ expected)
+- ✅ User name "Erik Svensson" displayed correctly
+- ✅ "Ladda ner QR-kod" button works - changes to "Nedladdad!" with checkmark icon
+- ❌ Share functionality fails due to clipboard permission denied in test environment
 
-#### Company QR Code Screen (CompanyQRCodeScreen) - ✅ PASS
-- **URL tested:** `http://localhost:3000/app?screen=companyQRCode`
-- ✅ Real QR code displayed (SVG with multiple paths)
-- ✅ QR code is scannable and contains URL: `${origin}/app?company=arlanda-logistics-ab`
-- ✅ "Ladda ner" button works - shows "Nedladdad!" feedback
-- ✅ Download triggers PNG file save with company name included
+#### Company QR Code Screen (CompanyQRCodeScreen) - ✅ MOSTLY WORKING
+- **URL tested:** `https://skillbridge-147.preview.emergentagent.com/app?screen=companyQRCode`
+- ✅ Page loads correctly with title "Företagets QR-kod"
+- ✅ Real QR code displayed (15 path elements - proper complexity)
+- ✅ Company name "Arlanda Logistics AB" displayed correctly
+- ✅ "Ladda ner" button works - changes to "Nedladdad!" with checkmark icon
+- ❌ Share functionality fails due to clipboard permission denied in test environment
 
-#### Share Functionality - ✅ PASS
-- ✅ "Dela QR-kod" / "Dela" buttons implemented
-- ✅ Uses Web Share API on supported devices
-- ✅ Falls back to clipboard copy with "Länk kopierad!" feedback
+#### Share Functionality - ❌ CLIPBOARD PERMISSION ISSUE
+- ✅ "Dela QR-kod" / "Dela" buttons implemented and clickable
+- ❌ Clipboard copy fails with "NotAllowedError: Write permission denied"
+- ❌ Buttons do not show "Länk kopierad!" feedback due to permission failure
+- ⚠️ This is expected behavior in automated testing environments
 
 ## "Förbättra ditt CV" Feature Testing - ✅ PASS
 
