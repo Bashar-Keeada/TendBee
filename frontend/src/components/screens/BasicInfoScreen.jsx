@@ -1,13 +1,15 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
 import { ScreenContainer } from '@/components/ScreenContainer';
 import { ProgressBar } from '@/components/ProgressBar';
-import { ChevronLeft, ArrowRight, Camera, X, Shield, Crown, Lock, Eye, EyeOff, Sparkles } from 'lucide-react';
+import { ChevronLeft, ArrowRight, Camera, X, Shield, Crown, Lock, Eye, EyeOff, Sparkles, Loader2, Check } from 'lucide-react';
 
-export const BasicInfoScreen = ({ onNavigate, onUpdateProfile, onUpdate, isPlusMember = false }) => {
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || '';
+
+export const BasicInfoScreen = ({ onNavigate, onUpdateProfile, onUpdate, isPlusMember = false, onPlusActivated }) => {
   const fileInputRef = useRef(null);
   const [formData, setFormData] = useState({
     firstName: '',
@@ -24,6 +26,80 @@ export const BasicInfoScreen = ({ onNavigate, onUpdateProfile, onUpdate, isPlusM
   });
   const [previewUrl, setPreviewUrl] = useState(null);
   const [showPlusModal, setShowPlusModal] = useState(false);
+  const [isProcessingPayment, setIsProcessingPayment] = useState(false);
+  const [selectedPackage, setSelectedPackage] = useState('monthly');
+  const [paymentSuccess, setPaymentSuccess] = useState(false);
+  
+  // Check for payment success on URL
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const paymentStatus = params.get('payment');
+    const sessionId = params.get('session_id');
+    
+    if (paymentStatus === 'success' && sessionId) {
+      // Poll for payment status
+      pollPaymentStatus(sessionId);
+    }
+  }, []);
+  
+  const pollPaymentStatus = async (sessionId, attempts = 0) => {
+    const maxAttempts = 10;
+    
+    if (attempts >= maxAttempts) {
+      console.error('Payment status check timed out');
+      return;
+    }
+    
+    try {
+      const response = await fetch(`${BACKEND_URL}/api/payments/status/${sessionId}`);
+      if (response.ok) {
+        const data = await response.json();
+        if (data.payment_status === 'paid') {
+          setPaymentSuccess(true);
+          onPlusActivated?.();
+          // Clear URL params
+          window.history.replaceState({}, '', window.location.pathname);
+          setTimeout(() => setPaymentSuccess(false), 5000);
+        } else if (data.status !== 'expired') {
+          // Keep polling
+          setTimeout(() => pollPaymentStatus(sessionId, attempts + 1), 2000);
+        }
+      }
+    } catch (error) {
+      console.error('Error checking payment status:', error);
+    }
+  };
+  
+  const handleUpgradeToPlusClick = async () => {
+    setIsProcessingPayment(true);
+    
+    try {
+      const userId = localStorage.getItem('tendbee_user_id');
+      const response = await fetch(`${BACKEND_URL}/api/payments/checkout`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          package_id: selectedPackage,
+          origin_url: window.location.origin,
+          user_id: userId
+        })
+      });
+      
+      if (response.ok) {
+        const data = await response.json();
+        // Redirect to Stripe Checkout
+        window.location.href = data.url;
+      } else {
+        const error = await response.json();
+        alert(error.detail || 'Kunde inte starta betalning');
+      }
+    } catch (error) {
+      console.error('Payment error:', error);
+      alert('Ett fel uppstod. Försök igen.');
+    } finally {
+      setIsProcessingPayment(false);
+    }
+  };
   
   const handleChange = (field, value) => {
     setFormData(prev => ({ ...prev, [field]: value }));
