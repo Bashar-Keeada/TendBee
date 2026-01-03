@@ -5,7 +5,7 @@ import { ScreenContainer } from '@/components/ScreenContainer';
 import { ProfileCompleteness } from '@/components/ProfileCompleteness';
 import { ChevronLeft, Share2, Info, Search, Download, Check } from 'lucide-react';
 
-export const MyQRCodeScreen = ({ onNavigate, profilePercentage = 50 }) => {
+export const MyQRCodeScreen = ({ onNavigate, profilePercentage = 20 }) => {
   const qrRef = useRef(null);
   const [copied, setCopied] = useState(false);
   const [downloaded, setDownloaded] = useState(false);
