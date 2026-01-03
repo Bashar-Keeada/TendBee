@@ -1,0 +1,300 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://tendbee.se/schemas/job.json",
+  "title": "JobAd",
+  "description": "Normalized job advertisement schema for TendBee platform",
+  "type": "object",
+  "required": ["job_id", "source", "title", "company", "published_at"],
+  "properties": {
+    "job_id": {
+      "type": "string",
+      "description": "Unique identifier in format source:external_id",
+      "pattern": "^[a-z]+:[a-zA-Z0-9_-]+$",
+      "examples": ["platsbanken:12345", "linkedin:abc-def-123"]
+    },
+    "source": {
+      "type": "string",
+      "enum": ["platsbanken", "linkedin", "indeed", "internal", "partner"],
+      "description": "Origin system of the job listing"
+    },
+    "external_id": {
+      "type": "string",
+      "description": "Original ID from source system"
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 500,
+      "description": "Job title"
+    },
+    "description": {
+      "type": "string",
+      "description": "Full job description in plain text or markdown"
+    },
+    "description_html": {
+      "type": "string",
+      "description": "Original HTML description (if available)"
+    },
+    "company": {
+      "type": "string",
+      "description": "Employer company name"
+    },
+    "company_id": {
+      "type": "string",
+      "description": "Internal employer ID if registered"
+    },
+    "company_logo": {
+      "type": "string",
+      "format": "uri",
+      "description": "URL to company logo"
+    },
+    "company_org_number": {
+      "type": "string",
+      "pattern": "^[0-9]{6}-[0-9]{4}$",
+      "description": "Swedish organization number"
+    },
+    "location": {
+      "$ref": "#/definitions/Location"
+    },
+    "employment_type": {
+      "type": "string",
+      "enum": ["heltid", "deltid", "vikariat", "praktik", "frilans", "sommarjobb"],
+      "description": "Type of employment"
+    },
+    "remote": {
+      "type": "string",
+      "enum": ["remote", "hybrid", "onsite"],
+      "default": "onsite",
+      "description": "Remote work policy"
+    },
+    "salary_range": {
+      "$ref": "#/definitions/SalaryRange"
+    },
+    "required_skills": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/Skill"
+      },
+      "description": "Required skills/competencies"
+    },
+    "preferred_skills": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/Skill"
+      },
+      "description": "Nice-to-have skills"
+    },
+    "experience_years": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 50,
+      "description": "Required years of experience"
+    },
+    "education_level": {
+      "type": "string",
+      "enum": ["grundskola", "gymnasium", "yrkesutbildning", "hogskola", "universitet", "doktorand"],
+      "description": "Required education level"
+    },
+    "languages": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/Language"
+      },
+      "description": "Required languages"
+    },
+    "certifications": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Required certifications (e.g., truckkort)"
+    },
+    "benefits": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Job benefits"
+    },
+    "published_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the job was published"
+    },
+    "expires_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Application deadline"
+    },
+    "start_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Expected start date"
+    },
+    "application_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "External application URL"
+    },
+    "application_email": {
+      "type": "string",
+      "format": "email",
+      "description": "Email for applications"
+    },
+    "contact_person": {
+      "type": "string",
+      "description": "Contact person name"
+    },
+    "contact_phone": {
+      "type": "string",
+      "description": "Contact phone number"
+    },
+    "fingerprint": {
+      "type": "string",
+      "description": "SHA256 hash for deduplication"
+    },
+    "canonical_job_id": {
+      "type": "string",
+      "description": "ID of canonical job if this is a duplicate"
+    },
+    "embedding": {
+      "type": "array",
+      "items": {
+        "type": "number"
+      },
+      "description": "Vector embedding for semantic search/matching"
+    },
+    "raw_payload": {
+      "type": "object",
+      "description": "Original payload from source for debugging"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["active", "expired", "filled", "withdrawn", "duplicate"],
+      "default": "active"
+    },
+    "view_count": {
+      "type": "integer",
+      "default": 0
+    },
+    "application_count": {
+      "type": "integer",
+      "default": 0
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "indexed_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When embedding was last updated"
+    }
+  },
+  "definitions": {
+    "Location": {
+      "type": "object",
+      "properties": {
+        "city": {
+          "type": "string"
+        },
+        "municipality": {
+          "type": "string",
+          "description": "Swedish kommun"
+        },
+        "region": {
+          "type": "string",
+          "description": "Swedish län"
+        },
+        "country": {
+          "type": "string",
+          "default": "Sverige"
+        },
+        "lat": {
+          "type": "number",
+          "minimum": -90,
+          "maximum": 90
+        },
+        "lon": {
+          "type": "number",
+          "minimum": -180,
+          "maximum": 180
+        },
+        "postal_code": {
+          "type": "string"
+        },
+        "address": {
+          "type": "string"
+        }
+      }
+    },
+    "SalaryRange": {
+      "type": "object",
+      "properties": {
+        "min": {
+          "type": "integer",
+          "description": "Minimum salary"
+        },
+        "max": {
+          "type": "integer",
+          "description": "Maximum salary"
+        },
+        "currency": {
+          "type": "string",
+          "default": "SEK"
+        },
+        "period": {
+          "type": "string",
+          "enum": ["hourly", "monthly", "yearly"],
+          "default": "monthly"
+        },
+        "negotiable": {
+          "type": "boolean",
+          "default": true
+        }
+      }
+    },
+    "Skill": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "normalized_name": {
+          "type": "string",
+          "description": "Standardized skill name from taxonomy"
+        },
+        "category": {
+          "type": "string",
+          "description": "Skill category"
+        },
+        "level": {
+          "type": "string",
+          "enum": ["basic", "intermediate", "advanced", "expert"]
+        }
+      },
+      "required": ["name"]
+    },
+    "Language": {
+      "type": "object",
+      "properties": {
+        "language": {
+          "type": "string"
+        },
+        "level": {
+          "type": "string",
+          "enum": ["basic", "conversational", "fluent", "native"]
+        },
+        "required": {
+          "type": "boolean",
+          "default": true
+        }
+      },
+      "required": ["language"]
+    }
+  }
+}

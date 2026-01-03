@@ -1,0 +1,190 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://tendbee.se/schemas/match.json",
+  "title": "MatchResult",
+  "description": "Job-candidate match result schema",
+  "type": "object",
+  "required": ["match_id", "job_id", "candidate_id", "score", "matched_at"],
+  "properties": {
+    "match_id": {
+      "type": "string",
+      "description": "Unique match identifier"
+    },
+    "job_id": {
+      "type": "string",
+      "description": "Reference to job"
+    },
+    "candidate_id": {
+      "type": "string",
+      "description": "Reference to candidate"
+    },
+    "score": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1,
+      "description": "Overall match score (0-1)"
+    },
+    "score_breakdown": {
+      "$ref": "#/definitions/ScoreBreakdown"
+    },
+    "matched_skills": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/MatchedSkill"
+      },
+      "description": "Skills that contributed to the match"
+    },
+    "missing_skills": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Required skills candidate is missing"
+    },
+    "match_highlights": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Key reasons for the match"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["new", "viewed", "saved", "applied", "interviewing", "rejected", "hired", "expired"],
+      "default": "new"
+    },
+    "candidate_action": {
+      "type": "string",
+      "enum": ["none", "interested", "not_interested", "applied"],
+      "default": "none"
+    },
+    "employer_action": {
+      "type": "string",
+      "enum": ["none", "shortlisted", "contacted", "rejected"],
+      "default": "none"
+    },
+    "feedback": {
+      "$ref": "#/definitions/MatchFeedback"
+    },
+    "notification_sent": {
+      "type": "boolean",
+      "default": false
+    },
+    "notification_sent_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "matched_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "viewed_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "applied_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "expires_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the job expires"
+    },
+    "algorithm_version": {
+      "type": "string",
+      "description": "Version of matching algorithm used"
+    }
+  },
+  "definitions": {
+    "ScoreBreakdown": {
+      "type": "object",
+      "properties": {
+        "skill_similarity": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Cosine similarity of skill embeddings (weight: 0.55)"
+        },
+        "experience_match": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Experience years match (weight: 0.20)"
+        },
+        "location_score": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Geographic proximity score (weight: 0.10)"
+        },
+        "availability_score": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Start date compatibility (weight: 0.10)"
+        },
+        "salary_match": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Salary expectation overlap (weight: 0.05)"
+        }
+      },
+      "description": "Individual score components"
+    },
+    "MatchedSkill": {
+      "type": "object",
+      "properties": {
+        "skill_name": {
+          "type": "string"
+        },
+        "candidate_level": {
+          "type": "string",
+          "enum": ["basic", "intermediate", "advanced", "expert"]
+        },
+        "required_level": {
+          "type": "string",
+          "enum": ["basic", "intermediate", "advanced", "expert"]
+        },
+        "match_type": {
+          "type": "string",
+          "enum": ["exact", "similar", "related"],
+          "description": "How the skill matched"
+        },
+        "contribution": {
+          "type": "number",
+          "description": "How much this skill contributed to score"
+        }
+      }
+    },
+    "MatchFeedback": {
+      "type": "object",
+      "properties": {
+        "candidate_feedback": {
+          "type": "string",
+          "enum": ["relevant", "not_relevant", "applied", "hired"]
+        },
+        "candidate_feedback_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "candidate_comment": {
+          "type": "string"
+        },
+        "employer_feedback": {
+          "type": "string",
+          "enum": ["good_match", "poor_match", "hired"]
+        },
+        "employer_feedback_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "employer_comment": {
+          "type": "string"
+        }
+      },
+      "description": "Feedback for ML model training"
+    }
+  }
+}

@@ -1,0 +1,1021 @@
+openapi: 3.0.3
+info:
+  title: TendBee Recruitment Platform API
+  description: |
+    GDPR-compliant recruitment platform API for job seekers, employers, and administrators.
+    Supports job ingestion from external sources, AI-powered matching, and secure authentication.
+  version: 1.0.0
+  contact:
+    name: TendBee Support
+    email: support@tendbee.se
+  license:
+    name: Proprietary
+
+servers:
+  - url: https://api.tendbee.se/v1
+    description: Production server
+  - url: https://staging-api.tendbee.se/v1
+    description: Staging server
+
+tags:
+  - name: Authentication
+    description: User authentication and authorization
+  - name: Registration
+    description: User registration flows
+  - name: Jobs
+    description: Job listing management and ingestion
+  - name: Matching
+    description: AI-powered job-candidate matching
+  - name: Contact
+    description: Contact form and communication
+  - name: Admin
+    description: Administrative operations
+  - name: GDPR
+    description: GDPR compliance endpoints
+
+security:
+  - BearerAuth: []
+
+paths:
+  # ==================== AUTHENTICATION ====================
+  /auth/login:
+    post:
+      tags: [Authentication]
+      summary: User login
+      description: Authenticate user with email/password or magic link
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: '#/components/schemas/LoginPasswordRequest'
+                - $ref: '#/components/schemas/LoginMagicLinkRequest'
+            examples:
+              password:
+                summary: Password login
+                value:
+                  email: "user@example.com"
+                  password: "securePassword123"
+                  user_type: "jobseeker"
+              magic_link:
+                summary: Magic link login
+                value:
+                  email: "user@example.com"
+                  method: "magic_link"
+      responses:
+        '200':
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /auth/refresh:
+    post:
+      tags: [Authentication]
+      summary: Refresh access token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [refresh_token]
+              properties:
+                refresh_token:
+                  type: string
+      responses:
+        '200':
+          description: Token refreshed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+
+  /auth/logout:
+    post:
+      tags: [Authentication]
+      summary: Logout user
+      responses:
+        '200':
+          description: Logged out successfully
+
+  /auth/magic-link:
+    post:
+      tags: [Authentication]
+      summary: Request magic link email
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email]
+              properties:
+                email:
+                  type: string
+                  format: email
+      responses:
+        '200':
+          description: Magic link sent
+
+  /auth/verify-magic-link:
+    post:
+      tags: [Authentication]
+      summary: Verify magic link token
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [token]
+              properties:
+                token:
+                  type: string
+      responses:
+        '200':
+          description: Token valid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+
+  # ==================== REGISTRATION ====================
+  /register/jobseeker:
+    post:
+      tags: [Registration]
+      summary: Register new job seeker
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JobSeekerRegistration'
+      responses:
+        '201':
+          description: Registration successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegistrationResponse'
+        '400':
+          description: Validation error
+        '409':
+          description: Email already registered
+
+  /register/employer:
+    post:
+      tags: [Registration]
+      summary: Register new employer
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmployerRegistration'
+      responses:
+        '201':
+          description: Registration successful
+        '400':
+          description: Validation error
+
+  # ==================== JOBS ====================
+  /jobs:
+    get:
+      tags: [Jobs]
+      summary: Search and list jobs
+      parameters:
+        - name: q
+          in: query
+          description: Search query
+          schema:
+            type: string
+        - name: location
+          in: query
+          schema:
+            type: string
+        - name: skills
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+        - name: employment_type
+          in: query
+          schema:
+            type: string
+            enum: [heltid, deltid, vikariat, praktik]
+        - name: salary_min
+          in: query
+          schema:
+            type: integer
+        - name: salary_max
+          in: query
+          schema:
+            type: integer
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 20
+            maximum: 100
+      responses:
+        '200':
+          description: Job listings
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JobListResponse'
+
+  /jobs/{job_id}:
+    get:
+      tags: [Jobs]
+      summary: Get job details
+      parameters:
+        - name: job_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Job details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JobAd'
+
+  /jobs/ingest:
+    post:
+      tags: [Jobs]
+      summary: Ingest job from external source
+      description: |
+        Webhook/API endpoint for ingesting jobs from external sources.
+        Requires HMAC signature verification.
+      security:
+        - HMACAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IngestPayload'
+      responses:
+        '202':
+          description: Job queued for processing
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IngestResponse'
+        '400':
+          description: Invalid payload
+        '401':
+          description: Invalid signature
+        '429':
+          description: Rate limit exceeded
+
+  /jobs/search:
+    post:
+      tags: [Jobs]
+      summary: Advanced job search with filters
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JobSearchRequest'
+      responses:
+        '200':
+          description: Search results
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JobListResponse'
+
+  # ==================== MATCHING ====================
+  /matches:
+    get:
+      tags: [Matching]
+      summary: Get matches for current user
+      parameters:
+        - name: min_score
+          in: query
+          description: Minimum match score (0-1)
+          schema:
+            type: number
+            minimum: 0
+            maximum: 1
+            default: 0.65
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 20
+      responses:
+        '200':
+          description: Match results
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MatchListResponse'
+
+  /matches/compute:
+    post:
+      tags: [Matching]
+      summary: Trigger match computation for a job or candidate
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                job_id:
+                  type: string
+                candidate_id:
+                  type: string
+      responses:
+        '202':
+          description: Matching queued
+
+  /matches/{match_id}/feedback:
+    post:
+      tags: [Matching]
+      summary: Submit feedback on match quality
+      parameters:
+        - name: match_id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MatchFeedback'
+      responses:
+        '200':
+          description: Feedback recorded
+
+  # ==================== CONTACT ====================
+  /contact:
+    post:
+      tags: [Contact]
+      summary: Submit contact form
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ContactRequest'
+      responses:
+        '200':
+          description: Message sent
+
+  # ==================== ADMIN ====================
+  /admin/connectors:
+    get:
+      tags: [Admin]
+      summary: List all job source connectors
+      security:
+        - BearerAuth: [admin]
+      responses:
+        '200':
+          description: Connector list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Connector'
+
+  /admin/connectors/{connector_id}:
+    put:
+      tags: [Admin]
+      summary: Update connector configuration
+      security:
+        - BearerAuth: [admin]
+      parameters:
+        - name: connector_id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConnectorUpdate'
+      responses:
+        '200':
+          description: Connector updated
+
+  /admin/ingest-logs:
+    get:
+      tags: [Admin]
+      summary: Get ingestion logs
+      security:
+        - BearerAuth: [admin]
+      parameters:
+        - name: source
+          in: query
+          schema:
+            type: string
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: [success, failed, pending]
+        - name: from
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - name: to
+          in: query
+          schema:
+            type: string
+            format: date-time
+      responses:
+        '200':
+          description: Ingest logs
+
+  /admin/review-queue:
+    get:
+      tags: [Admin]
+      summary: Get items in manual review queue
+      security:
+        - BearerAuth: [admin]
+      responses:
+        '200':
+          description: Review queue items
+
+  /admin/reindex:
+    post:
+      tags: [Admin]
+      summary: Trigger reindexing of jobs
+      security:
+        - BearerAuth: [admin]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                job_ids:
+                  type: array
+                  items:
+                    type: string
+                full_reindex:
+                  type: boolean
+                  default: false
+      responses:
+        '202':
+          description: Reindex queued
+
+  # ==================== GDPR ====================
+  /gdpr/export:
+    post:
+      tags: [GDPR]
+      summary: Request data export (GDPR Article 20)
+      description: Request export of all personal data. Export will be sent via email.
+      responses:
+        '202':
+          description: Export request queued
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  request_id:
+                    type: string
+                  estimated_completion:
+                    type: string
+                    format: date-time
+
+  /gdpr/delete:
+    post:
+      tags: [GDPR]
+      summary: Request account deletion (GDPR Article 17)
+      description: Request deletion of all personal data. Requires re-authentication.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [confirmation]
+              properties:
+                confirmation:
+                  type: string
+                  description: Must be "DELETE MY DATA"
+      responses:
+        '202':
+          description: Deletion request queued
+
+  /gdpr/consent:
+    get:
+      tags: [GDPR]
+      summary: Get current consent status
+      responses:
+        '200':
+          description: Consent status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConsentStatus'
+
+    put:
+      tags: [GDPR]
+      summary: Update consent preferences
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConsentUpdate'
+      responses:
+        '200':
+          description: Consent updated
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    HMACAuth:
+      type: apiKey
+      in: header
+      name: X-Webhook-Signature
+      description: HMAC-SHA256 signature of request body
+
+  schemas:
+    # Auth Schemas
+    LoginPasswordRequest:
+      type: object
+      required: [email, password]
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          minLength: 8
+        user_type:
+          type: string
+          enum: [jobseeker, employer]
+
+    LoginMagicLinkRequest:
+      type: object
+      required: [email, method]
+      properties:
+        email:
+          type: string
+          format: email
+        method:
+          type: string
+          enum: [magic_link]
+
+    AuthResponse:
+      type: object
+      properties:
+        access_token:
+          type: string
+        refresh_token:
+          type: string
+        token_type:
+          type: string
+          default: Bearer
+        expires_in:
+          type: integer
+          description: Token lifetime in seconds
+        user:
+          $ref: '#/components/schemas/UserInfo'
+
+    UserInfo:
+      type: object
+      properties:
+        id:
+          type: string
+        email:
+          type: string
+        user_type:
+          type: string
+        name:
+          type: string
+
+    # Registration Schemas
+    JobSeekerRegistration:
+      type: object
+      required: [email, first_name, last_name, gdpr_consent]
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          minLength: 8
+        first_name:
+          type: string
+        last_name:
+          type: string
+        phone:
+          type: string
+        location:
+          $ref: '#/components/schemas/Location'
+        gdpr_consent:
+          type: boolean
+          description: Must be true
+        marketing_consent:
+          type: boolean
+          default: false
+
+    EmployerRegistration:
+      type: object
+      required: [email, company_name, org_number, gdpr_consent]
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+        company_name:
+          type: string
+        org_number:
+          type: string
+          description: Swedish organization number
+        contact_person:
+          type: string
+        phone:
+          type: string
+        gdpr_consent:
+          type: boolean
+
+    RegistrationResponse:
+      type: object
+      properties:
+        user_id:
+          type: string
+        email_verification_sent:
+          type: boolean
+        message:
+          type: string
+
+    # Job Schemas
+    JobAd:
+      type: object
+      required: [job_id, source, title, company]
+      properties:
+        job_id:
+          type: string
+          description: "Format: source:external_id"
+        source:
+          type: string
+          enum: [platsbanken, linkedin, indeed, internal, partner]
+        title:
+          type: string
+        description:
+          type: string
+        company:
+          type: string
+        company_logo:
+          type: string
+          format: uri
+        location:
+          $ref: '#/components/schemas/Location'
+        employment_type:
+          type: string
+          enum: [heltid, deltid, vikariat, praktik, frilans]
+        remote:
+          type: string
+          enum: [remote, hybrid, onsite]
+        salary_range:
+          $ref: '#/components/schemas/SalaryRange'
+        required_skills:
+          type: array
+          items:
+            type: string
+        preferred_skills:
+          type: array
+          items:
+            type: string
+        experience_years:
+          type: integer
+        education_level:
+          type: string
+        languages:
+          type: array
+          items:
+            type: string
+        published_at:
+          type: string
+          format: date-time
+        expires_at:
+          type: string
+          format: date-time
+        application_url:
+          type: string
+          format: uri
+        application_email:
+          type: string
+          format: email
+        raw_payload:
+          type: object
+          description: Original payload from source (for debugging)
+        fingerprint:
+          type: string
+          description: Dedupe fingerprint
+        embedding:
+          type: array
+          items:
+            type: number
+          description: Vector embedding for matching
+
+    Location:
+      type: object
+      properties:
+        city:
+          type: string
+        region:
+          type: string
+        country:
+          type: string
+          default: Sverige
+        lat:
+          type: number
+        lon:
+          type: number
+        postal_code:
+          type: string
+
+    SalaryRange:
+      type: object
+      properties:
+        min:
+          type: integer
+        max:
+          type: integer
+        currency:
+          type: string
+          default: SEK
+        period:
+          type: string
+          enum: [monthly, yearly, hourly]
+          default: monthly
+
+    JobListResponse:
+      type: object
+      properties:
+        jobs:
+          type: array
+          items:
+            $ref: '#/components/schemas/JobAd'
+        total:
+          type: integer
+        page:
+          type: integer
+        limit:
+          type: integer
+        has_more:
+          type: boolean
+
+    JobSearchRequest:
+      type: object
+      properties:
+        query:
+          type: string
+        filters:
+          type: object
+          properties:
+            location:
+              $ref: '#/components/schemas/Location'
+            employment_types:
+              type: array
+              items:
+                type: string
+            salary_min:
+              type: integer
+            salary_max:
+              type: integer
+            skills:
+              type: array
+              items:
+                type: string
+            experience_max:
+              type: integer
+            remote:
+              type: array
+              items:
+                type: string
+        sort:
+          type: string
+          enum: [relevance, date, salary]
+          default: relevance
+
+    # Ingest Schemas
+    IngestPayload:
+      type: object
+      required: [source, job_id, payload]
+      properties:
+        source:
+          type: string
+          enum: [platsbanken, linkedin, indeed, partner]
+        job_id:
+          type: string
+          description: External job ID from source
+        payload:
+          type: object
+          description: Raw job data from source
+        action:
+          type: string
+          enum: [create, update, delete]
+          default: create
+        timestamp:
+          type: string
+          format: date-time
+
+    IngestResponse:
+      type: object
+      properties:
+        ingest_id:
+          type: string
+        status:
+          type: string
+          enum: [queued, processing, completed, failed]
+        message:
+          type: string
+
+    # Match Schemas
+    MatchResult:
+      type: object
+      properties:
+        match_id:
+          type: string
+        job:
+          $ref: '#/components/schemas/JobAd'
+        candidate_id:
+          type: string
+        score:
+          type: number
+          minimum: 0
+          maximum: 1
+        score_breakdown:
+          $ref: '#/components/schemas/ScoreBreakdown'
+        matched_at:
+          type: string
+          format: date-time
+        status:
+          type: string
+          enum: [new, viewed, applied, rejected, hired]
+
+    ScoreBreakdown:
+      type: object
+      properties:
+        skill_similarity:
+          type: number
+        experience_match:
+          type: number
+        location_score:
+          type: number
+        availability_score:
+          type: number
+        salary_match:
+          type: number
+
+    MatchListResponse:
+      type: object
+      properties:
+        matches:
+          type: array
+          items:
+            $ref: '#/components/schemas/MatchResult'
+        total:
+          type: integer
+
+    MatchFeedback:
+      type: object
+      required: [feedback_type]
+      properties:
+        feedback_type:
+          type: string
+          enum: [relevant, not_relevant, applied, hired]
+        comment:
+          type: string
+
+    # Contact Schema
+    ContactRequest:
+      type: object
+      required: [name, email, message]
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+          format: email
+        phone:
+          type: string
+        subject:
+          type: string
+        message:
+          type: string
+        category:
+          type: string
+          enum: [general, support, partnership, press]
+
+    # Admin Schemas
+    Connector:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        source:
+          type: string
+        status:
+          type: string
+          enum: [active, paused, error]
+        last_fetch:
+          type: string
+          format: date-time
+        jobs_fetched:
+          type: integer
+        error_count:
+          type: integer
+        config:
+          type: object
+
+    ConnectorUpdate:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: [active, paused]
+        api_key:
+          type: string
+        config:
+          type: object
+
+    # GDPR Schemas
+    ConsentStatus:
+      type: object
+      properties:
+        gdpr_consent:
+          type: boolean
+        gdpr_consent_timestamp:
+          type: string
+          format: date-time
+        marketing_consent:
+          type: boolean
+        marketing_consent_timestamp:
+          type: string
+          format: date-time
+        analytics_consent:
+          type: boolean
+        third_party_sharing:
+          type: boolean
+
+    ConsentUpdate:
+      type: object
+      properties:
+        marketing_consent:
+          type: boolean
+        analytics_consent:
+          type: boolean
+        third_party_sharing:
+          type: boolean
+
+    # Error Schema
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+        code:
+          type: string
+        message:
+          type: string
+        details:
+          type: object

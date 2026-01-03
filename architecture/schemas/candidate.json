@@ -1,0 +1,357 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://tendbee.se/schemas/candidate.json",
+  "title": "CandidateProfile",
+  "description": "Job seeker profile schema for TendBee platform",
+  "type": "object",
+  "required": ["candidate_id", "email", "consent"],
+  "properties": {
+    "candidate_id": {
+      "type": "string",
+      "description": "Unique candidate identifier"
+    },
+    "user_id": {
+      "type": "string",
+      "description": "Reference to auth user"
+    },
+    "anonymous_id": {
+      "type": "string",
+      "description": "Anonymous ID for privacy-protected matching (TendBee Plus)"
+    },
+    "email": {
+      "type": "string",
+      "format": "email"
+    },
+    "first_name": {
+      "type": "string",
+      "maxLength": 100
+    },
+    "last_name": {
+      "type": "string",
+      "maxLength": 100
+    },
+    "phone": {
+      "type": "string",
+      "pattern": "^\\+?[0-9\\s-]+$"
+    },
+    "date_of_birth": {
+      "type": "string",
+      "format": "date",
+      "description": "Hidden from employers if privacy enabled"
+    },
+    "gender": {
+      "type": "string",
+      "enum": ["man", "kvinna", "icke_binar", "vill_ej_ange"],
+      "description": "Hidden from employers if privacy enabled"
+    },
+    "profile_image": {
+      "type": "string",
+      "format": "uri",
+      "description": "Hidden from employers if privacy enabled"
+    },
+    "location": {
+      "$ref": "#/definitions/Location"
+    },
+    "willing_to_relocate": {
+      "type": "boolean",
+      "default": false
+    },
+    "preferred_locations": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/Location"
+      }
+    },
+    "headline": {
+      "type": "string",
+      "maxLength": 200,
+      "description": "Professional headline"
+    },
+    "summary": {
+      "type": "string",
+      "maxLength": 5000,
+      "description": "Professional summary"
+    },
+    "skills": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/Skill"
+      }
+    },
+    "experience": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/Experience"
+      }
+    },
+    "education": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/Education"
+      }
+    },
+    "certifications": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/Certification"
+      }
+    },
+    "languages": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/Language"
+      }
+    },
+    "experience_years": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Total years of professional experience"
+    },
+    "availability_date": {
+      "type": "string",
+      "format": "date",
+      "description": "When candidate can start"
+    },
+    "notice_period_days": {
+      "type": "integer",
+      "description": "Notice period at current job"
+    },
+    "employment_preferences": {
+      "$ref": "#/definitions/EmploymentPreferences"
+    },
+    "salary_expectation": {
+      "$ref": "#/definitions/SalaryExpectation"
+    },
+    "cv_text": {
+      "type": "string",
+      "description": "Full CV text for embedding generation"
+    },
+    "cv_file_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "Uploaded CV file URL"
+    },
+    "embedding": {
+      "type": "array",
+      "items": {
+        "type": "number"
+      },
+      "description": "Vector embedding for matching"
+    },
+    "privacy_settings": {
+      "$ref": "#/definitions/PrivacySettings"
+    },
+    "consent": {
+      "$ref": "#/definitions/Consent"
+    },
+    "is_plus_member": {
+      "type": "boolean",
+      "default": false,
+      "description": "TendBee Plus membership status"
+    },
+    "plus_expires_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "profile_completeness": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 100,
+      "description": "Profile completion percentage"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["active", "inactive", "hired", "deleted"],
+      "default": "active"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "last_active_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "indexed_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "definitions": {
+    "Location": {
+      "type": "object",
+      "properties": {
+        "city": { "type": "string" },
+        "region": { "type": "string" },
+        "country": { "type": "string", "default": "Sverige" },
+        "lat": { "type": "number" },
+        "lon": { "type": "number" },
+        "postal_code": { "type": "string" }
+      }
+    },
+    "Skill": {
+      "type": "object",
+      "required": ["name"],
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "normalized_name": { "type": "string" },
+        "category": { "type": "string" },
+        "level": {
+          "type": "string",
+          "enum": ["basic", "intermediate", "advanced", "expert"]
+        },
+        "years": { "type": "integer" },
+        "verified": { "type": "boolean", "default": false }
+      }
+    },
+    "Experience": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "company": { "type": "string" },
+        "location": { "$ref": "#/definitions/Location" },
+        "start_date": { "type": "string", "format": "date" },
+        "end_date": { "type": "string", "format": "date" },
+        "current": { "type": "boolean", "default": false },
+        "description": { "type": "string" },
+        "skills_used": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "Education": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "institution": { "type": "string" },
+        "degree": { "type": "string" },
+        "field": { "type": "string" },
+        "level": {
+          "type": "string",
+          "enum": ["grundskola", "gymnasium", "yrkesutbildning", "hogskola", "universitet", "doktorand"]
+        },
+        "start_date": { "type": "string", "format": "date" },
+        "end_date": { "type": "string", "format": "date" },
+        "current": { "type": "boolean", "default": false },
+        "grade": { "type": "string" }
+      }
+    },
+    "Certification": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "issuer": { "type": "string" },
+        "issue_date": { "type": "string", "format": "date" },
+        "expiry_date": { "type": "string", "format": "date" },
+        "credential_id": { "type": "string" },
+        "credential_url": { "type": "string", "format": "uri" }
+      }
+    },
+    "Language": {
+      "type": "object",
+      "properties": {
+        "language": { "type": "string" },
+        "level": {
+          "type": "string",
+          "enum": ["basic", "conversational", "fluent", "native"]
+        }
+      }
+    },
+    "EmploymentPreferences": {
+      "type": "object",
+      "properties": {
+        "employment_types": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["heltid", "deltid", "vikariat", "praktik", "frilans"]
+          }
+        },
+        "remote_preference": {
+          "type": "string",
+          "enum": ["remote", "hybrid", "onsite", "any"]
+        },
+        "industries": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "job_roles": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "SalaryExpectation": {
+      "type": "object",
+      "properties": {
+        "min": { "type": "integer" },
+        "max": { "type": "integer" },
+        "currency": { "type": "string", "default": "SEK" },
+        "period": {
+          "type": "string",
+          "enum": ["hourly", "monthly", "yearly"],
+          "default": "monthly"
+        },
+        "negotiable": { "type": "boolean", "default": true }
+      }
+    },
+    "PrivacySettings": {
+      "type": "object",
+      "properties": {
+        "hide_name": { "type": "boolean", "default": false },
+        "hide_age": { "type": "boolean", "default": false },
+        "hide_gender": { "type": "boolean", "default": false },
+        "hide_photo": { "type": "boolean", "default": false },
+        "use_anonymous_id": { "type": "boolean", "default": false },
+        "hide_current_employer": { "type": "boolean", "default": false }
+      },
+      "description": "Privacy features (requires TendBee Plus)"
+    },
+    "Consent": {
+      "type": "object",
+      "required": ["gdpr", "gdpr_timestamp"],
+      "properties": {
+        "gdpr": {
+          "type": "boolean",
+          "description": "Required GDPR consent for data processing"
+        },
+        "gdpr_timestamp": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "marketing": {
+          "type": "boolean",
+          "default": false
+        },
+        "marketing_timestamp": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "analytics": {
+          "type": "boolean",
+          "default": false
+        },
+        "third_party_sharing": {
+          "type": "boolean",
+          "default": false
+        },
+        "ip_address": {
+          "type": "string",
+          "description": "IP at time of consent"
+        },
+        "user_agent": {
+          "type": "string",
+          "description": "Browser/device at time of consent"
+        }
+      }
+    }
+  }
+}
