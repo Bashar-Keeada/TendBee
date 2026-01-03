@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useEffect } from 'react';
+import React, { useRef, useCallback, useState, useEffect } from 'react';
 import { QRCodeSVG, QRCodeCanvas } from 'qrcode.react';
 import { Button } from '@/components/ui/button';
 import { ScreenContainer } from '@/components/ScreenContainer';
@@ -6,18 +6,20 @@ import { ProfileCompleteness } from '@/components/ProfileCompleteness';
 import { ChevronLeft, Share2, Info, Search, Download, Check } from 'lucide-react';
 
 export const MyQRCodeScreen = ({ onNavigate, profilePercentage = 20 }) => {
-  const [canvasElement, setCanvasElement] = useState(null);
+  const canvasContainerRef = useRef(null);
   const [copied, setCopied] = useState(false);
   const [downloaded, setDownloaded] = useState(false);
+  const [isReady, setIsReady] = useState(false);
   
   // Generera en unik profil-URL baserat på användardata
   const profileUrl = `${window.location.origin}/app?profile=erik-svensson-12345`;
 
-  // Callback ref för att få canvas-elementet
-  const canvasRefCallback = useCallback((node) => {
-    if (node !== null) {
-      setCanvasElement(node);
-    }
+  // Vänta på att canvas ska renderas
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsReady(true);
+    }, 500);
+    return () => clearTimeout(timer);
   }, []);
   
   // Dela QR-kod/länk
@@ -56,26 +58,36 @@ export const MyQRCodeScreen = ({ onNavigate, profilePercentage = 20 }) => {
 
   // Ladda ner QR-kod som PNG
   const handleDownload = useCallback(() => {
-    if (canvasElement) {
+    // Hitta canvas-elementet i containern
+    const canvas = canvasContainerRef.current?.querySelector('canvas');
+    
+    if (canvas) {
       try {
         // Skapa en ny canvas med vit bakgrund och padding
         const paddedCanvas = document.createElement('canvas');
         const padding = 32;
-        paddedCanvas.width = canvasElement.width + padding * 2;
-        paddedCanvas.height = canvasElement.height + padding * 2;
+        paddedCanvas.width = canvas.width + padding * 2;
+        paddedCanvas.height = canvas.height + padding * 2;
         
         const ctx = paddedCanvas.getContext('2d');
         ctx.fillStyle = '#ffffff';
         ctx.fillRect(0, 0, paddedCanvas.width, paddedCanvas.height);
-        ctx.drawImage(canvasElement, padding, padding);
+        ctx.drawImage(canvas, padding, padding);
         
-        const url = paddedCanvas.toDataURL('image/png');
+        const dataUrl = paddedCanvas.toDataURL('image/png');
+        
+        // Skapa länk och ladda ner
         const link = document.createElement('a');
         link.download = 'min-qr-kod-tendbee.png';
-        link.href = url;
+        link.href = dataUrl;
+        link.style.display = 'none';
         document.body.appendChild(link);
         link.click();
-        document.body.removeChild(link);
+        
+        // Rensa
+        setTimeout(() => {
+          document.body.removeChild(link);
+        }, 100);
         
         setDownloaded(true);
         setTimeout(() => setDownloaded(false), 2000);
@@ -84,10 +96,10 @@ export const MyQRCodeScreen = ({ onNavigate, profilePercentage = 20 }) => {
         alert('Kunde inte ladda ner QR-koden. Försök igen.');
       }
     } else {
-      console.error('Canvas not found');
-      alert('QR-koden laddas fortfarande. Vänta och försök igen.');
+      console.error('Canvas not found in container');
+      alert('QR-koden laddas fortfarande. Vänta en sekund och försök igen.');
     }
-  }, [canvasElement]);
+  }, []);
 
   return (
     <ScreenContainer hasFooter>
@@ -126,10 +138,18 @@ export const MyQRCodeScreen = ({ onNavigate, profilePercentage = 20 }) => {
         />
       </div>
 
-      {/* Dold Canvas QR-kod för nedladdning */}
-      <div style={{ position: 'absolute', left: '-9999px', top: '-9999px', opacity: 0 }}>
+      {/* Dold Canvas QR-kod för nedladdning - använd visibility hidden istället för position */}
+      <div 
+        ref={canvasContainerRef}
+        style={{ 
+          position: 'fixed',
+          left: '-9999px',
+          top: 0,
+          visibility: 'hidden',
+          pointerEvents: 'none'
+        }}
+      >
         <QRCodeCanvas
-          ref={canvasRefCallback}
           value={profileUrl}
           size={512}
           level="H"
@@ -164,6 +184,7 @@ export const MyQRCodeScreen = ({ onNavigate, profilePercentage = 20 }) => {
         size="lg"
         className="w-full h-12 mb-3"
         onClick={handleDownload}
+        disabled={!isReady}
       >
         {downloaded ? <Check className="w-5 h-5" /> : <Download className="w-5 h-5" />}
         {downloaded ? 'Nedladdad!' : 'Ladda ner QR-kod'}
