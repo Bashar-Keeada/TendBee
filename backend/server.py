@@ -838,14 +838,19 @@ async def get_matched_jobs(jobseeker_id: str, limit: int = Query(default=20, le=
     # Get active jobs
     jobs = await db.jobs.find({"is_active": True}, {"_id": 0}).to_list(100)
     
+    # Batch fetch all companies to avoid N+1 query problem
+    company_ids = [job.get('company_id') for job in jobs if job.get('company_id')]
+    companies = await db.companies.find({"id": {"$in": company_ids}}, {"_id": 0}).to_list(len(company_ids))
+    company_map = {c.get('id'): c for c in companies}
+    
     # Calculate match scores and add company names
     matched_jobs = []
     for job in jobs:
         match_score = calculate_match_score(jobseeker, job)
         
-        # Get company name
-        company = await db.companies.find_one({"id": job.get('company_id')}, {"_id": 0})
-        company_name = company.get('company_name') if company else "Okänt företag"
+        # Get company name from pre-fetched map
+        company = company_map.get(job.get('company_id'), {})
+        company_name = company.get('company_name', "Okänt företag")
         
         job_with_match = JobWithMatch(
             **await serialize_doc(job),
@@ -872,8 +877,30 @@ async def get_matched_candidates(job_id: str, limit: int = Query(default=20, le=
     if not job:
         raise HTTPException(status_code=404, detail="Jobb hittades inte")
     
-    # Get all jobseekers
-    jobseekers = await db.jobseekers.find({}, {"_id": 0}).to_list(100)
+    # Get jobseekers with projection for required fields only
+    jobseekers = await db.jobseekers.find({}, {
+        "_id": 0,
+        "id": 1,
+        "first_name": 1,
+        "last_name": 1,
+        "age": 1,
+        "phone": 1,
+        "email": 1,
+        "cities": 1,
+        "country": 1,
+        "remote_work": 1,
+        "job_categories": 1,
+        "languages": 1,
+        "has_drivers_license": 1,
+        "work_types": 1,
+        "min_salary": 1,
+        "salary_negotiable": 1,
+        "cv_summary": 1,
+        "cv_experience": 1,
+        "cv_skills": 1,
+        "created_at": 1,
+        "updated_at": 1
+    }).to_list(limit)
     
     # Calculate match scores
     matched_candidates = []
