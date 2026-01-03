@@ -347,34 +347,34 @@ export const BasicInfoScreen = ({ onNavigate, onUpdateProfile, onUpdate, isPlusM
       {/* Back Button */}
       <button 
         onClick={() => onNavigate('login')}
-        className="flex items-center gap-1 text-muted-foreground hover:text-foreground transition-colors mb-4"
+        className="inline-flex items-center gap-1.5 text-gray-500 hover:text-gray-700 transition-colors mb-6 group"
       >
-        <ChevronLeft className="w-5 h-5" />
-        <span className="text-sm">Tillbaka</span>
+        <ChevronLeft className="w-5 h-5 group-hover:-translate-x-0.5 transition-transform" />
+        <span className="text-sm font-medium">Tillbaka</span>
       </button>
       
       {/* Progress */}
       <ProgressBar currentStep={1} totalSteps={7} />
       
       {/* Header */}
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold text-foreground mb-2">
+      <div className="mb-8">
+        <h1 className="text-2xl font-bold text-gray-900 mb-2">
           Grundläggande information
         </h1>
-        <p className="text-muted-foreground">
+        <p className="text-gray-500">
           Berätta lite om dig själv
         </p>
       </div>
 
       {/* Profile Picture Upload */}
-      <div className="mb-6">
-        <Label className="form-label text-center block mb-3">
+      <div className="mb-8">
+        <Label className="text-sm font-semibold text-gray-700 text-center block mb-4">
           Profilbild (valfritt)
           {formData.hideProfileImage && (
             <span className="ml-2 text-xs text-amber-600 font-normal">(Dold för arbetsgivare)</span>
           )}
         </Label>
-        <div className="relative w-28 h-28 mx-auto">
+        <div className="relative w-32 h-32 mx-auto">
           <div 
             className={`profile-picture-upload ${previewUrl ? 'has-image' : ''} ${formData.hideProfileImage ? 'opacity-50' : ''}`}
             onClick={() => fileInputRef.current?.click()}
@@ -382,7 +382,7 @@ export const BasicInfoScreen = ({ onNavigate, onUpdateProfile, onUpdate, isPlusM
             {isUploadingImage ? (
               <div className="flex flex-col items-center text-amber-500">
                 <Loader2 className="w-8 h-8 mb-1 animate-spin" />
-                <span className="text-xs">Laddar upp...</span>
+                <span className="text-xs font-medium">Laddar upp...</span>
               </div>
             ) : previewUrl ? (
               <>
@@ -395,8 +395,8 @@ export const BasicInfoScreen = ({ onNavigate, onUpdateProfile, onUpdate, isPlusM
               </>
             ) : (
               <div className="flex flex-col items-center text-gray-400">
-                <Camera className="w-8 h-8 mb-1" />
-                <span className="text-xs">Lägg till</span>
+                <Camera className="w-10 h-10 mb-2" />
+                <span className="text-xs font-medium">Lägg till foto</span>
               </div>
             )}
             <input
@@ -414,7 +414,7 @@ export const BasicInfoScreen = ({ onNavigate, onUpdateProfile, onUpdate, isPlusM
                 e.stopPropagation();
                 removeImage();
               }}
-              className="absolute -top-2 -right-2 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center hover:bg-red-600 transition-colors"
+              className="absolute -top-1 -right-1 w-8 h-8 bg-red-500 text-white rounded-full flex items-center justify-center hover:bg-red-600 transition-colors shadow-lg"
             >
               <X className="w-4 h-4" />
             </button>
@@ -423,7 +423,7 @@ export const BasicInfoScreen = ({ onNavigate, onUpdateProfile, onUpdate, isPlusM
       </div>
       
       {/* Form */}
-      <div className="space-y-5">
+      <div className="space-y-6">
         <div className="grid grid-cols-2 gap-4">
           <div>
             <Label htmlFor="firstName" className="form-label">Förnamn</Label>
@@ -490,8 +490,8 @@ export const BasicInfoScreen = ({ onNavigate, onUpdateProfile, onUpdate, isPlusM
         
         <div>
           <Label htmlFor="phone" className="form-label">Telefonnummer</Label>
-          <div className="flex gap-2">
-            <div className="flex items-center justify-center px-4 h-12 bg-muted rounded-xl border border-border text-sm font-medium text-muted-foreground">
+          <div className="flex gap-3">
+            <div className="flex items-center justify-center px-4 h-12 bg-gray-100 rounded-xl border-2 border-gray-200 text-sm font-semibold text-gray-600">
               +46
             </div>
             <Input
@@ -507,22 +507,25 @@ export const BasicInfoScreen = ({ onNavigate, onUpdateProfile, onUpdate, isPlusM
       </div>
 
       {/* Privacy Settings - Plus Feature */}
-      <div className="mt-8 pt-6 border-t border-gray-200">
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center gap-2">
-            <Shield className="w-5 h-5 text-amber-600" />
-            <h3 className="font-semibold text-gray-900">Integritetsskydd</h3>
+      <div className="mt-10 pt-8 border-t border-gray-200">
+        <div className="flex items-center justify-between mb-5">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-amber-100 flex items-center justify-center">
+              <Shield className="w-5 h-5 text-amber-600" />
+            </div>
+            <h3 className="font-bold text-gray-900">Integritetsskydd</h3>
           </div>
           {!isPlusMember && (
-            <span className="flex items-center gap-1 text-xs font-medium text-amber-600 bg-amber-50 px-2 py-1 rounded-full">
-              <Crown className="w-3 h-3" />
+            <span className="flex items-center gap-1.5 text-xs font-semibold text-amber-600 bg-amber-50 px-3 py-1.5 rounded-full border border-amber-200">
+              <Crown className="w-3.5 h-3.5" />
               Plus
             </span>
           )}
         </div>
 
-        <p className="text-sm text-gray-500 mb-4">
-          Bli bedömd på dina kompetenser - inte ditt utseende, kön eller ålder. Världens första jobb-app som bekämpar diskriminering.
+        <p className="text-sm text-gray-500 mb-5 leading-relaxed">
+          Bli bedömd på dina kompetenser - inte ditt utseende, kön eller ålder. 
+          <span className="text-amber-600 font-medium"> Världens första jobb-app som bekämpar diskriminering.</span>
         </p>
 
         <div className="space-y-3">
@@ -555,27 +558,36 @@ export const BasicInfoScreen = ({ onNavigate, onUpdateProfile, onUpdate, isPlusM
         {!isPlusMember && (
           <button
             onClick={() => setShowPlusModal(true)}
-            className="w-full mt-4 p-4 bg-gradient-to-r from-amber-50 to-amber-100 rounded-xl border border-amber-200 flex items-center justify-center gap-2 hover:from-amber-100 hover:to-amber-200 transition-all"
+            className="w-full mt-5 p-4 rounded-2xl flex items-center justify-center gap-3 transition-all duration-300 hover:scale-[1.01] group"
+            style={{
+              background: 'linear-gradient(135deg, #fef3c7 0%, #fde68a 100%)',
+              border: '2px solid #fcd34d'
+            }}
           >
             <Crown className="w-5 h-5 text-amber-600" />
-            <span className="font-semibold text-amber-700">Uppgradera till Plus för 49 kr/månad</span>
+            <span className="font-semibold text-amber-700">Uppgradera till Plus för 49 kr/mån</span>
+            <ArrowRight className="w-4 h-4 text-amber-600 group-hover:translate-x-1 transition-transform" />
           </button>
         )}
       </div>
       
       {/* Footer Button */}
-      <div className="mt-8 pb-4">
+      <div className="mt-10 pb-6">
         <button 
-          className="w-full h-14 rounded-xl font-semibold text-white flex items-center justify-center gap-2 transition-all duration-200 hover:scale-[1.02] shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+          className="w-full h-14 rounded-2xl font-semibold text-white flex items-center justify-center gap-3 transition-all duration-300 hover:scale-[1.02] shadow-xl disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 group"
           style={{
-            background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 50%, #b45309 100%)',
-            boxShadow: '0 10px 30px -5px rgba(245, 158, 11, 0.4)'
+            background: isValid 
+              ? 'linear-gradient(135deg, #f59e0b 0%, #d97706 50%, #b45309 100%)'
+              : 'linear-gradient(135deg, #9ca3af 0%, #6b7280 100%)',
+            boxShadow: isValid 
+              ? '0 12px 35px -8px rgba(245, 158, 11, 0.5)'
+              : '0 4px 12px -4px rgba(0, 0, 0, 0.1)'
           }}
           disabled={!isValid}
           onClick={handleContinue}
         >
-          Fortsätt
-          <ArrowRight className="w-5 h-5" />
+          <span>Fortsätt</span>
+          <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
         </button>
       </div>
     </ScreenContainer>
