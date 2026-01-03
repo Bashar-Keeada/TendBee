@@ -662,12 +662,12 @@ export default function TendbeeLanding() {
           
           <div className="pt-8 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-4">
             <p className="text-white/40 text-sm">
-              © 2025 Tendbee AB. All rights reserved.
+              © 2025 Tendbee AB. Alla rättigheter förbehållna.
             </p>
             <div className="flex items-center gap-6 text-sm text-white/40">
-              <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
-              <a href="#" className="hover:text-white transition-colors">Terms of Service</a>
-              <a href="#" className="hover:text-white transition-colors">Cookie Policy</a>
+              <button onClick={() => navigate('/integritetspolicy')} className="hover:text-white transition-colors">Integritetspolicy</button>
+              <button onClick={() => navigate('/villkor')} className="hover:text-white transition-colors">Allmänna villkor</button>
+              <button onClick={() => navigate('/cookies')} className="hover:text-white transition-colors">Cookie-policy</button>
             </div>
           </div>
         </div>
