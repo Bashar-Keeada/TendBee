@@ -78,36 +78,39 @@ export const CoursesScreen = ({ onNavigate, coursesCompleted, onCompleteCourse, 
   const toggleSkill = (skill) => {
     setSelectedSkills(prev => {
       const exists = prev.find(s => s.id === skill.id);
-      if (exists) {
-        return prev.filter(s => s.id !== skill.id);
-      }
-      return [...prev, skill];
+      const newSkills = exists 
+        ? prev.filter(s => s.id !== skill.id)
+        : [...prev, skill];
+      // Auto-spara direkt till parent
+      onUpdate?.({ skills: newSkills });
+      return newSkills;
     });
-    markUnsaved();
   };
 
   // Hantera val av fördefinierad utbildning
   const toggleEducation = (edu) => {
     setSelectedEducation(prev => {
       const exists = prev.find(e => e.id === edu.id);
-      if (exists) {
-        return prev.filter(e => e.id !== edu.id);
-      }
-      return [...prev, edu];
+      const newEducation = exists 
+        ? prev.filter(e => e.id !== edu.id)
+        : [...prev, edu];
+      // Auto-spara direkt till parent
+      onUpdate?.({ education: newEducation });
+      return newEducation;
     });
-    markUnsaved();
   };
 
   // Hantera val av fördefinierad erfarenhet
   const toggleExperience = (exp) => {
     setSelectedExperience(prev => {
       const exists = prev.find(e => e.id === exp.id);
-      if (exists) {
-        return prev.filter(e => e.id !== exp.id);
-      }
-      return [...prev, exp];
+      const newExperience = exists 
+        ? prev.filter(e => e.id !== exp.id)
+        : [...prev, exp];
+      // Auto-spara direkt till parent
+      onUpdate?.({ experience: newExperience });
+      return newExperience;
     });
-    markUnsaved();
   };
 
   // Lägg till egen kompetens
