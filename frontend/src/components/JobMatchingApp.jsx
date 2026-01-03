@@ -256,12 +256,7 @@ export function JobMatchingApp() {
   };
   
   return (
-    <div 
-      className="min-h-screen flex items-center justify-center"
-      style={{
-        background: 'linear-gradient(135deg, hsl(222, 47%, 8%) 0%, hsl(222, 47%, 11%) 40%, hsl(230, 50%, 15%) 100%)'
-      }}
-    >
+    <div className="min-h-screen flex items-center justify-center bg-gray-50">
       <div className="w-full max-w-md px-6 py-8">
         {renderScreen()}
       </div>
