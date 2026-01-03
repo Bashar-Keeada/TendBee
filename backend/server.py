@@ -266,10 +266,12 @@ class AuthResponse(BaseModel):
 
 # ===================== AUTH HELPER FUNCTIONS =====================
 
+# Get salt from environment variable
+SALT_SECRET = os.environ.get('SALT_SECRET', 'tendbee_default_salt_2025')
+
 def hash_password(password: str) -> str:
     """Hash password using SHA-256 with salt"""
-    salt = "tendbee_salt_2025"  # In production, use proper salt per user
-    return hashlib.sha256(f"{password}{salt}".encode()).hexdigest()
+    return hashlib.sha256(f"{password}{SALT_SECRET}".encode()).hexdigest()
 
 def verify_password(password: str, hashed: str) -> bool:
     """Verify password against hash"""
