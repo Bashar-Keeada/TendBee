@@ -266,18 +266,31 @@ export function JobMatchingApp() {
   };
   
   // Update user data during registration flow
-  const handleUpdateUserData = (newData) => {
-    setUserData(prev => ({ ...prev, ...newData }));
-  };
+  const handleUpdateUserData = useCallback((newData) => {
+    setUserData(prev => {
+      const updated = { ...prev, ...newData };
+      // Sync important changes with backend
+      if (newData.onlineCourseCompleted !== undefined || 
+          newData.practicalCourseCompleted !== undefined ||
+          newData.skills !== undefined ||
+          newData.education !== undefined ||
+          newData.experience !== undefined) {
+        syncWithBackend(updated);
+      }
+      return updated;
+    });
+  }, [syncWithBackend]);
 
   // Hantera kursavslutning
-  const handleCompleteCourse = (courseType) => {
-    if (courseType === 'online') {
-      setUserData(prev => ({ ...prev, onlineCourseCompleted: true }));
-    } else if (courseType === 'physical') {
-      setUserData(prev => ({ ...prev, practicalCourseCompleted: true }));
-    }
-  };
+  const handleCompleteCourse = useCallback((courseType) => {
+    setUserData(prev => {
+      const updated = courseType === 'online' 
+        ? { ...prev, onlineCourseCompleted: true }
+        : { ...prev, practicalCourseCompleted: true };
+      syncWithBackend(updated);
+      return updated;
+    });
+  }, [syncWithBackend]);
   
   // Update company data
   const handleUpdateCompanyData = (newData) => {
