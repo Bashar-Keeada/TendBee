@@ -3,18 +3,37 @@ import { QRCodeSVG, QRCodeCanvas } from 'qrcode.react';
 import { Button } from '@/components/ui/button';
 import { ScreenContainer } from '@/components/ScreenContainer';
 import { ProfileCompleteness } from '@/components/ProfileCompleteness';
-import { ChevronLeft, Share2, Info, Search, Download, Check } from 'lucide-react';
+import { ChevronLeft, Share2, Info, Search, Download, Check, Shield, Crown, Eye } from 'lucide-react';
 
-export const MyQRCodeScreen = ({ onNavigate, profilePercentage = 20 }) => {
+// Generera ett anonymt ID
+const generateAnonymousId = () => {
+  const adjectives = ['Snabb', 'Stark', 'Klok', 'Pålitlig', 'Driven', 'Flexibel', 'Noggrann', 'Effektiv'];
+  const animals = ['Björn', 'Varg', 'Örn', 'Räv', 'Älg', 'Lo', 'Falk', 'Uggla'];
+  const number = Math.floor(Math.random() * 1000);
+  const adj = adjectives[Math.floor(Math.random() * adjectives.length)];
+  const animal = animals[Math.floor(Math.random() * animals.length)];
+  return `${adj}${animal}${number}`;
+};
+
+export const MyQRCodeScreen = ({ onNavigate, profilePercentage = 20, userData = {} }) => {
   const canvasContainerRef = useRef(null);
   const [copied, setCopied] = useState(false);
   const [downloaded, setDownloaded] = useState(false);
   const [isReady, setIsReady] = useState(false);
+  const [anonymousId] = useState(() => generateAnonymousId());
   
-  // Generera en unik profil-URL baserat på användardata
-  const profileUrl = `${window.location.origin}/app?profile=erik-svensson-12345`;
+  // Kontrollera om användaren har Plus och valt anonymitet
+  const isPlusMember = userData?.isPlusMember || false;
+  const useAnonymousId = userData?.useAnonymousId || false;
+  const hideProfileImage = userData?.hideProfileImage || false;
+  
+  // Generera en unik profil-URL
+  const profileId = useAnonymousId ? anonymousId : 'erik-svensson-12345';
+  const profileUrl = `${window.location.origin}/app?profile=${profileId}`;
+  
+  // Visa namn eller anonym ID
+  const displayName = useAnonymousId ? anonymousId : (userData?.firstName ? `${userData.firstName} ${userData.lastName}` : 'Erik Svensson');
 
-  // Vänta på att canvas ska renderas
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsReady(true);
@@ -22,10 +41,9 @@ export const MyQRCodeScreen = ({ onNavigate, profilePercentage = 20 }) => {
     return () => clearTimeout(timer);
   }, []);
   
-  // Dela QR-kod/länk
   const handleShare = useCallback(async () => {
     const shareData = {
-      title: 'Min profil på Tendbee',
+      title: useAnonymousId ? `Profil: ${anonymousId}` : 'Min profil på Tendbee',
       text: 'Se min profil och kontakta mig för jobbmöjligheter!',
       url: profileUrl
     };
@@ -36,58 +54,55 @@ export const MyQRCodeScreen = ({ onNavigate, profilePercentage = 20 }) => {
         setCopied(true);
         setTimeout(() => setCopied(false), 2000);
       } else {
-        // Fallback: kopiera till urklipp
         await navigator.clipboard.writeText(profileUrl);
         setCopied(true);
         setTimeout(() => setCopied(false), 2000);
       }
     } catch (err) {
       if (err.name !== 'AbortError') {
-        console.error('Delningsfel:', err);
         try {
           await navigator.clipboard.writeText(profileUrl);
           setCopied(true);
           setTimeout(() => setCopied(false), 2000);
         } catch (clipboardErr) {
-          // Fallback: visa alert med länken
           alert('Kopiera denna länk: ' + profileUrl);
         }
       }
     }
-  }, [profileUrl]);
+  }, [profileUrl, useAnonymousId, anonymousId]);
 
-  // Ladda ner QR-kod som PNG
   const handleDownload = useCallback(() => {
-    // Hitta canvas-elementet i containern
     const canvas = canvasContainerRef.current?.querySelector('canvas');
     
     if (canvas) {
       try {
-        // Skapa en ny canvas med vit bakgrund och padding
         const paddedCanvas = document.createElement('canvas');
         const padding = 32;
+        const textHeight = useAnonymousId ? 60 : 0;
         paddedCanvas.width = canvas.width + padding * 2;
-        paddedCanvas.height = canvas.height + padding * 2;
+        paddedCanvas.height = canvas.height + padding * 2 + textHeight;
         
         const ctx = paddedCanvas.getContext('2d');
         ctx.fillStyle = '#ffffff';
         ctx.fillRect(0, 0, paddedCanvas.width, paddedCanvas.height);
         ctx.drawImage(canvas, padding, padding);
         
-        const dataUrl = paddedCanvas.toDataURL('image/png');
+        // Lägg till anonym ID om aktiverat
+        if (useAnonymousId) {
+          ctx.fillStyle = '#000000';
+          ctx.font = 'bold 20px Arial, sans-serif';
+          ctx.textAlign = 'center';
+          ctx.fillText(`🛡️ ${anonymousId}`, paddedCanvas.width / 2, canvas.height + padding + 40);
+        }
         
-        // Skapa länk och ladda ner
+        const dataUrl = paddedCanvas.toDataURL('image/png');
         const link = document.createElement('a');
-        link.download = 'min-qr-kod-tendbee.png';
+        link.download = useAnonymousId ? `anonym-qr-${anonymousId}.png` : 'min-qr-kod-tendbee.png';
         link.href = dataUrl;
         link.style.display = 'none';
         document.body.appendChild(link);
         link.click();
-        
-        // Rensa
-        setTimeout(() => {
-          document.body.removeChild(link);
-        }, 100);
+        setTimeout(() => document.body.removeChild(link), 100);
         
         setDownloaded(true);
         setTimeout(() => setDownloaded(false), 2000);
@@ -96,10 +111,9 @@ export const MyQRCodeScreen = ({ onNavigate, profilePercentage = 20 }) => {
         alert('Kunde inte ladda ner QR-koden. Försök igen.');
       }
     } else {
-      console.error('Canvas not found in container');
       alert('QR-koden laddas fortfarande. Vänta en sekund och försök igen.');
     }
-  }, []);
+  }, [useAnonymousId, anonymousId]);
 
   return (
     <ScreenContainer hasFooter>
@@ -124,8 +138,17 @@ export const MyQRCodeScreen = ({ onNavigate, profilePercentage = 20 }) => {
           Visa denna kod för arbetsgivare
         </p>
       </div>
+
+      {/* Anonymous Mode Badge */}
+      {useAnonymousId && (
+        <div className="flex items-center justify-center gap-2 mb-4 p-3 bg-gradient-to-r from-amber-50 to-amber-100 rounded-xl border border-amber-200">
+          <Shield className="w-5 h-5 text-amber-600" />
+          <span className="text-sm font-medium text-amber-700">Anonymt läge aktiverat</span>
+          <Crown className="w-4 h-4 text-amber-500" />
+        </div>
+      )}
       
-      {/* QR Code - Synlig SVG för visning */}
+      {/* QR Code */}
       <div className="qr-container mb-6 animate-scale-in">
         <QRCodeSVG 
           value={profileUrl}
@@ -137,16 +160,10 @@ export const MyQRCodeScreen = ({ onNavigate, profilePercentage = 20 }) => {
         />
       </div>
 
-      {/* Dold Canvas QR-kod för nedladdning - använd visibility hidden istället för position */}
+      {/* Hidden Canvas for Download */}
       <div 
         ref={canvasContainerRef}
-        style={{ 
-          position: 'fixed',
-          left: '-9999px',
-          top: 0,
-          visibility: 'hidden',
-          pointerEvents: 'none'
-        }}
+        style={{ position: 'fixed', left: '-9999px', top: 0, visibility: 'hidden', pointerEvents: 'none' }}
       >
         <QRCodeCanvas
           value={profileUrl}
@@ -158,10 +175,26 @@ export const MyQRCodeScreen = ({ onNavigate, profilePercentage = 20 }) => {
         />
       </div>
       
-      {/* Name placeholder */}
+      {/* Name / Anonymous ID */}
       <div className="text-center mb-6">
-        <p className="font-semibold text-foreground text-lg">Erik Svensson</p>
-        <p className="text-sm text-muted-foreground">Lager & Logistik</p>
+        {useAnonymousId ? (
+          <div className="flex items-center justify-center gap-2">
+            <Shield className="w-5 h-5 text-amber-600" />
+            <p className="font-semibold text-foreground text-lg">{anonymousId}</p>
+          </div>
+        ) : (
+          <>
+            {!hideProfileImage && userData?.profileImage && (
+              <div className="w-16 h-16 mx-auto mb-3 rounded-full overflow-hidden border-2 border-amber-400">
+                <img src={userData.profileImage} alt="Profil" className="w-full h-full object-cover" />
+              </div>
+            )}
+            <p className="font-semibold text-foreground text-lg">{displayName}</p>
+          </>
+        )}
+        <p className="text-sm text-muted-foreground">
+          {userData?.jobCategory || 'Lager & Logistik'}
+        </p>
       </div>
       
       {/* Info Box */}
@@ -171,11 +204,35 @@ export const MyQRCodeScreen = ({ onNavigate, profilePercentage = 20 }) => {
           <div>
             <p className="font-medium text-foreground text-sm">Hur funkar det?</p>
             <p className="text-sm text-muted-foreground">
-              När en arbetsgivare skannar din QR-kod får de direkt tillgång till din profil och kan kontakta dig för jobb.
+              {useAnonymousId 
+                ? 'Arbetsgivare ser bara dina kompetenser och erfarenheter - inte ditt namn, kön eller ålder. Du blir kontaktad via appen.'
+                : 'När en arbetsgivare skannar din QR-kod får de direkt tillgång till din profil och kan kontakta dig för jobb.'
+              }
             </p>
           </div>
         </div>
       </div>
+
+      {/* Privacy Status */}
+      {(userData?.hideGender || userData?.hideAge || hideProfileImage) && (
+        <div className="mb-6 p-4 bg-green-50 rounded-xl border border-green-200">
+          <div className="flex items-center gap-2 mb-2">
+            <Eye className="w-5 h-5 text-green-600" />
+            <span className="font-medium text-green-700 text-sm">Dold information</span>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            {userData?.hideGender && (
+              <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full">Kön dolt</span>
+            )}
+            {userData?.hideAge && (
+              <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full">Ålder dold</span>
+            )}
+            {hideProfileImage && (
+              <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full">Bild dold</span>
+            )}
+          </div>
+        </div>
+      )}
 
       {/* Download Button */}
       <Button 
