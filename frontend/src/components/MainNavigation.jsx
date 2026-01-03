@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Menu, X, ChevronDown, Building2, Globe, Users } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 
 // TendBee Logo - Minimalist line-art bee style
 export const TendbeeLogo = ({ className = "h-8", dark = false }) => (
