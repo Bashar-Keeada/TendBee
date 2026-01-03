@@ -350,39 +350,39 @@ export const CoursesScreen = ({ onNavigate, coursesCompleted, onCompleteCourse, 
       )}
 
       {/* Section 1: Kompetenser & Certifikat */}
-      <div className="card-interactive mb-4">
+      <div className="p-4 rounded-2xl border-2 border-gray-100 mb-4 hover:border-gray-200 hover:shadow-md transition-all duration-300 bg-white">
         <button 
           onClick={() => setActiveSection(activeSection === 'skills' ? null : 'skills')}
           className="w-full flex items-center gap-4"
         >
-          <div className="w-12 h-12 rounded-xl flex items-center justify-center bg-blue-100">
+          <div className="w-12 h-12 rounded-xl flex items-center justify-center bg-blue-100 shrink-0">
             <Wrench className="w-6 h-6 text-blue-600" />
           </div>
           <div className="flex-1 text-left">
             <div className="flex items-center gap-2">
-              <h3 className="font-semibold text-foreground">Kompetenser & Certifikat</h3>
+              <h3 className="font-bold text-gray-900">Kompetenser & Certifikat</h3>
               {selectedSkills.length > 0 && (
-                <Badge className="bg-blue-100 text-blue-600 text-xs">{selectedSkills.length}</Badge>
+                <span className="bg-blue-100 text-blue-600 text-xs font-bold px-2 py-0.5 rounded-full">{selectedSkills.length}</span>
               )}
             </div>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-sm text-gray-500">
               Truckkort, kurser, färdigheter (+20%)
             </p>
           </div>
-          <ArrowRight className={`w-5 h-5 text-muted-foreground transition-transform ${activeSection === 'skills' ? 'rotate-90' : ''}`} />
+          <ArrowRight className={`w-5 h-5 text-gray-400 transition-transform duration-300 ${activeSection === 'skills' ? 'rotate-90' : ''}`} />
         </button>
 
         {activeSection === 'skills' && (
-          <div className="mt-4 pt-4 border-t border-border animate-fade-in">
+          <div className="mt-4 pt-4 border-t border-gray-100 animate-fade-in">
             {/* Valda kompetenser */}
             {selectedSkills.length > 0 && (
               <div className="mb-4">
-                <p className="text-xs text-muted-foreground mb-2">Valda:</p>
+                <p className="text-xs font-semibold text-gray-500 mb-2">Valda:</p>
                 <div className="flex flex-wrap gap-2">
                   {selectedSkills.map(skill => (
                     <Badge 
                       key={skill.id} 
-                      className="bg-blue-100 text-blue-700 hover:bg-blue-200 cursor-pointer flex items-center gap-1"
+                      className="bg-blue-100 text-blue-700 hover:bg-blue-200 cursor-pointer flex items-center gap-1 font-medium"
                       onClick={() => removeSkill(skill.id)}
                     >
                       {skill.label}
@@ -394,7 +394,7 @@ export const CoursesScreen = ({ onNavigate, coursesCompleted, onCompleteCourse, 
             )}
 
             {/* Fördefinierade val */}
-            <p className="text-xs text-muted-foreground mb-2">Välj från listan:</p>
+            <p className="text-xs font-semibold text-gray-500 mb-2">Välj från listan:</p>
             <div className="flex flex-wrap gap-2 mb-4">
               {PREDEFINED_SKILLS.map(skill => {
                 const isSelected = selectedSkills.find(s => s.id === skill.id);
@@ -402,10 +402,10 @@ export const CoursesScreen = ({ onNavigate, coursesCompleted, onCompleteCourse, 
                   <Badge 
                     key={skill.id}
                     variant={isSelected ? "default" : "outline"}
-                    className={`cursor-pointer transition-colors ${
+                    className={`cursor-pointer transition-all duration-200 ${
                       isSelected 
-                        ? 'bg-blue-600 text-white hover:bg-blue-700' 
-                        : 'hover:bg-blue-50 hover:border-blue-300'
+                        ? 'bg-blue-600 text-white hover:bg-blue-700 shadow-sm' 
+                        : 'hover:bg-blue-50 hover:border-blue-300 border-gray-200'
                     }`}
                     onClick={() => toggleSkill(skill)}
                   >
@@ -424,63 +424,61 @@ export const CoursesScreen = ({ onNavigate, coursesCompleted, onCompleteCourse, 
                   value={customSkill}
                   onChange={(e) => setCustomSkill(e.target.value)}
                   onKeyPress={(e) => e.key === 'Enter' && addCustomSkill()}
-                  className="flex-1"
+                  className="flex-1 form-input h-10"
                   autoFocus
                 />
-                <Button size="sm" onClick={addCustomSkill}>Lägg till</Button>
+                <Button size="sm" onClick={addCustomSkill} className="bg-blue-600 hover:bg-blue-700">Lägg till</Button>
                 <Button size="sm" variant="ghost" onClick={() => setShowSkillInput(false)}>
                   <X className="w-4 h-4" />
                 </Button>
               </div>
             ) : (
-              <Button 
-                variant="outline" 
-                size="sm" 
+              <button 
                 onClick={() => setShowSkillInput(true)}
-                className="w-full"
+                className="w-full py-2.5 border-2 border-dashed border-gray-200 rounded-xl text-gray-500 text-sm font-medium hover:border-blue-300 hover:text-blue-600 hover:bg-blue-50/50 transition-all flex items-center justify-center gap-2"
               >
-                <Plus className="w-4 h-4 mr-2" />
+                <Plus className="w-4 h-4" />
                 Övrigt - Lägg till egen
-              </Button>
+              </button>
             )}
           </div>
         )}
       </div>
 
       {/* Section 2: Utbildning */}
-      <div className="card-interactive mb-4">
+      <div className="p-4 rounded-2xl border-2 border-gray-100 mb-4 hover:border-gray-200 hover:shadow-md transition-all duration-300 bg-white">
         <button 
           onClick={() => setActiveSection(activeSection === 'education' ? null : 'education')}
           className="w-full flex items-center gap-4"
         >
-          <div className="w-12 h-12 rounded-xl flex items-center justify-center bg-green-100">
+          <div className="w-12 h-12 rounded-xl flex items-center justify-center bg-green-100 shrink-0">
             <GraduationCap className="w-6 h-6 text-green-600" />
           </div>
           <div className="flex-1 text-left">
             <div className="flex items-center gap-2">
-              <h3 className="font-semibold text-foreground">Utbildning</h3>
+              <h3 className="font-bold text-gray-900">Utbildning</h3>
               {selectedEducation.length > 0 && (
-                <Badge className="bg-green-100 text-green-600 text-xs">{selectedEducation.length}</Badge>
+                <span className="bg-green-100 text-green-600 text-xs font-bold px-2 py-0.5 rounded-full">{selectedEducation.length}</span>
               )}
             </div>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-sm text-gray-500">
               Högskola, YH, gymnasium, kurser (+15%)
             </p>
           </div>
-          <ArrowRight className={`w-5 h-5 text-muted-foreground transition-transform ${activeSection === 'education' ? 'rotate-90' : ''}`} />
+          <ArrowRight className={`w-5 h-5 text-gray-400 transition-transform duration-300 ${activeSection === 'education' ? 'rotate-90' : ''}`} />
         </button>
 
         {activeSection === 'education' && (
-          <div className="mt-4 pt-4 border-t border-border animate-fade-in">
+          <div className="mt-4 pt-4 border-t border-gray-100 animate-fade-in">
             {/* Valda utbildningar */}
             {selectedEducation.length > 0 && (
               <div className="mb-4">
-                <p className="text-xs text-muted-foreground mb-2">Valda:</p>
+                <p className="text-xs font-semibold text-gray-500 mb-2">Valda:</p>
                 <div className="flex flex-wrap gap-2">
                   {selectedEducation.map(edu => (
                     <Badge 
                       key={edu.id} 
-                      className="bg-green-100 text-green-700 hover:bg-green-200 cursor-pointer flex items-center gap-1"
+                      className="bg-green-100 text-green-700 hover:bg-green-200 cursor-pointer flex items-center gap-1 font-medium"
                       onClick={() => removeEducation(edu.id)}
                     >
                       {edu.label}
@@ -492,7 +490,7 @@ export const CoursesScreen = ({ onNavigate, coursesCompleted, onCompleteCourse, 
             )}
 
             {/* Fördefinierade val */}
-            <p className="text-xs text-muted-foreground mb-2">Välj från listan:</p>
+            <p className="text-xs font-semibold text-gray-500 mb-2">Välj från listan:</p>
             <div className="flex flex-wrap gap-2 mb-4">
               {PREDEFINED_EDUCATION.map(edu => {
                 const isSelected = selectedEducation.find(e => e.id === edu.id);
@@ -500,10 +498,10 @@ export const CoursesScreen = ({ onNavigate, coursesCompleted, onCompleteCourse, 
                   <Badge 
                     key={edu.id}
                     variant={isSelected ? "default" : "outline"}
-                    className={`cursor-pointer transition-colors ${
+                    className={`cursor-pointer transition-all duration-200 ${
                       isSelected 
-                        ? 'bg-green-600 text-white hover:bg-green-700' 
-                        : 'hover:bg-green-50 hover:border-green-300'
+                        ? 'bg-green-600 text-white hover:bg-green-700 shadow-sm' 
+                        : 'hover:bg-green-50 hover:border-green-300 border-gray-200'
                     }`}
                     onClick={() => toggleEducation(edu)}
                   >
@@ -522,31 +520,29 @@ export const CoursesScreen = ({ onNavigate, coursesCompleted, onCompleteCourse, 
                   value={customEducation}
                   onChange={(e) => setCustomEducation(e.target.value)}
                   onKeyPress={(e) => e.key === 'Enter' && addCustomEducation()}
-                  className="flex-1"
+                  className="flex-1 form-input h-10"
                   autoFocus
                 />
-                <Button size="sm" onClick={addCustomEducation}>Lägg till</Button>
+                <Button size="sm" onClick={addCustomEducation} className="bg-green-600 hover:bg-green-700">Lägg till</Button>
                 <Button size="sm" variant="ghost" onClick={() => setShowEducationInput(false)}>
                   <X className="w-4 h-4" />
                 </Button>
               </div>
             ) : (
-              <Button 
-                variant="outline" 
-                size="sm" 
+              <button 
                 onClick={() => setShowEducationInput(true)}
-                className="w-full"
+                className="w-full py-2.5 border-2 border-dashed border-gray-200 rounded-xl text-gray-500 text-sm font-medium hover:border-green-300 hover:text-green-600 hover:bg-green-50/50 transition-all flex items-center justify-center gap-2"
               >
-                <Plus className="w-4 h-4 mr-2" />
+                <Plus className="w-4 h-4" />
                 Övrigt - Lägg till egen
-              </Button>
+              </button>
             )}
           </div>
         )}
       </div>
 
       {/* Section 3: Erfarenhet */}
-      <div className="card-interactive mb-6">
+      <div className="p-4 rounded-2xl border-2 border-gray-100 mb-8 hover:border-gray-200 hover:shadow-md transition-all duration-300 bg-white">
         <button 
           onClick={() => setActiveSection(activeSection === 'experience' ? null : 'experience')}
           className="w-full flex items-center gap-4"
