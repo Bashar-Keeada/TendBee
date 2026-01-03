@@ -1,38 +1,46 @@
 # Test Result Documentation
 
 ## Current Testing Focus
-Testing profile data persistence (skills, education, experience saving to localStorage).
+Testing all three new features:
+1. Profile data persistence (completed ✅)
+2. Tendbee Plus payment integration (Stripe)
+3. Profile image upload backend
 
 ## Test Status
-- **Feature**: Profile data persistence
-- **Status**: ✅ COMPLETED - ALL TESTS PASSED
+- **Features**: Payment integration, Image upload
+- **Status**: TESTING
 
-## Test Scenarios Verified
-1. ✅ Add skills on Courses page - verified they persist in localStorage
-2. ✅ Navigate away and back - verified skills are still there
-3. ✅ Profile percentage updates with added skills/education/experience (20% → 51%)
-4. ✅ Auto-save functionality works without manual save button
-5. ✅ Visual persistence - selected items remain highlighted after navigation
+## Test Scenarios to Verify
 
-## Technical Changes Made
-- Added localStorage persistence in JobMatchingApp.jsx
-- Auto-save on every skill/education/experience change in CoursesScreen.jsx
-- Removed manual "save" requirement - all changes auto-save
-- Added loading state while initializing
-- Fixed undefined variable bug in CoursesScreen.jsx (hasUnsavedChanges)
+### 1. Stripe Payment Integration
+- GET /api/payments/packages - returns monthly and yearly packages
+- POST /api/payments/checkout - creates Stripe checkout session
+- GET /api/payments/status/{session_id} - checks payment status
+- Frontend Plus modal shows package selection
+- Clicking "Uppgradera till Plus" redirects to Stripe checkout
 
-## Test Results Summary
-**Skills Persistence**: ✅ PASS (3 items: Truckkort A, Excel, Lagersystem WMS)
-**Education Persistence**: ✅ PASS (1 item: Gymnasium)
-**Experience Persistence**: ✅ PASS (1 item: Lagerarbete)
-**Profile Percentage Update**: ✅ PASS (20% → 51%)
-**Navigation Persistence**: ✅ PASS (data persists when navigating away and back)
-**Visual State Persistence**: ✅ PASS (selected items remain highlighted)
+### 2. Profile Image Upload
+- POST /api/upload/profile-image - uploads image file
+- GET /api/uploads/{filename} - serves uploaded files
+- DELETE /api/upload/profile-image/{user_id} - deletes user's image
+- Frontend shows upload progress indicator
+- Image persists after upload
+
+### 3. Profile Data Persistence (Already tested ✅)
+- Skills auto-save to localStorage
+- Education auto-save to localStorage
+- Experience auto-save to localStorage
 
 ## Incorporate User Feedback
-- User reported skills not saving when navigating
-- ✅ FIXED by implementing auto-save on every change
-- ✅ VERIFIED through comprehensive testing
+- User requested Stripe payment for Tendbee Plus
+- User requested backend for profile image upload
+- All in Swedish
 
-## Known Issues from Previous Session
-- ✅ RESOLVED - persistence feature is now working correctly
+## API Endpoints
+- GET /api/payments/packages
+- POST /api/payments/checkout
+- GET /api/payments/status/{session_id}
+- POST /api/webhook/stripe
+- POST /api/upload/profile-image
+- GET /api/uploads/{filename}
+- DELETE /api/upload/profile-image/{user_id}
