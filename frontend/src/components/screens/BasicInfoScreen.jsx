@@ -114,33 +114,81 @@ export const BasicInfoScreen = ({ onNavigate, onUpdateProfile, onUpdate, isPlusM
     setFormData(prev => ({ ...prev, [field]: !prev[field] }));
   };
 
-  // Hantera bilduppladdning
-  const handleImageUpload = (e) => {
+  // Hantera bilduppladdning - nu med backend-lagring
+  const [isUploadingImage, setIsUploadingImage] = useState(false);
+  
+  const handleImageUpload = async (e) => {
     const file = e.target.files?.[0];
-    if (file) {
-      if (!file.type.startsWith('image/')) {
-        alert('Vänligen välj en bildfil');
-        return;
-      }
-      if (file.size > 5 * 1024 * 1024) {
-        alert('Bilden får max vara 5MB');
-        return;
+    if (!file) return;
+    
+    if (!file.type.startsWith('image/')) {
+      alert('Vänligen välj en bildfil');
+      return;
+    }
+    if (file.size > 5 * 1024 * 1024) {
+      alert('Bilden får max vara 5MB');
+      return;
+    }
+    
+    // Show preview immediately
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setPreviewUrl(reader.result);
+    };
+    reader.readAsDataURL(file);
+    
+    // Upload to backend
+    setIsUploadingImage(true);
+    try {
+      const userId = localStorage.getItem('tendbee_user_id');
+      const formDataUpload = new FormData();
+      formDataUpload.append('file', file);
+      if (userId) {
+        formDataUpload.append('user_id', userId);
       }
       
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setPreviewUrl(reader.result);
-        setFormData(prev => ({ ...prev, profileImage: reader.result }));
-      };
-      reader.readAsDataURL(file);
+      const response = await fetch(`${BACKEND_URL}/api/upload/profile-image`, {
+        method: 'POST',
+        body: formDataUpload
+      });
+      
+      if (response.ok) {
+        const data = await response.json();
+        setFormData(prev => ({ ...prev, profileImage: data.url }));
+        onUpdate?.({ profileImage: data.url });
+        console.log('Image uploaded:', data.url);
+      } else {
+        const error = await response.json();
+        alert(error.detail || 'Kunde inte ladda upp bilden');
+        setPreviewUrl(null);
+      }
+    } catch (error) {
+      console.error('Upload error:', error);
+      alert('Ett fel uppstod vid uppladdning');
+      setPreviewUrl(null);
+    } finally {
+      setIsUploadingImage(false);
     }
   };
 
-  const removeImage = () => {
+  const removeImage = async () => {
     setPreviewUrl(null);
     setFormData(prev => ({ ...prev, profileImage: null }));
+    onUpdate?.({ profileImage: null });
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
+    }
+    
+    // Delete from backend if user is logged in
+    const userId = localStorage.getItem('tendbee_user_id');
+    if (userId) {
+      try {
+        await fetch(`${BACKEND_URL}/api/upload/profile-image/${userId}`, {
+          method: 'DELETE'
+        });
+      } catch (error) {
+        console.error('Error deleting image:', error);
+      }
     }
   };
   
