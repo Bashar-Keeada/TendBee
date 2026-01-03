@@ -1,30 +1,14 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
-  ChevronLeft, Heart, Target, Users, Lightbulb, Shield, 
-  Globe, Award, Sparkles, ArrowRight, Linkedin, Twitter, Mail
+  Heart, Target, Users, Lightbulb, Shield, 
+  Globe, Award, Sparkles, ArrowRight
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-
-// TendBee Logo Component
-const TendbeeLogo = ({ className = "h-8", dark = false }) => (
-  <div className={`flex items-center gap-3 ${className}`}>
-    <div className="relative">
-      <svg className="w-10 h-10" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M30 35 Q10 25 18 12 Q24 5 30 15" stroke={dark ? "#92400E" : "#F59E0B"} strokeWidth="2.5" strokeLinecap="round" fill="none"/>
-        <path d="M30 35 Q50 25 42 12 Q36 5 30 15" stroke={dark ? "#92400E" : "#F59E0B"} strokeWidth="2.5" strokeLinecap="round" fill="none"/>
-        <path d="M30 35 Q25 45 30 55 Q35 45 30 35" stroke={dark ? "#92400E" : "#F59E0B"} strokeWidth="2.5" strokeLinecap="round" fill="none"/>
-        <path d="M26 8 L30 14 L34 8" stroke={dark ? "#92400E" : "#F59E0B"} strokeWidth="2" strokeLinecap="round" fill="none"/>
-      </svg>
-    </div>
-    <span className={`font-bold text-2xl tracking-tight ${dark ? 'text-gray-900' : 'text-white'}`}>
-      Tend<span style={{ color: '#F59E0B' }}>Bee</span>
-    </span>
-  </div>
-);
+import { MainNavigation, MainFooter } from '@/components/MainNavigation';
 
 // Team Member Component
-const TeamMember = ({ name, role, description, image }) => (
+const TeamMember = ({ name, role, description }) => (
   <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-lg transition-shadow">
     <div className="w-24 h-24 bg-gradient-to-br from-amber-100 to-amber-200 rounded-full mx-auto mb-4 flex items-center justify-center">
       <span className="text-3xl font-bold text-amber-600">{name.charAt(0)}</span>
@@ -102,36 +86,17 @@ export default function AboutPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="bg-gray-900 text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            <button onClick={() => navigate('/')} className="flex items-center gap-2">
-              <TendbeeLogo />
-            </button>
-            <nav className="hidden md:flex items-center gap-6">
-              <button onClick={() => navigate('/om-oss')} className="text-amber-400 font-medium">Om oss</button>
-              <button onClick={() => navigate('/karriar')} className="text-gray-300 hover:text-white transition-colors">Karriär</button>
-              <Button onClick={() => navigate('/app')} className="bg-amber-500 hover:bg-amber-600 text-white">
-                Kom igång
-              </Button>
-            </nav>
-          </div>
-        </div>
-      </header>
+      {/* Shared Navigation */}
+      <MainNavigation transparent={true} />
 
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white py-20">
+      <section className="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white pt-32 pb-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <button 
-            onClick={() => navigate('/')}
-            className="flex items-center gap-1 text-gray-400 hover:text-white mb-8 transition-colors"
-          >
-            <ChevronLeft className="w-5 h-5" />
-            Tillbaka till startsidan
-          </button>
-          
           <div className="max-w-3xl">
+            <div className="inline-flex items-center gap-2 bg-amber-500/20 text-amber-400 px-4 py-2 rounded-full text-sm font-medium mb-6">
+              <Award className="w-4 h-4" />
+              Världens första anti-diskriminerande jobbplattform
+            </div>
             <h1 className="text-4xl md:text-5xl font-bold mb-6">
               Vi bygger framtidens <span className="text-amber-400">rekrytering</span>
             </h1>
@@ -139,12 +104,6 @@ export default function AboutPage() {
               Tendbee grundades med en enkel men kraftfull vision: att skapa en arbetsmarknad 
               där alla bedöms på sina kompetenser - inte sitt utseende, kön eller ålder.
             </p>
-            <div className="flex items-center gap-4">
-              <div className="flex items-center gap-2 text-amber-400">
-                <Award className="w-5 h-5" />
-                <span className="text-sm font-medium">Världens första anti-diskriminerande jobbplattform</span>
-              </div>
-            </div>
           </div>
         </div>
       </section>
@@ -333,33 +292,8 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="bg-gray-950 text-gray-400 py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col md:flex-row items-center justify-between">
-            <TendbeeLogo />
-            <div className="flex items-center gap-6 mt-6 md:mt-0">
-              <button onClick={() => navigate('/om-oss')} className="hover:text-white transition-colors">Om oss</button>
-              <button onClick={() => navigate('/karriar')} className="hover:text-white transition-colors">Karriär</button>
-              <a href="mailto:kontakt@tendbee.se" className="hover:text-white transition-colors">Kontakt</a>
-            </div>
-            <div className="flex items-center gap-4 mt-6 md:mt-0">
-              <a href="#" className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-gray-700 transition-colors">
-                <Linkedin className="w-5 h-5" />
-              </a>
-              <a href="#" className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-gray-700 transition-colors">
-                <Twitter className="w-5 h-5" />
-              </a>
-              <a href="mailto:kontakt@tendbee.se" className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-gray-700 transition-colors">
-                <Mail className="w-5 h-5" />
-              </a>
-            </div>
-          </div>
-          <div className="border-t border-gray-800 mt-8 pt-8 text-center text-sm">
-            <p>&copy; {new Date().getFullYear()} Tendbee. Alla rättigheter förbehållna.</p>
-          </div>
-        </div>
-      </footer>
+      {/* Shared Footer */}
+      <MainFooter />
     </div>
   );
 }
