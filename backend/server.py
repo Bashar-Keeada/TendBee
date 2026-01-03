@@ -1460,6 +1460,237 @@ async def admin_get_activity(limit: int = Query(default=50, le=100)):
     return activities[:limit]
 
 
+# ===================== STRIPE PAYMENT ROUTES =====================
+
+# Tendbee Plus subscription packages (fixed prices - never accept from frontend!)
+TENDBEE_PLUS_PACKAGES = {
+    "monthly": {
+        "name": "Tendbee Plus Månadsvis",
+        "amount": 49.00,  # SEK
+        "currency": "sek",
+        "description": "Anonyma jobbansökningar, dölj ålder/kön/bild"
+    },
+    "yearly": {
+        "name": "Tendbee Plus Årsvis",
+        "amount": 490.00,  # SEK (2 months free)
+        "currency": "sek",
+        "description": "Spara 2 månader! Alla Plus-funktioner i 12 månader"
+    }
+}
+
+
+class CreateCheckoutRequest(BaseModel):
+    package_id: str = Field(..., description="Package ID: 'monthly' or 'yearly'")
+    origin_url: str = Field(..., description="Frontend origin URL for redirect")
+    user_id: Optional[str] = Field(None, description="User ID if logged in")
+
+
+class PaymentStatusRequest(BaseModel):
+    session_id: str
+
+
+@api_router.get("/payments/packages")
+async def get_payment_packages():
+    """Get available Tendbee Plus subscription packages"""
+    return {
+        "packages": [
+            {
+                "id": pkg_id,
+                "name": pkg["name"],
+                "amount": pkg["amount"],
+                "currency": pkg["currency"],
+                "description": pkg["description"]
+            }
+            for pkg_id, pkg in TENDBEE_PLUS_PACKAGES.items()
+        ]
+    }
+
+
+@api_router.post("/payments/checkout")
+async def create_checkout_session(request: Request, input: CreateCheckoutRequest):
+    """Create a Stripe checkout session for Tendbee Plus subscription"""
+    
+    # Validate package exists
+    if input.package_id not in TENDBEE_PLUS_PACKAGES:
+        raise HTTPException(status_code=400, detail="Ogiltigt paket")
+    
+    package = TENDBEE_PLUS_PACKAGES[input.package_id]
+    
+    # Get Stripe API key
+    stripe_api_key = os.environ.get('STRIPE_API_KEY')
+    if not stripe_api_key:
+        raise HTTPException(status_code=500, detail="Betalning är inte konfigurerad")
+    
+    # Build URLs from frontend origin
+    success_url = f"{input.origin_url}/app?payment=success&session_id={{CHECKOUT_SESSION_ID}}"
+    cancel_url = f"{input.origin_url}/app?payment=cancelled"
+    
+    # Create webhook URL
+    host_url = str(request.base_url).rstrip('/')
+    webhook_url = f"{host_url}/api/webhook/stripe"
+    
+    # Initialize Stripe
+    stripe_checkout = StripeCheckout(api_key=stripe_api_key, webhook_url=webhook_url)
+    
+    # Create checkout session
+    checkout_request = CheckoutSessionRequest(
+        amount=package["amount"],
+        currency=package["currency"],
+        success_url=success_url,
+        cancel_url=cancel_url,
+        metadata={
+            "package_id": input.package_id,
+            "package_name": package["name"],
+            "user_id": input.user_id or "anonymous"
+        }
+    )
+    
+    try:
+        session: CheckoutSessionResponse = await stripe_checkout.create_checkout_session(checkout_request)
+        
+        # Create payment transaction record
+        transaction = {
+            "id": str(uuid.uuid4()),
+            "session_id": session.session_id,
+            "user_id": input.user_id,
+            "package_id": input.package_id,
+            "package_name": package["name"],
+            "amount": package["amount"],
+            "currency": package["currency"],
+            "payment_status": "pending",
+            "status": "initiated",
+            "created_at": datetime.now(timezone.utc).isoformat()
+        }
+        await db.payment_transactions.insert_one(transaction)
+        
+        return {
+            "url": session.url,
+            "session_id": session.session_id
+        }
+    except Exception as e:
+        logger.error(f"Error creating checkout session: {e}")
+        raise HTTPException(status_code=500, detail="Kunde inte skapa betalningssession")
+
+
+@api_router.get("/payments/status/{session_id}")
+async def get_payment_status(session_id: str, request: Request):
+    """Check payment status for a checkout session"""
+    
+    # Get Stripe API key
+    stripe_api_key = os.environ.get('STRIPE_API_KEY')
+    if not stripe_api_key:
+        raise HTTPException(status_code=500, detail="Betalning är inte konfigurerad")
+    
+    # Create webhook URL
+    host_url = str(request.base_url).rstrip('/')
+    webhook_url = f"{host_url}/api/webhook/stripe"
+    
+    # Initialize Stripe
+    stripe_checkout = StripeCheckout(api_key=stripe_api_key, webhook_url=webhook_url)
+    
+    try:
+        status: CheckoutStatusResponse = await stripe_checkout.get_checkout_status(session_id)
+        
+        # Update transaction in database
+        update_data = {
+            "payment_status": status.payment_status,
+            "status": status.status,
+            "updated_at": datetime.now(timezone.utc).isoformat()
+        }
+        
+        # If payment is successful, update user's Plus membership
+        if status.payment_status == "paid":
+            transaction = await db.payment_transactions.find_one(
+                {"session_id": session_id},
+                {"_id": 0}
+            )
+            
+            if transaction and transaction.get("user_id") and transaction.get("status") != "completed":
+                # Mark transaction as completed
+                await db.payment_transactions.update_one(
+                    {"session_id": session_id},
+                    {"$set": {"status": "completed", **update_data}}
+                )
+                
+                # Update user's Plus membership status
+                await db.users.update_one(
+                    {"id": transaction["user_id"]},
+                    {"$set": {
+                        "is_plus_member": True,
+                        "plus_activated_at": datetime.now(timezone.utc).isoformat(),
+                        "plus_package": transaction.get("package_id")
+                    }}
+                )
+            else:
+                await db.payment_transactions.update_one(
+                    {"session_id": session_id},
+                    {"$set": update_data}
+                )
+        else:
+            await db.payment_transactions.update_one(
+                {"session_id": session_id},
+                {"$set": update_data}
+            )
+        
+        return {
+            "status": status.status,
+            "payment_status": status.payment_status,
+            "amount_total": status.amount_total,
+            "currency": status.currency,
+            "metadata": status.metadata
+        }
+    except Exception as e:
+        logger.error(f"Error checking payment status: {e}")
+        raise HTTPException(status_code=500, detail="Kunde inte kontrollera betalningsstatus")
+
+
+@api_router.post("/webhook/stripe")
+async def stripe_webhook(request: Request):
+    """Handle Stripe webhooks"""
+    try:
+        # Get raw body
+        body = await request.body()
+        signature = request.headers.get("Stripe-Signature")
+        
+        stripe_api_key = os.environ.get('STRIPE_API_KEY')
+        host_url = str(request.base_url).rstrip('/')
+        webhook_url = f"{host_url}/api/webhook/stripe"
+        
+        stripe_checkout = StripeCheckout(api_key=stripe_api_key, webhook_url=webhook_url)
+        
+        # Handle webhook
+        webhook_response = await stripe_checkout.handle_webhook(body, signature)
+        
+        # Update transaction based on webhook event
+        if webhook_response.session_id:
+            await db.payment_transactions.update_one(
+                {"session_id": webhook_response.session_id},
+                {"$set": {
+                    "payment_status": webhook_response.payment_status,
+                    "webhook_received_at": datetime.now(timezone.utc).isoformat()
+                }}
+            )
+        
+        return {"status": "ok"}
+    except Exception as e:
+        logger.error(f"Webhook error: {e}")
+        return {"status": "error", "message": str(e)}
+
+
+@api_router.get("/user/{user_id}/plus-status")
+async def get_user_plus_status(user_id: str):
+    """Check if a user has Tendbee Plus membership"""
+    user = await db.users.find_one({"id": user_id}, {"_id": 0})
+    if not user:
+        raise HTTPException(status_code=404, detail="Användare hittades inte")
+    
+    return {
+        "is_plus_member": user.get("is_plus_member", False),
+        "plus_activated_at": user.get("plus_activated_at"),
+        "plus_package": user.get("plus_package")
+    }
+
+
 # Include the router in the main app
 app.include_router(api_router)
 
