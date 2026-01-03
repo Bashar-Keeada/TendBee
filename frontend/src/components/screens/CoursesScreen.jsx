@@ -152,26 +152,34 @@ export const CoursesScreen = ({ onNavigate, coursesCompleted, onCompleteCourse, 
       });
       setCustomExperience('');
       setShowExperienceInput(false);
-      markUnsaved();
     }
   };
 
   // Ta bort kompetens
   const removeSkill = (skillId) => {
-    setSelectedSkills(prev => prev.filter(s => s.id !== skillId));
-    markUnsaved();
+    setSelectedSkills(prev => {
+      const newSkills = prev.filter(s => s.id !== skillId);
+      onUpdate?.({ skills: newSkills });
+      return newSkills;
+    });
   };
 
   // Ta bort utbildning
   const removeEducation = (eduId) => {
-    setSelectedEducation(prev => prev.filter(e => e.id !== eduId));
-    markUnsaved();
+    setSelectedEducation(prev => {
+      const newEducation = prev.filter(e => e.id !== eduId);
+      onUpdate?.({ education: newEducation });
+      return newEducation;
+    });
   };
 
   // Ta bort erfarenhet
   const removeExperience = (expId) => {
-    setSelectedExperience(prev => prev.filter(e => e.id !== expId));
-    markUnsaved();
+    setSelectedExperience(prev => {
+      const newExperience = prev.filter(e => e.id !== expId);
+      onUpdate?.({ experience: newExperience });
+      return newExperience;
+    });
   };
 
   // Spara alla val och gå tillbaka
