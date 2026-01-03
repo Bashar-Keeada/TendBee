@@ -138,9 +138,9 @@ export default function TendbeeLanding() {
                   </a>
                 </div>
               </div>
-              <a href="#customers" className={`font-medium transition-colors ${scrolled ? 'text-foreground/70 hover:text-foreground' : 'text-white/70 hover:text-white'}`}>Customers</a>
+              <button onClick={() => navigate('/om-oss')} className={`font-medium transition-colors ${scrolled ? 'text-foreground/70 hover:text-foreground' : 'text-white/70 hover:text-white'}`}>Om oss</button>
+              <button onClick={() => navigate('/karriar')} className={`font-medium transition-colors ${scrolled ? 'text-foreground/70 hover:text-foreground' : 'text-white/70 hover:text-white'}`}>Karriär</button>
               <a href="#pricing" className={`font-medium transition-colors ${scrolled ? 'text-foreground/70 hover:text-foreground' : 'text-white/70 hover:text-white'}`}>Pricing</a>
-              <a href="#investors" className={`font-medium transition-colors ${scrolled ? 'text-foreground/70 hover:text-foreground' : 'text-white/70 hover:text-white'}`}>Investors</a>
             </div>
             
             <div className="hidden lg:flex items-center gap-4">
