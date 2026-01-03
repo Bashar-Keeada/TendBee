@@ -166,9 +166,9 @@ export default function TendbeeLanding() {
             <div className="px-4 py-4 space-y-3">
               <a href="#platform" className="block py-2 text-foreground font-medium">Platform</a>
               <a href="#solutions" className="block py-2 text-foreground font-medium">Solutions</a>
-              <a href="#customers" className="block py-2 text-foreground font-medium">Customers</a>
+              <button onClick={() => navigate('/om-oss')} className="block py-2 text-foreground font-medium w-full text-left">Om oss</button>
+              <button onClick={() => navigate('/karriar')} className="block py-2 text-foreground font-medium w-full text-left">Karriär</button>
               <a href="#pricing" className="block py-2 text-foreground font-medium">Pricing</a>
-              <a href="#investors" className="block py-2 text-foreground font-medium">Investors</a>
               <button onClick={handleLogin} className="block py-2 text-foreground font-medium w-full text-left">Login</button>
               <button onClick={handleDemo} className="btn-enterprise w-full mt-4">Request Demo</button>
             </div>
