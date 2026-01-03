@@ -6,7 +6,7 @@ import { ProfileCompleteness } from '@/components/ProfileCompleteness';
 import { ChevronLeft, Share2, Info, Search, Download, Check } from 'lucide-react';
 
 export const MyQRCodeScreen = ({ onNavigate, profilePercentage = 20 }) => {
-  const qrRef = useRef(null);
+  const canvasRef = useRef(null);
   const [copied, setCopied] = useState(false);
   const [downloaded, setDownloaded] = useState(false);
   
@@ -22,8 +22,10 @@ export const MyQRCodeScreen = ({ onNavigate, profilePercentage = 20 }) => {
     };
 
     try {
-      if (navigator.share && navigator.canShare(shareData)) {
+      if (navigator.share && navigator.canShare && navigator.canShare(shareData)) {
         await navigator.share(shareData);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
       } else {
         // Fallback: kopiera till urklipp
         await navigator.clipboard.writeText(profileUrl);
@@ -41,6 +43,7 @@ export const MyQRCodeScreen = ({ onNavigate, profilePercentage = 20 }) => {
           setTimeout(() => setCopied(false), 2000);
         } catch (clipboardErr) {
           console.error('Kunde inte kopiera:', clipboardErr);
+          alert('Länk: ' + profileUrl);
         }
       }
     }
@@ -48,7 +51,7 @@ export const MyQRCodeScreen = ({ onNavigate, profilePercentage = 20 }) => {
 
   // Ladda ner QR-kod som PNG
   const handleDownload = useCallback(() => {
-    const canvas = qrRef.current?.querySelector('canvas');
+    const canvas = canvasRef.current;
     if (canvas) {
       // Skapa en ny canvas med vit bakgrund och padding
       const paddedCanvas = document.createElement('canvas');
@@ -65,10 +68,15 @@ export const MyQRCodeScreen = ({ onNavigate, profilePercentage = 20 }) => {
       const link = document.createElement('a');
       link.download = 'min-qr-kod-tendbee.png';
       link.href = url;
+      document.body.appendChild(link);
       link.click();
+      document.body.removeChild(link);
       
       setDownloaded(true);
       setTimeout(() => setDownloaded(false), 2000);
+    } else {
+      console.error('Canvas not found');
+      alert('Kunde inte ladda ner QR-koden. Försök igen.');
     }
   }, []);
 
@@ -96,9 +104,8 @@ export const MyQRCodeScreen = ({ onNavigate, profilePercentage = 20 }) => {
         </p>
       </div>
       
-      {/* QR Code - Nu med riktig QR-kod! */}
-      <div className="qr-container mb-6 animate-scale-in" ref={qrRef}>
-        {/* Synlig SVG QR-kod */}
+      {/* QR Code - Synlig SVG för visning */}
+      <div className="qr-container mb-6 animate-scale-in">
         <QRCodeSVG 
           value={profileUrl}
           size={192}
@@ -108,17 +115,19 @@ export const MyQRCodeScreen = ({ onNavigate, profilePercentage = 20 }) => {
           fgColor="currentColor"
           className="text-foreground"
         />
-        {/* Dold Canvas QR-kod för nedladdning */}
-        <div className="hidden">
-          <QRCodeCanvas
-            value={profileUrl}
-            size={512}
-            level="H"
-            includeMargin={true}
-            bgColor="#ffffff"
-            fgColor="#000000"
-          />
-        </div>
+      </div>
+
+      {/* Dold Canvas QR-kod för nedladdning - använd absolute positioning istället för hidden */}
+      <div style={{ position: 'absolute', left: '-9999px', top: '-9999px' }}>
+        <QRCodeCanvas
+          ref={canvasRef}
+          value={profileUrl}
+          size={512}
+          level="H"
+          includeMargin={true}
+          bgColor="#ffffff"
+          fgColor="#000000"
+        />
       </div>
       
       {/* Name placeholder */}
