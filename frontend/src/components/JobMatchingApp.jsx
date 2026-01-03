@@ -30,6 +30,7 @@ import { AdminPanel } from './AdminPanel';
 
 export function JobMatchingApp() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   
   // State for screen navigation
   const [currentScreen, setCurrentScreen] = useState('landing');
@@ -39,6 +40,20 @@ export function JobMatchingApp() {
   const [selectedCandidate, setSelectedCandidate] = useState(null);
   const [companyData, setCompanyData] = useState(null);
   const [currentJobId, setCurrentJobId] = useState(null);
+
+  // Handle URL-based navigation for testing
+  useEffect(() => {
+    const screen = searchParams.get('screen');
+    if (screen) {
+      setCurrentScreen(screen);
+      // Set appropriate user type based on screen
+      if (['myQRCode', 'cvCompleted', 'jobList', 'jobDetails'].includes(screen)) {
+        setUserType('jobseeker');
+      } else if (['companyQRCode', 'employerDashboard', 'candidateList'].includes(screen)) {
+        setUserType('employer');
+      }
+    }
+  }, [searchParams]);
   
   // Handle navigation between screens
   const handleNavigate = (screen, data) => {
